@@ -1,0 +1,364 @@
+{
+    "data": [
+        {
+            "year": 1979,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 15.41,
+            "area": 12.41
+        },
+        {
+            "year": 1980,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 14.86,
+            "area": 11.94
+        },
+        {
+            "year": 1981,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 14.91,
+            "area": 11.91
+        },
+        {
+            "year": 1982,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 15.18,
+            "area": 12.19
+        },
+        {
+            "year": 1983,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 14.94,
+            "area": 12.01
+        },
+        {
+            "year": 1984,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 14.47,
+            "area": 11.68
+        },
+        {
+            "year": 1985,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 14.72,
+            "area": 11.69
+        },
+        {
+            "year": 1986,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 14.89,
+            "area": 11.88
+        },
+        {
+            "year": 1987,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 14.97,
+            "area": 11.9
+        },
+        {
+            "year": 1988,
+            "month": 1,
+            "dataType": "-9999",
+            "region": "N",
+            "extent": -9999,
+            "area": -9999
+        },
+        {
+            "year": 1989,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 14.95,
+            "area": 13.18
+        },
+        {
+            "year": 1990,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 14.78,
+            "area": 12.8
+        },
+        {
+            "year": 1991,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 14.36,
+            "area": 12.57
+        },
+        {
+            "year": 1992,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 14.64,
+            "area": 12.61
+        },
+        {
+            "year": 1993,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 14.9,
+            "area": 12.93
+        },
+        {
+            "year": 1994,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 14.73,
+            "area": 12.88
+        },
+        {
+            "year": 1995,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 14.59,
+            "area": 12.79
+        },
+        {
+            "year": 1996,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 14.18,
+            "area": 12.15
+        },
+        {
+            "year": 1997,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 14.42,
+            "area": 12.39
+        },
+        {
+            "year": 1998,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 14.72,
+            "area": 12.81
+        },
+        {
+            "year": 1999,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 14.36,
+            "area": 12.6
+        },
+        {
+            "year": 2000,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 14.22,
+            "area": 12.3
+        },
+        {
+            "year": 2001,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 14.2,
+            "area": 12.35
+        },
+        {
+            "year": 2002,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 14.27,
+            "area": 12.26
+        },
+        {
+            "year": 2003,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 14.39,
+            "area": 12.29
+        },
+        {
+            "year": 2004,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 14.03,
+            "area": 12.26
+        },
+        {
+            "year": 2005,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 13.66,
+            "area": 11.92
+        },
+        {
+            "year": 2006,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 13.47,
+            "area": 11.65
+        },
+        {
+            "year": 2007,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 13.7,
+            "area": 11.86
+        },
+        {
+            "year": 2008,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 13.89,
+            "area": 12.3
+        },
+        {
+            "year": 2009,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 13.91,
+            "area": 12.32
+        },
+        {
+            "year": 2010,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 13.74,
+            "area": 12.04
+        },
+        {
+            "year": 2011,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 13.46,
+            "area": 11.83
+        },
+        {
+            "year": 2012,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 13.73,
+            "area": 12.21
+        },
+        {
+            "year": 2013,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 13.7,
+            "area": 12.02
+        },
+        {
+            "year": 2014,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 13.65,
+            "area": 12.1
+        },
+        {
+            "year": 2015,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 13.6,
+            "area": 12.17
+        },
+        {
+            "year": 2016,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 13.46,
+            "area": 11.8
+        },
+        {
+            "year": 2017,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 13.19,
+            "area": 11.37
+        },
+        {
+            "year": 2018,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 13.08,
+            "area": 11.7
+        },
+        {
+            "year": 2019,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 13.57,
+            "area": 12.14
+        },
+        {
+            "year": 2020,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 13.64,
+            "area": 12.15
+        },
+        {
+            "year": 2021,
+            "month": 1,
+            "dataType": "Goddard",
+            "region": "N",
+            "extent": 13.5,
+            "area": 11.75
+        },
+        {
+            "year": 2022,
+            "month": 1,
+            "dataType": "NRTSI-G",
+            "region": "N",
+            "extent": 13.88,
+            "area": 12.22
+        },
+        {
+            "year": 2023,
+            "month": 1,
+            "dataType": "NRTSI-G",
+            "rsegion": "N",
+            "extent": 13.35,
+            "area": 11.83
+        }
+    ]
+}
