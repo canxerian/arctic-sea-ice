@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/Arctic-Sea-Ice.JS/static/css/main.073c9b0a.css",
+    "main.js": "/Arctic-Sea-Ice.JS/static/js/main.13f0009e.js",
+    "static/js/787.1cf17955.chunk.js": "/Arctic-Sea-Ice.JS/static/js/787.1cf17955.chunk.js",
+    "static/media/logo.svg": "/Arctic-Sea-Ice.JS/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "index.html": "/Arctic-Sea-Ice.JS/index.html",
+    "main.073c9b0a.css.map": "/Arctic-Sea-Ice.JS/static/css/main.073c9b0a.css.map",
+    "main.13f0009e.js.map": "/Arctic-Sea-Ice.JS/static/js/main.13f0009e.js.map",
+    "787.1cf17955.chunk.js.map": "/Arctic-Sea-Ice.JS/static/js/787.1cf17955.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.073c9b0a.css",
+    "static/js/main.13f0009e.js"
+  ]
+}
