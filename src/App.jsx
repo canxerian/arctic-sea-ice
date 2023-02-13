@@ -1,11 +1,13 @@
-import './App.css';
+import MainUI from './components/MainUI';
+import './App.scss';
 
 function App() {
   return (
     <>
-      {elems}
-      <h1>Arctic Sea Ice</h1>
-      <p>A cosy data visualisation</p>
+      {/* <h1>Arctic Sea Ice</h1>
+      <p>A cosy data visualisation</p> */}
+
+      <MainUI />
     </>
   );
 }

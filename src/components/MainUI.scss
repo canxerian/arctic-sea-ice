@@ -1,0 +1,30 @@
+#data-list-aside {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 200px;
+    height: 100vh;
+
+    ul {
+        // Position center vertically
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+
+        overflow: scroll;
+        margin: auto;
+        height: 90%;
+        padding: 48vh 0;
+        box-sizing: border-box;
+
+        li {
+            transition: font-size 0.2s;
+            &.active {
+                font-size: 30px;
+            }
+            &.activeSibling {
+                font-size: 20px;
+            }
+        }
+    }
+}
