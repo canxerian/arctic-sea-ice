@@ -10,7 +10,13 @@ const outputPath = "../src/Data/ArcticIceData.json";
 const getMonth = (month) => String("0" + month).slice(-2);
 
 const process = async () => {
-    let allDataByMonth = [];
+    let arcticIceData = {
+        data: [],
+        minExtent: Number.MAX_VALUE,
+        maxExtent: Number.MIN_VALUE,
+        minArea: Number.MAX_VALUE,
+        maxArea: Number.MIN_VALUE
+    };
 
     for (let i = 1; i <= 12; i++) {
         const month = getMonth(i);
@@ -19,11 +25,11 @@ const process = async () => {
         const json = await csvtojson().fromFile(path);
 
         // Stick all data points in to a single array and then sort later
-        allDataByMonth = allDataByMonth.concat(json);
+        arcticIceData.data = arcticIceData.data.concat(json);
     }
 
     // Sort by year
-    allDataByMonth.sort((a, b) => {
+    arcticIceData.data.sort((a, b) => {
         const aYear = parseInt(a.year);
         const bYear = parseInt(b.year);
 
@@ -31,9 +37,9 @@ const process = async () => {
     });
 
     // Assert order
-    for (let i = 0; i < allDataByMonth.length - 1; i++) {
-        const a = allDataByMonth[i];
-        const b = allDataByMonth[i + 1];
+    for (let i = 0; i < arcticIceData.data.length - 1; i++) {
+        const a = arcticIceData.data[i];
+        const b = arcticIceData.data[i + 1];
 
         const compNumA = (parseInt(a.year) * 100) + parseInt(a.mo);         // '1979', '1' becomes 197901, for comparison
         const compNumB = (parseInt(b.year) * 100) + parseInt(b.mo);
@@ -42,24 +48,15 @@ const process = async () => {
     }
 
     // Find min max extent and area
-    let minExtent = 99999999;
-    let maxExtent = 0;
-    let minArea = 999999999;
-    let maxArea = 0;
-    for (let i = 0; i < allDataByMonth.length; i++) {
-        const dataItem = allDataByMonth[i];
-        minExtent = Math.min(dataItem.extent, minExtent);
-        maxExtent = Math.max(dataItem.extent, maxExtent);
-        minArea = Math.min(dataItem.area, minArea);
-        maxArea = Math.max(dataItem.area, maxArea);
+    for (let i = 0; i < arcticIceData.data.length; i++) {
+        const dataItem = arcticIceData.data[i];
+        arcticIceData.minExtent = Math.min(dataItem.extent, arcticIceData.minExtent);
+        arcticIceData.maxExtent = Math.max(dataItem.extent, arcticIceData.maxExtent);
+        arcticIceData.minArea = Math.min(dataItem.area, arcticIceData.minArea);
+        arcticIceData.maxArea = Math.max(dataItem.area, arcticIceData.maxArea);
     }
 
-    allDataByMonth.minExtent = minExtent;
-    allDataByMonth.maxExtent = maxExtent;
-    allDataByMonth.minArea = minArea;
-    allDataByMonth.maxArea = maxArea;
-
-    await fs.promises.writeFile(outputPath, JSON.stringify(allDataByMonth));
+    await fs.promises.writeFile(outputPath, JSON.stringify(arcticIceData));
 }
 
 process();
