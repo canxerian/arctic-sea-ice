@@ -41,6 +41,24 @@ const process = async () => {
         console.assert(compNumA < compNumB, `a: ${compNumA}, b: ${compNumB}`);
     }
 
+    // Find min max extent and area
+    let minExtent = 99999999;
+    let maxExtent = 0;
+    let minArea = 999999999;
+    let maxArea = 0;
+    for (let i = 0; i < allDataByMonth.length; i++) {
+        const dataItem = allDataByMonth[i];
+        minExtent = Math.min(dataItem.extent, minExtent);
+        maxExtent = Math.max(dataItem.extent, maxExtent);
+        minArea = Math.min(dataItem.area, minArea);
+        maxArea = Math.max(dataItem.area, maxArea);
+    }
+
+    allDataByMonth.minExtent = minExtent;
+    allDataByMonth.maxExtent = maxExtent;
+    allDataByMonth.minArea = minArea;
+    allDataByMonth.maxArea = maxArea;
+
     await fs.promises.writeFile(outputPath, JSON.stringify(allDataByMonth));
 }
 
