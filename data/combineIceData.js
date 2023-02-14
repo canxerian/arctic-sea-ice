@@ -12,10 +12,12 @@ const getMonth = (month) => String("0" + month).slice(-2);
 const process = async () => {
     let arcticIceData = {
         data: [],
+        minMaxAreaByYear: [],               // The min and max entries for each year, sorted by time
+        minMaxExtentByYear: [],
         minExtent: Number.MAX_VALUE,
         maxExtent: Number.MIN_VALUE,
         minArea: Number.MAX_VALUE,
-        maxArea: Number.MIN_VALUE
+        maxArea: Number.MIN_VALUE,
     };
 
     for (let i = 1; i <= 12; i++) {
@@ -28,24 +30,25 @@ const process = async () => {
         arcticIceData.data = arcticIceData.data.concat(json);
     }
 
+    // Convert year, mo(nth), area and extent to numbers
+    arcticIceData.data = arcticIceData.data.map(dataItem => ({
+        year: parseInt(dataItem.year),
+        month: parseInt(dataItem.mo),
+        extent: parseFloat(dataItem.extent),
+        area: parseFloat(dataItem.area)
+    }));
+
     // Sort by year
-    arcticIceData.data.sort((a, b) => {
-        const aYear = parseInt(a.year);
-        const bYear = parseInt(b.year);
+    arcticIceData.data.sort((a, b) => a.year - b.year);
 
-        return aYear - bYear;
-    });
+    // Find min/max entries for each year
+    // for (let i = 0; i < arcticIceData.data.length; i++) {
+    //     const dataItem = arcticIceData.data[i];
+    //     let min = Number.MAX_VALUE;
+    //     let max = Number.MIN_VALUE;
 
-    // Assert order
-    for (let i = 0; i < arcticIceData.data.length - 1; i++) {
-        const a = arcticIceData.data[i];
-        const b = arcticIceData.data[i + 1];
-
-        const compNumA = (parseInt(a.year) * 100) + parseInt(a.mo);         // '1979', '1' becomes 197901, for comparison
-        const compNumB = (parseInt(b.year) * 100) + parseInt(b.mo);
-
-        console.assert(compNumA < compNumB, `a: ${compNumA}, b: ${compNumB}`);
-    }
+    //     min = Math.min(min, parseInt(dataItem.area)
+    // }
 
     // Find min max extent and area
     for (let i = 0; i < arcticIceData.data.length; i++) {
@@ -56,7 +59,22 @@ const process = async () => {
         arcticIceData.maxArea = Math.max(dataItem.area, arcticIceData.maxArea);
     }
 
+    assertOrder(arcticIceData.data);
+
     await fs.promises.writeFile(outputPath, JSON.stringify(arcticIceData));
+}
+
+const assertOrder = (dataArrar) => {
+    // Assert order
+    for (let i = 0; i < dataArrar.length - 1; i++) {
+        const a = dataArrar[i];
+        const b = dataArrar[i + 1];
+
+        const compNumA = (a.year * 100) + a.month;         // '1979', '1' becomes 197901, for comparison
+        const compNumB = (b.year * 100) + b.month;
+
+        console.assert(compNumA < compNumB, `a: ${compNumA}, b: ${compNumB}`);
+    }
 }
 
 process();
