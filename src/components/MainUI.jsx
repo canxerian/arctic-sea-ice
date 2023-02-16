@@ -1,9 +1,10 @@
 import { useState } from "react";
 import ArcticIceData from "../data/ArcticIceData.json";
+import { MonthLookup } from "../data/MonthLookup";
 import "./MainUI.scss";
 
 const MainUI = () => {
-    const [activeIndex, setActiveIndex] = useState(null);
+    const [activeIndex, setActiveIndex] = useState(0);
 
     const onScroll = (e) => {
         const { height, width, x, y } = e.target.getBoundingClientRect();
@@ -25,12 +26,15 @@ const MainUI = () => {
                 setActiveIndex(0);
             }
             else {
-                setActiveIndex(ArcticIceData.length - 1);
+                setActiveIndex(ArcticIceData.data.length - 1);
             }
         }
     }
 
-    const listItems = ArcticIceData.map((item, index) => {
+    const extentRange = ArcticIceData.maxExtent - ArcticIceData.minExtent;
+    const areaRange = ArcticIceData.maxArea - ArcticIceData.minArea;
+
+    const listItems = ArcticIceData.minMaxAreaByYear.map((item, index) => {
         let className;
         if (index === activeIndex) {
             className = "active";
@@ -38,8 +42,16 @@ const MainUI = () => {
         else if (index === activeIndex - 1 || index === activeIndex + 1) {
             className = "activeSibling";
         }
-        return <li data-index={index} key={index} className={className}>
-            {item.year} {item.mo}
+
+        const minColour = "red";
+        const maxColour = "green";
+
+        const areaPercent = (item.area - ArcticIceData.minArea) / areaRange * 100;
+        const bgColour = areaPercent < 30 ? "red" : "green";
+        const backgroundStyle = { background: `linear-gradient(90deg, ${bgColour} ${areaPercent}%, #fff 0%)` }
+
+        return <li data-index={index} key={index} className={className} style={backgroundStyle}>
+            {item.year} {MonthLookup[item.mo]} - {areaPercent.toFixed(2)}%
         </li>
     });
 

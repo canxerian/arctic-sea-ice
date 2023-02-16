@@ -2,7 +2,7 @@
     position: absolute;
     right: 0;
     top: 0;
-    width: 200px;
+    width: 400px;
     height: 100vh;
 
     ul {
@@ -16,14 +16,17 @@
         height: 90%;
         padding: 48vh 0;
         box-sizing: border-box;
+        // font-weight: 200;
 
         li {
-            transition: font-size 0.2s;
+            transition: font-weight 0.2s font-size 0.2;
             &.active {
-                font-size: 30px;
+                // font-size: 30px;
+                font-weight: 800;
             }
             &.activeSibling {
-                font-size: 20px;
+                // font-size: 20px;
+                // font-weight: 400;
             }
         }
     }
