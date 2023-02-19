@@ -48,7 +48,7 @@ const MainUI = () => {
 
         const areaPercent = (item.area - ArcticIceData.minArea) / areaRange * 100;
         const bgColour = areaPercent < 30 ? "red" : "green";
-        const backgroundStyle = { background: `linear-gradient(90deg, ${bgColour} ${areaPercent}%, #fff 0%)` }
+        const backgroundStyle = { background: `linear-gradient(90deg, ${bgColour} ${areaPercent}%, transparent 0%)` }
 
         return <li data-index={index} key={index} className={className} style={backgroundStyle}>
             {item.year} {MonthLookup[item.mo]} - {areaPercent.toFixed(2)}%
