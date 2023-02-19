@@ -147,6 +147,8 @@
   "devDependencies": {
     "csvtojson": "^2.0.10",
     "gh-pages": "^5.0.0",
+    "glslify-loader": "^2.0.0",
+    "raw-loader": "^4.0.2",
     "sass": "^1.58.0"
   }
 }
