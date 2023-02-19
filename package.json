@@ -5,6 +5,11 @@
   "homepage": "https://canxerian.github.io/Arctic-Sea-Ice.JS",
   "dependencies": {
     "@babel/core": "^7.16.0",
+    "@babylonjs/core": "^5.47.0",
+    "@babylonjs/inspector": "^5.47.0",
+    "@babylonjs/loaders": "^5.47.0",
+    "@babylonjs/materials": "^5.47.0",
+    "@babylonjs/post-processes": "^5.47.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
     "@svgr/webpack": "^5.5.0",
     "@testing-library/jest-dom": "^5.16.5",
