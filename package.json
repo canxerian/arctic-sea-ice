@@ -57,6 +57,7 @@
     "style-loader": "^3.3.1",
     "tailwindcss": "^3.0.2",
     "terser-webpack-plugin": "^5.2.5",
+    "tweakpane": "^3.1.4",
     "web-vitals": "^2.1.4",
     "webpack": "^5.64.4",
     "webpack-dev-server": "^4.6.0",
@@ -145,6 +146,7 @@
     ]
   },
   "devDependencies": {
+    "@tweakpane/core": "^1.1.4",
     "csvtojson": "^2.0.10",
     "gh-pages": "^5.0.0",
     "glslify-loader": "^2.0.0",

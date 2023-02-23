@@ -7,6 +7,8 @@ attribute vec2 uv;
 // Uniforms (global)
 uniform mat4 worldViewProjection;
 uniform float time;
+uniform float frequency;
+uniform float amplitude;
 
 // Varying (shared between vert/frag)
 varying vec3 vPosition;
@@ -14,10 +16,7 @@ varying vec4 vClipSpace;
 varying vec2 vUV;
 
 void main(void) {
-    float amp = 0.1;
-    float freq = 0.6;
-
-    float newY = sin(position.x + time * freq) * amp;
+    float newY = sin(position.x + time * frequency) * amplitude;
     vec3 newPosition = vec3(position.x, newY, position.z);
 
     // // Convert position to world space

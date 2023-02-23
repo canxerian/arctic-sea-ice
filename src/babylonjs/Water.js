@@ -3,6 +3,8 @@ import * as BABYLON from "@babylonjs/core";
 import waterVertexShader from "./shaders/Water.vertex.glsl";
 import waterFragmentShader from "./shaders/Water.fragment.glsl";
 
+import SceneData from "./SceneData.json";
+
 BABYLON.Effect.ShadersStore["waterVertexShader"] = waterVertexShader
 BABYLON.Effect.ShadersStore["waterFragmentShader"] = waterFragmentShader
 
@@ -22,10 +24,10 @@ export default class Water {
             },
             {
                 attributes: ["position", "normal", "uv"],
-                uniforms: ["worldViewProjection", "time"]
+                uniforms: ["worldViewProjection", "time", "frequency"]
             }
         );
-        
+
         this.waterMaterial.setTexture("depthTex", depthTex);
         this.waterMaterial.setTexture("refractionSampler", refractionRTT);
         this.waterMaterial.setFloat("camMinZ", scene.activeCamera.minZ);
@@ -35,10 +37,8 @@ export default class Water {
         this.waterMaterial.setFloat("wNoiseOffset", 0.01);
         this.waterMaterial.setFloat("fNoiseScale", 10.0);
         this.waterMaterial.setFloat("maxDepth", 5.0);
-        this.waterMaterial.setVector4("wDeepColor", new BABYLON.Vector4(0.0,0.2,0.5,0.8));
-        this.waterMaterial.setVector4("wShallowColor", new BABYLON.Vector4(0.3,0.4,0.8,0.5));
-       
-
+        this.waterMaterial.setVector4("wDeepColor", new BABYLON.Vector4(0.0, 0.2, 0.5, 0.8));
+        this.waterMaterial.setVector4("wShallowColor", new BABYLON.Vector4(0.3, 0.4, 0.8, 0.5));
 
         waterMesh.material = this.waterMaterial;
     }
@@ -46,5 +46,7 @@ export default class Water {
     update() {
         const timeMs = (new Date()).getTime() - this.startTime;
         this.waterMaterial.setFloat("time", timeMs / 1000);
+        this.waterMaterial.setFloat("frequency", SceneData.WaterFrequency);
+        this.waterMaterial.setFloat("amplitude", SceneData.WaterAmplitude);
     }
 }

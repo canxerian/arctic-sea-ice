@@ -1,8 +1,10 @@
 import * as BABYLON from "@babylonjs/core";
 import "@babylonjs/loaders";
+import { Pane } from "tweakpane";
 
 import arcticModel from "./models/Arctic.glb";
 import Water from "./Water";
+import SceneData from "./SceneData.json";
 
 const Deg2Rad = Math.PI / 180;
 export default class BabylonScene {
@@ -15,11 +17,12 @@ export default class BabylonScene {
         const scene = new BABYLON.Scene(engine);
         const camera = this.createCamera();
 
+        this.createDebugMenu();
+
         // Gizmo 
         const gizmoManager = new BABYLON.GizmoManager(scene);
         gizmoManager.positionGizmoEnabled = true;
         // gizmoManager.attachableMeshes = [sphere, sphere1, water];
-
 
         const sphere = BABYLON.MeshBuilder.CreateSphere("sphere", { segments: 16, diameter: 10 }, this.scene);
 
@@ -49,7 +52,6 @@ export default class BabylonScene {
             this.water.update();
             scene.render();
         });
-
     }
 
     createCamera(canvas) {
@@ -64,5 +66,31 @@ export default class BabylonScene {
 
         cam.attachControl(canvas, true, true);
         return cam;
+    }
+
+    createDebugMenu() {
+        const pane = new Pane({ title: "Debug Menu" });
+
+        Object.keys(SceneData).forEach((key) => {
+            pane.addInput(SceneData, key, { min: 0, max: 10 });
+        });
+
+
+        const saveBtn = pane.addButton({ title: "Save", label: "Save" });
+        saveBtn.on("click", async () => {
+            const preset = pane.exportPreset();
+            const opts = {
+                suggestedName: "SceneData",
+                excludeAcceptAllOption: true,
+                types: [{
+                    description: 'JSON',
+                    accept: { 'application/json': ['.json'] },
+                }],
+            };
+            const saveFile = await window.showSaveFilePicker(opts);
+            const writable = await saveFile.createWritable();
+            await writable.write(JSON.stringify(preset));
+            await writable.close();
+        });
     }
 }
