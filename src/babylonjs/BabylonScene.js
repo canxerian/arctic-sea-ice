@@ -17,7 +17,7 @@ export default class BabylonScene {
         const scene = new BABYLON.Scene(engine);
         const camera = this.createCamera();
 
-        this.createDebugMenu();
+        const debugMenu = this.createDebugMenu();
 
         // Gizmo 
         const gizmoManager = new BABYLON.GizmoManager(scene);
@@ -46,7 +46,7 @@ export default class BabylonScene {
         const hemiLight = new BABYLON.HemisphericLight("HemiLight", new BABYLON.Vector3(1, -1, 3), scene);
         hemiLight.intensity = 3;
 
-        this.water = new Water(scene, depthTex, refractionRTT);
+        this.water = new Water(scene, depthTex, refractionRTT, debugMenu);
 
         engine.runRenderLoop(() => {
             this.water.update();
@@ -72,12 +72,16 @@ export default class BabylonScene {
         const pane = new Pane({ title: "Debug Menu" });
 
         Object.keys(SceneData).forEach((key) => {
-            pane.addInput(SceneData, key, { min: 0, max: 10 });
+            if (typeof SceneData[key] === "number") {
+                pane.addInput(SceneData, key, { min: 0, max: 10 });
+            }
+            else if (typeof SceneData[key] === "object" && SceneData[key].r) {
+                pane.addInput(SceneData, key, { color: { type: "float" } });
+            }
         });
 
-
         const saveBtn = pane.addButton({ title: "Save", label: "Save" });
-        saveBtn.on("click", async () => {
+        const onClickSave = async () => {
             const preset = pane.exportPreset();
             const opts = {
                 suggestedName: "SceneData",
@@ -91,6 +95,9 @@ export default class BabylonScene {
             const writable = await saveFile.createWritable();
             await writable.write(JSON.stringify(preset));
             await writable.close();
-        });
+        }
+        saveBtn.on("click", onClickSave);
+
+        return pane;
     }
 }

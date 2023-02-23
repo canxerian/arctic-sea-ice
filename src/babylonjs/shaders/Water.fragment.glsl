@@ -20,6 +20,8 @@ uniform float wNoiseScale;
 uniform float wNoiseOffset;
 uniform float fNoiseScale;
 
+uniform float waterMixDebug;
+
 float mod289(float x) 
 { 
     return x - floor(x * (1.0 / 289.0)) * 289.0;
@@ -63,40 +65,22 @@ void main(void)
     // init baseColor
     vec4 baseColor = vec4(0.0);
 
-    // generate noise value
-    float waveNoise = noise(vec3(0., time, 0.)+vPosition*wNoiseScale)*wNoiseOffset;
-
-    // remap frag screen space coords to ndc (-1 to +1)
+	// normalized device coordinates - remap frag screen space coords to ndc (-1 to +1)
+    // We do this obtain our "UV" for the depth textur
     vec2 ndc = (vClipSpace.xy / vClipSpace.w) / 2.0 + 0.5;
 
-    // grab depth value (0 to 1) at ndc for object behind water
-    float depthOfObjectBehindWater = texture2D(depthTex, vec2(ndc.x, ndc.y)+waveNoise).r;
-
-    // get depth of water plane
-    float linearWaterDepth = (vClipSpace.z + camMinZ) / (camMaxZ + camMinZ);
+	// grab depth value (0 to 1) at ndc for object behind water
+	float depthOfObjectBehindWater = texture2D(depthTex, vec2(ndc.x, ndc.y)).r;
+    
+	// get depth of water plane
+	float linearWaterDepth = (vClipSpace.z + camMinZ) / (camMaxZ + camMinZ);
 
     // calculate water depth scaled to camMaxZ since camMaxZ >> camMinZ
-    float waterDepth = camMaxZ*(depthOfObjectBehindWater - linearWaterDepth);
+	float waterDepth = camMaxZ * (depthOfObjectBehindWater - linearWaterDepth);
 
-    // get water depth as a ratio of maxDepth
-    float wdepth = clamp((waterDepth/maxDepth), 0.0, 1.0);
+    waterDepth = clamp(waterDepth / maxDepth, 0.0, 1.0);
 
-    // mix water colors based on depth
-    baseColor = mix(wShallowColor, wDeepColor, wdepth);
+    vec4 waterColour = mix(wDeepColor, wShallowColor, waterDepth);
 
-    // mix colors with scene render
-    vec4 refractiveColor = texture2D(refractionSampler, vec2(ndc.x, ndc.y)+waveNoise);
-
-    baseColor = mix(refractiveColor, baseColor, baseColor.a);
-
-    // decide the amount of foam 
-    float foam = 1.0-smoothstep(0.1, 0.2, wdepth);
-
-    // make the foam effect using noise
-    float foamEffect = smoothstep( 0.1, 0.2, noise(vec3(0., time, 0.)+vPosition*fNoiseScale*0.3)*foam);
-
-    baseColor.rgba += vec4(foamEffect);
-
-    // final result
-    gl_FragColor = baseColor;   
+    gl_FragColor = waterColour;
 }
