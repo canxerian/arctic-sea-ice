@@ -28,7 +28,8 @@ export default class BabylonScene {
         // Skybox
         this.createSkybox(scene);
 
-        const sphere = BABYLON.MeshBuilder.CreateSphere("sphere", { segments: 16, diameter: 10 }, this.scene);
+        const sphere = BABYLON.MeshBuilder.CreateSphere("sphere", { segments: 16, diameter: 3 }, this.scene);
+        sphere.position = new BABYLON.Vector3(-10, 0, 0.5);
 
         const loadedArcticMesh = await BABYLON.SceneLoader.ImportMeshAsync("", arcticModel);
         // Clear color
@@ -65,9 +66,9 @@ export default class BabylonScene {
     createCamera(canvas) {
         const cam = new BABYLON.ArcRotateCamera(
             "Main Camera",
-            0,
+            -90 * Deg2Rad,
             70 * Deg2Rad,
-            20,
+            60,
             new BABYLON.Vector3(0, 0, 0)
         );
         cam.upperBetaLimit = 90 * Deg2Rad;

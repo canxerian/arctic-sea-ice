@@ -58,6 +58,13 @@ float noise(vec3 p)
     return o4.y * d.y + o4.x * (1.0 - d.y);
 }
 
+/*
+    Unity water shader
+    1. Multiply cam far plane by depth texture
+    2. localise to screen space of mesh:
+        screen o
+*/
+
 void main(void) 
 {
     // init baseColor
