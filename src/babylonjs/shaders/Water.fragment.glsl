@@ -20,8 +20,6 @@ uniform float wNoiseScale;
 uniform float wNoiseOffset;
 uniform float fNoiseScale;
 
-uniform float waterMixDebug;
-
 float mod289(float x) 
 { 
     return x - floor(x * (1.0 / 289.0)) * 289.0;

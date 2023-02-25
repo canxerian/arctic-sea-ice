@@ -45,8 +45,7 @@ export default class Water {
                     "worldViewProjection",
                     "maxDepth",
                     "wDeepColor",
-                    "wShallowColor",
-                    "waterMixDebug"
+                    "wShallowColor"
                 ]
             }
         );
@@ -77,8 +76,6 @@ export default class Water {
             this.waterMaterial.setFloat("amplitude", SceneData.WaterAmplitude);
 
             // Frag
-            this.waterMaterial.setFloat("waterMixDebug", SceneData.WaterMixDebug);
-
             this.waterMaterial.setFloat("maxDepth", SceneData.WaterMaxDepth);
             this.waterMaterial.setVector4("wDeepColor", new BABYLON.Vector4(SceneData.WaterColourDeep.r, SceneData.WaterColourDeep.g, SceneData.WaterColourDeep.b, SceneData.WaterColourDeep.a));
             this.waterMaterial.setVector4("wShallowColor", new BABYLON.Vector4(SceneData.WaterColourShallow.r, SceneData.WaterColourShallow.g, SceneData.WaterColourShallow.b, SceneData.WaterColourShallow.a));
