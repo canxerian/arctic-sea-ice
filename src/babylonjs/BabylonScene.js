@@ -6,6 +6,8 @@ import arcticModel from "./models/Arctic.glb";
 import Water from "./Water";
 import SceneData from "./SceneData.json";
 
+import envTexture from "./textures/kloppenheim_06_puresky_4k.env";
+
 const Deg2Rad = Math.PI / 180;
 export default class BabylonScene {
     constructor(canvas) {
@@ -22,13 +24,15 @@ export default class BabylonScene {
         // Gizmo 
         const gizmoManager = new BABYLON.GizmoManager(scene);
         gizmoManager.positionGizmoEnabled = true;
-        // gizmoManager.attachableMeshes = [sphere, sphere1, water];
+
+        // Skybox
+        this.createSkybox(scene);
 
         const sphere = BABYLON.MeshBuilder.CreateSphere("sphere", { segments: 16, diameter: 10 }, this.scene);
 
         const loadedArcticMesh = await BABYLON.SceneLoader.ImportMeshAsync("", arcticModel);
         // Clear color
-        scene.clearColor = new BABYLON.Color3(0.1, 0.1, 0.1);
+        // scene.clearColor = new BABYLON.Color3(0.1, 0.1, 0.1);
 
         // Depth texture setup (for water)
         const depthRenderer = scene.enableDepthRenderer(scene.activeCamera, false);
@@ -52,6 +56,10 @@ export default class BabylonScene {
             this.water.update();
             scene.render();
         });
+
+        window.addEventListener("resize", () => {
+            engine.resize();
+        })
     }
 
     createCamera(canvas) {
@@ -66,6 +74,17 @@ export default class BabylonScene {
 
         cam.attachControl(canvas, true, true);
         return cam;
+    }
+
+    /**
+     * 
+     * @param {BABYLON.Scene} scene 
+     */
+    createSkybox(scene) {
+        scene.environmentTexture = BABYLON.CubeTexture.CreateFromPrefilteredData(envTexture, scene);
+        scene.createDefaultSkybox(scene.environmentTexture, true);
+        scene.imageProcessingConfiguration.toneMappingEnabled = true;
+        scene.imageProcessingConfiguration.toneMappingType = BABYLON.ImageProcessingConfiguration.TONEMAPPING_STANDARD;
     }
 
     createDebugMenu() {
