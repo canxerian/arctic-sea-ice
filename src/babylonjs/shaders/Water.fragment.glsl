@@ -65,13 +65,11 @@ float noise(vec3 p)
         screen o
 */
 
-void main(void) 
+float getWaterDepth()
 {
-    // init baseColor
-    vec4 baseColor = vec4(0.0);
-
-	// normalized device coordinates - remap frag screen space coords to ndc (-1 to +1)
-    // We do this obtain our "UV" for the depth texture. Think of it as a mask for the depth texture (which is full screen)
+    // normalized device coordinates - remap frag screen space coords to ndc (-1 to +1)
+    // The divide by "w" is known as perspective divide
+    // NDC is then used as the UVs to sample the depthTex, Think of it as a mask for the depth texture (which is full screen)
     vec2 ndc = (vClipSpace.xy / vClipSpace.w) / 2.0 + 0.5;
 
 	// grab depth value at ndc for object behind water
@@ -83,8 +81,18 @@ void main(void)
     // calculate water depth scaled to camMaxZ since camMaxZ >> camMinZ
 	float waterDepth = camMaxZ * (depthOfObjectBehindWater - linearWaterDepth);
 
-    waterDepth = clamp(waterDepth / maxDepth, 0.0, 1.0);
     waterDepth *= waterStrength;
+    waterDepth = clamp(waterDepth / maxDepth, 0.0, 1.0);
     
+    return waterDepth;
+}
+
+void main(void) 
+{
+    // init baseColor
+    vec4 baseColor = vec4(0.0);
+
+    float waterDepth = getWaterDepth();
+
     gl_FragColor = vec4(vec3(waterDepth), 1.0);
 }

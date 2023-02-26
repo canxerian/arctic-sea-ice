@@ -92,7 +92,10 @@ export default class BabylonScene {
         const pane = new Pane({ title: "Debug Menu" });
 
         Object.keys(SceneData).forEach((key) => {
-            if (typeof SceneData[key] === "number") {
+            if (key === "WaterStrength") {
+                pane.addInput(SceneData, key, { min: 0, max: 1 });
+            }
+            else if (typeof SceneData[key] === "number") {
                 pane.addInput(SceneData, key, { min: 0, max: 10 });
             }
             else if (typeof SceneData[key] === "object" && SceneData[key].r) {
