@@ -71,8 +71,12 @@ export default class BabylonScene {
             60,
             new BABYLON.Vector3(0, 0, 0)
         );
-        cam.upperBetaLimit = 90 * Deg2Rad;
-
+        cam.lowerRadiusLimit = 10;
+        cam.upperRadiusLimit = 100;
+        cam.lowerBetaLimit = 0 * Deg2Rad;
+        cam.upperBetaLimit = 80 * Deg2Rad;
+        cam.minZ = 0.01;
+        cam.maxZ = 1000;
         cam.attachControl(canvas, true, true);
         return cam;
     }
@@ -83,7 +87,7 @@ export default class BabylonScene {
      */
     createSkybox(scene) {
         scene.environmentTexture = BABYLON.CubeTexture.CreateFromPrefilteredData(envTexture, scene);
-        scene.createDefaultSkybox(scene.environmentTexture, true);
+        scene.createDefaultSkybox(scene.environmentTexture, true, 10 * scene.activeCamera.maxZ);
         scene.imageProcessingConfiguration.toneMappingEnabled = true;
         scene.imageProcessingConfiguration.toneMappingType = BABYLON.ImageProcessingConfiguration.TONEMAPPING_STANDARD;
     }
