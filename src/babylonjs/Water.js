@@ -64,9 +64,9 @@ export default class Water {
         this.waterMaterial.setFloat("wNoiseOffset", 0.01);
         this.waterMaterial.setFloat("fNoiseScale", 10.0);
         this.waterMaterial.setFloat("maxDepth", SceneData.WaterMaxDepth);
+        this.waterMaterial.setFloat("waterStrength", SceneData.WaterStrength);
         this.waterMaterial.setVector4("wDeepColor", new BABYLON.Vector4(SceneData.WaterColourDeep.r, SceneData.WaterColourDeep.g, SceneData.WaterColourDeep.b, SceneData.WaterColourDeep.a));
         this.waterMaterial.setVector4("wShallowColor", new BABYLON.Vector4(SceneData.WaterColourShallow.r, SceneData.WaterColourShallow.g, SceneData.WaterColourShallow.b, SceneData.WaterColourShallow.a));
-
 
         waterMesh.material = this.waterMaterial;
 
@@ -77,6 +77,7 @@ export default class Water {
 
             // Frag
             this.waterMaterial.setFloat("maxDepth", SceneData.WaterMaxDepth);
+            this.waterMaterial.setFloat("maxDepth", SceneData.WaterStrength);
             this.waterMaterial.setVector4("wDeepColor", new BABYLON.Vector4(SceneData.WaterColourDeep.r, SceneData.WaterColourDeep.g, SceneData.WaterColourDeep.b, SceneData.WaterColourDeep.a));
             this.waterMaterial.setVector4("wShallowColor", new BABYLON.Vector4(SceneData.WaterColourShallow.r, SceneData.WaterColourShallow.g, SceneData.WaterColourShallow.b, SceneData.WaterColourShallow.a));
         });

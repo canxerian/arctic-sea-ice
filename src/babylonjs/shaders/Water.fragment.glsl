@@ -11,8 +11,8 @@ uniform sampler2D refractionSampler;
 uniform float camMinZ;
 uniform float camMaxZ;
 uniform float maxDepth;
+uniform float waterStrength;
 
-// water colors
 uniform vec4 wDeepColor;
 uniform vec4 wShallowColor;
 uniform float time;
@@ -71,10 +71,10 @@ void main(void)
     vec4 baseColor = vec4(0.0);
 
 	// normalized device coordinates - remap frag screen space coords to ndc (-1 to +1)
-    // We do this obtain our "UV" for the depth textur
+    // We do this obtain our "UV" for the depth texture. Think of it as a mask for the depth texture (which is full screen)
     vec2 ndc = (vClipSpace.xy / vClipSpace.w) / 2.0 + 0.5;
 
-	// grab depth value (0 to 1) at ndc for object behind water
+	// grab depth value at ndc for object behind water
 	float depthOfObjectBehindWater = texture2D(depthTex, vec2(ndc.x, ndc.y)).r;
     
 	// get depth of water plane
@@ -84,8 +84,7 @@ void main(void)
 	float waterDepth = camMaxZ * (depthOfObjectBehindWater - linearWaterDepth);
 
     waterDepth = clamp(waterDepth / maxDepth, 0.0, 1.0);
-
-    vec4 waterColour = mix(wDeepColor, wShallowColor, waterDepth);
-
-    gl_FragColor = waterColour;
+    waterDepth *= waterStrength;
+    
+    gl_FragColor = vec4(vec3(waterDepth), 1.0);
 }
