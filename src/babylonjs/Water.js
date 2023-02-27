@@ -19,7 +19,8 @@ export default class Water {
      * @param {Pane} debugPane 
      */
     constructor(scene, depthTex, refractionRTT, debugPane) {
-        const waterMesh = BABYLON.Mesh.CreateGround("water", 45, 45, 64, scene);
+        const size = 100;
+        const waterMesh = BABYLON.Mesh.CreateGround("water", size, size, 64, scene);
         waterMesh.position.y += 1;
 
         this.startTime = (new Date()).getTime();
