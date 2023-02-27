@@ -13,6 +13,7 @@ uniform float amplitude;
 // Varying (shared between vert/frag)
 varying vec3 vPosition;
 varying vec4 vClipSpace;
+varying vec3 vWorldPosition;
 varying vec2 vUV;
 
 void main(void) {

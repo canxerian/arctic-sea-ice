@@ -14,14 +14,10 @@ uniform sampler2D normalMap2;
 uniform float camMinZ;
 uniform float camMaxZ;
 uniform float maxDepth;
-uniform float waterStrength;
-
 uniform vec4 wDeepColor;
 uniform vec4 wShallowColor;
 uniform float time;
-uniform float wNoiseScale;
-uniform float wNoiseOffset;
-uniform float fNoiseScale;
+uniform vec2 waterSpeed;
 
 vec2 getNormalisedDeviceCoords()
 {
@@ -58,6 +54,12 @@ float getFoam()
     return 0.0;
 }
 
+vec3 getNormal(vec2 uv)
+{
+    vec3 normal = texture2D(normalMap1, vec2(uv.x + time * waterSpeed.x, uv.y + time * waterSpeed.y)).xyz;
+    return normalize(normal);
+}
+
 void main(void) 
 {
     // init baseColor
@@ -77,6 +79,9 @@ void main(void)
 
     float foam = getFoam();
     baseColor.rgba += vec4(foam);
-    
+
+    vec3 normal = getNormal(vUV);
+    baseColor.rgb = normal;
+
     gl_FragColor = baseColor;
 }

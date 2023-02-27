@@ -2,6 +2,8 @@ import * as BABYLON from "@babylonjs/core";
 
 import waterVertexShader from "./shaders/Water.vertex.glsl";
 import waterFragmentShader from "./shaders/Water.fragment.glsl";
+import normalMap1 from "./textures/water_normal_cadhatch_325.jpg";
+import normalMap2 from "./textures/water_normal_cadhatch_339.jpg";
 
 import SceneData from "./SceneData.json";
 import { Pane } from "tweakpane";
@@ -46,7 +48,8 @@ export default class Water {
                     "worldViewProjection",
                     "maxDepth",
                     "wDeepColor",
-                    "wShallowColor"
+                    "wShallowColor",
+                    "waterSpeed"
                 ]
             }
         );
@@ -59,6 +62,7 @@ export default class Water {
         // Frag uniforms
         this.waterMaterial.setTexture("depthTex", depthTex);
         this.waterMaterial.setTexture("refractionSampler", refractionRTT);
+        this.waterMaterial.setTexture("normalMap1", new BABYLON.Texture(normalMap1, scene));
         this.waterMaterial.setFloat("camMinZ", scene.activeCamera.minZ);
         this.waterMaterial.setFloat("camMaxZ", scene.activeCamera.maxZ);
         this.waterMaterial.setFloat("wNoiseScale", 6.0);
@@ -68,6 +72,7 @@ export default class Water {
         this.waterMaterial.setFloat("waterStrength", SceneData.WaterStrength);
         this.waterMaterial.setVector4("wDeepColor", new BABYLON.Vector4(SceneData.WaterColourDeep.r, SceneData.WaterColourDeep.g, SceneData.WaterColourDeep.b, SceneData.WaterColourDeep.a));
         this.waterMaterial.setVector4("wShallowColor", new BABYLON.Vector4(SceneData.WaterColourShallow.r, SceneData.WaterColourShallow.g, SceneData.WaterColourShallow.b, SceneData.WaterColourShallow.a));
+        this.waterMaterial.setVector2("waterSpeed", SceneData.WaterSpeed);
 
         waterMesh.material = this.waterMaterial;
 
@@ -81,6 +86,7 @@ export default class Water {
             this.waterMaterial.setFloat("waterStrength", SceneData.WaterStrength);
             this.waterMaterial.setVector4("wDeepColor", new BABYLON.Vector4(SceneData.WaterColourDeep.r, SceneData.WaterColourDeep.g, SceneData.WaterColourDeep.b, SceneData.WaterColourDeep.a));
             this.waterMaterial.setVector4("wShallowColor", new BABYLON.Vector4(SceneData.WaterColourShallow.r, SceneData.WaterColourShallow.g, SceneData.WaterColourShallow.b, SceneData.WaterColourShallow.a));
+            this.waterMaterial.setVector2("waterSpeed", SceneData.WaterSpeed);
         });
     }
 

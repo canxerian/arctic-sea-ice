@@ -105,6 +105,9 @@ export default class BabylonScene {
             else if (typeof SceneData[key] === "object" && SceneData[key].r) {
                 pane.addInput(SceneData, key, { color: { type: "float" } });
             }
+            else {
+                pane.addInput(SceneData, key);
+            }
         });
 
         const saveBtn = pane.addButton({ title: "Save", label: "Save" });
