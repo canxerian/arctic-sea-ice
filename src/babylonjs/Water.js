@@ -36,62 +36,64 @@ export default class Water {
             },
             {
                 attributes: ["position", "normal", "uv"],
+                samplers: [
+                    "_DepthTex",
+                    "_RefractionTex",
+                    "_NormalMap1",
+                ],
                 uniforms: [
+                    // BabylonJS built-in uniforms
+                    "worldViewProjection",
+
                     // Vert
-                    "time",
-                    "frequency",
+                    "_Time",
+                    "_Frequency",
 
                     // Frag
-                    "depthTex",
-                    "camMinZ",
-                    "camMaxZ",
-                    "worldViewProjection",
-                    "maxDepth",
-                    "wDeepColor",
-                    "wShallowColor",
-                    "waterSpeed"
-                ]
+                    "_CamMinZ",
+                    "_CamMaxZ",
+                    "_WaterMaxDepth",
+                    "_WaterDeepColour",
+                    "_WaterShallowColour",
+                    "_WaterSpeed"
+                ],
+                needAlphaBlending: true
             }
         );
 
         // Vert uniforms
-        this.waterMaterial.setFloat("frequency", SceneData.WaterFrequency);
-        this.waterMaterial.setFloat("amplitude", SceneData.WaterAmplitude);
-        this.waterMaterial.setFloat("time", 0);
+        this.waterMaterial.setFloat("_Frequency", SceneData.WaterFrequency);
+        this.waterMaterial.setFloat("_Amplitude", SceneData.WaterAmplitude);
+        this.waterMaterial.setFloat("_Time", 0);
 
         // Frag uniforms
-        this.waterMaterial.setTexture("depthTex", depthTex);
-        this.waterMaterial.setTexture("refractionSampler", refractionRTT);
-        this.waterMaterial.setTexture("normalMap1", new BABYLON.Texture(normalMap1, scene));
-        this.waterMaterial.setFloat("camMinZ", scene.activeCamera.minZ);
-        this.waterMaterial.setFloat("camMaxZ", scene.activeCamera.maxZ);
-        this.waterMaterial.setFloat("wNoiseScale", 6.0);
-        this.waterMaterial.setFloat("wNoiseOffset", 0.01);
-        this.waterMaterial.setFloat("fNoiseScale", 10.0);
-        this.waterMaterial.setFloat("maxDepth", SceneData.WaterMaxDepth);
-        this.waterMaterial.setFloat("waterStrength", SceneData.WaterStrength);
-        this.waterMaterial.setVector4("wDeepColor", new BABYLON.Vector4(SceneData.WaterColourDeep.r, SceneData.WaterColourDeep.g, SceneData.WaterColourDeep.b, SceneData.WaterColourDeep.a));
-        this.waterMaterial.setVector4("wShallowColor", new BABYLON.Vector4(SceneData.WaterColourShallow.r, SceneData.WaterColourShallow.g, SceneData.WaterColourShallow.b, SceneData.WaterColourShallow.a));
-        this.waterMaterial.setVector2("waterSpeed", SceneData.WaterSpeed);
+        this.waterMaterial.setTexture("_DepthTex", depthTex);
+        this.waterMaterial.setTexture("_RefractionTex", refractionRTT);
+        this.waterMaterial.setTexture("_NormalMap1", new BABYLON.Texture(normalMap1, scene));
+        this.waterMaterial.setFloat("_CamMinZ", scene.activeCamera.minZ);
+        this.waterMaterial.setFloat("_CamMaxZ", scene.activeCamera.maxZ);
+        this.waterMaterial.setFloat("_WaterMaxDepth", SceneData.WaterMaxDepth);
+        this.waterMaterial.setVector4("_WaterDeepColour", new BABYLON.Vector4(SceneData.WaterColourDeep.r, SceneData.WaterColourDeep.g, SceneData.WaterColourDeep.b, SceneData.WaterColourDeep.a));
+        this.waterMaterial.setVector4("_WaterShallowColour", new BABYLON.Vector4(SceneData.WaterColourShallow.r, SceneData.WaterColourShallow.g, SceneData.WaterColourShallow.b, SceneData.WaterColourShallow.a));
+        this.waterMaterial.setVector2("_WaterSpeed", SceneData.WaterSpeed);
 
         waterMesh.material = this.waterMaterial;
 
-        debugPane.on('change', (ev) => {
+        debugPane.on('change', () => {
             // Vert
-            this.waterMaterial.setFloat("frequency", SceneData.WaterFrequency);
-            this.waterMaterial.setFloat("amplitude", SceneData.WaterAmplitude);
+            this.waterMaterial.setFloat("_Frequency", SceneData.WaterFrequency);
+            this.waterMaterial.setFloat("_Amplitude", SceneData.WaterAmplitude);
 
             // Frag
-            this.waterMaterial.setFloat("maxDepth", SceneData.WaterMaxDepth);
-            this.waterMaterial.setFloat("waterStrength", SceneData.WaterStrength);
-            this.waterMaterial.setVector4("wDeepColor", new BABYLON.Vector4(SceneData.WaterColourDeep.r, SceneData.WaterColourDeep.g, SceneData.WaterColourDeep.b, SceneData.WaterColourDeep.a));
-            this.waterMaterial.setVector4("wShallowColor", new BABYLON.Vector4(SceneData.WaterColourShallow.r, SceneData.WaterColourShallow.g, SceneData.WaterColourShallow.b, SceneData.WaterColourShallow.a));
-            this.waterMaterial.setVector2("waterSpeed", SceneData.WaterSpeed);
+            this.waterMaterial.setFloat("_WaterMaxDepth", SceneData.WaterMaxDepth);
+            this.waterMaterial.setVector4("_WaterDeepColour", new BABYLON.Vector4(SceneData.WaterColourDeep.r, SceneData.WaterColourDeep.g, SceneData.WaterColourDeep.b, SceneData.WaterColourDeep.a));
+            this.waterMaterial.setVector4("_WaterShallowColour", new BABYLON.Vector4(SceneData.WaterColourShallow.r, SceneData.WaterColourShallow.g, SceneData.WaterColourShallow.b, SceneData.WaterColourShallow.a));
+            this.waterMaterial.setVector2("_WaterSpeed", SceneData.WaterSpeed);
         });
     }
 
     update() {
         const timeMs = (new Date()).getTime() - this.startTime;
-        this.waterMaterial.setFloat("time", timeMs / 1000);
+        this.waterMaterial.setFloat("_Time", timeMs / 1000);
     }
 }

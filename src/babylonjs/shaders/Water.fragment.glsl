@@ -6,18 +6,17 @@ varying vec4 vClipSpace;
 varying vec2 vUV;
 
 // Uniforms
-uniform sampler2D depthTex;
-uniform sampler2D refractionSampler;
-uniform sampler2D normalMap1;
-uniform sampler2D normalMap2;
+uniform sampler2D _DepthTex;
+uniform sampler2D _RefractionTex;
+uniform sampler2D _NormalMap1;
 
-uniform float camMinZ;
-uniform float camMaxZ;
-uniform float maxDepth;
-uniform vec4 wDeepColor;
-uniform vec4 wShallowColor;
-uniform float time;
-uniform vec2 waterSpeed;
+uniform float _CamMinZ;
+uniform float _CamMaxZ;
+uniform float _WaterMaxDepth;
+uniform vec4 _WaterDeepColour;
+uniform vec4 _WaterShallowColour;
+uniform float _Time;
+uniform vec2 _WaterSpeed;
 
 vec2 getNormalisedDeviceCoords()
 {
@@ -27,36 +26,23 @@ vec2 getNormalisedDeviceCoords()
 float getWaterDepth(vec2 ndc)
 {
     // grab depth value (0 to 1) at ndc for object behind water
-    float depthOfObjectBehindWater = texture2D(depthTex, ndc).r;
+    float depthOfObjectBehindWater = texture2D(_DepthTex, ndc).r;
     
     // get depth of water plane
-    float linearWaterDepth = (vClipSpace.z + camMinZ) / (camMaxZ + camMinZ);
+    float linearWaterDepth = (vClipSpace.z + _CamMinZ) / (_CamMaxZ + _CamMinZ);
     
-    // calculate water depth scaled to camMaxZ since camMaxZ >> camMinZ
-    float waterDepth = camMaxZ*(depthOfObjectBehindWater - linearWaterDepth);
+    // calculate water depth scaled to _CamMaxZ since _CamMaxZ >> _CamMinZ
+    float waterDepth = _CamMaxZ * (depthOfObjectBehindWater - linearWaterDepth);
     
-    // get water depth as a ratio of maxDepth
-    float wdepth = clamp((waterDepth/maxDepth), 0.0, 1.0);
+    // get water depth as a ratio of _WaterMaxDepth
+    float wdepth = clamp((waterDepth / _WaterMaxDepth), 0.0, 1.0);
 
     return wdepth;
 }
 
-float getFoam()
-{
-    // TODO
-
-    // decide the amount of foam 
-    // float foam = 1.0 - smoothstep(0.1, 0.2, wdepth);
-    
-    // make the foam effect using noise
-    // float foamEffect = smoothstep( 0.1, 0.2, noise(vec3(0., time, 0.)+vPosition*fNoiseScale*0.3)*foam);
-    // baseColor.rgba += vec4(foamEffect);
-    return 0.0;
-}
-
 vec3 getNormal(vec2 uv)
 {
-    vec3 normal = texture2D(normalMap1, vec2(uv.x + time * waterSpeed.x, uv.y + time * waterSpeed.y)).xyz;
+    vec3 normal = texture2D(_NormalMap1, vec2(uv.x + _Time * _WaterSpeed.x, uv.y + _Time * _WaterSpeed.y)).xyz;
     return normalize(normal);
 }
 
@@ -71,17 +57,19 @@ void main(void)
     float wdepth = getWaterDepth(ndc);
     
     // mix water colors based on depth
-    baseColor = mix(wShallowColor, wDeepColor, wdepth);
+    baseColor = mix(_WaterShallowColour, _WaterDeepColour, wdepth);
     
     // mix colors with scene render
-    vec4 refractiveColor = texture2D(refractionSampler, ndc);
+    vec4 refractiveColor = texture2D(_RefractionTex, ndc);
     baseColor = mix(refractiveColor, baseColor, baseColor.a);
 
-    float foam = getFoam();
-    baseColor.rgba += vec4(foam);
-
     vec3 normal = getNormal(vUV);
-    baseColor.rgb = normal;
+    
+    // Diffuse
+    
 
+
+
+    // baseColor.a = 0.5;
     gl_FragColor = baseColor;
 }
