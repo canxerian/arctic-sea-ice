@@ -3,6 +3,7 @@ precision highp float;
 // Varyings (received from vertex shader)
 varying vec3 vPosition;
 varying vec4 vClipSpace;
+varying vec4 vWorldPosition;
 varying vec2 vUV;
 
 // Uniforms
@@ -12,11 +13,21 @@ uniform sampler2D _NormalMap1;
 
 uniform float _CamMinZ;
 uniform float _CamMaxZ;
+uniform vec3 _CamPosition;
+
 uniform float _WaterMaxDepth;
 uniform vec4 _WaterDeepColour;
 uniform vec4 _WaterShallowColour;
-uniform float _Time;
 uniform vec2 _WaterSpeed;
+uniform float _WaterShininess;
+uniform vec3 _SunDirection;
+uniform float _NormalBumpScale;
+uniform float _Time;
+
+float saturate(float val)
+{
+    return clamp(val, 0.0, 1.0);
+}
 
 vec2 getNormalisedDeviceCoords()
 {
@@ -43,7 +54,8 @@ float getWaterDepth(vec2 ndc)
 vec3 getNormal(vec2 uv)
 {
     vec3 normal = texture2D(_NormalMap1, vec2(uv.x + _Time * _WaterSpeed.x, uv.y + _Time * _WaterSpeed.y)).xyz;
-    return normalize(normal);
+    normal = normal * 2.0 - 1.0;
+    return normalize(normal.xzy);
 }
 
 void main(void) 
@@ -64,12 +76,23 @@ void main(void)
     baseColor = mix(refractiveColor, baseColor, baseColor.a);
 
     vec3 normal = getNormal(vUV);
-    
-    // Diffuse
-    
 
+    // Diffuse
+    float diffuse = max(0.0, dot(normal, normalize(_SunDirection)));
+
+    // Specular
+    // https://en.wikibooks.org/wiki/Cg_Programming/Unity/Specular_Highlights
+    vec3 viewDir = normalize(_CamPosition.xyz - vWorldPosition.xyz);
+    vec3 lightCol = vec3(0.2, 0.2, 0.6);
+    vec3 specularCol = vec3(0.5, 0.6, 0.6);
+    vec3 reflection = 
+    float specular = pow(max(0.0, dot(reflect(-_SunDirection, normal), viewDir)), _WaterShininess); 
+
+    float halfVector = max(0.0, dot(normal, normalize(_SunDirection)));
+
+    gl_FragColor = vec4(vec3(specular), 1.0);
 
 
     // baseColor.a = 0.5;
-    gl_FragColor = baseColor;
+    // gl_FragColor = baseColor;
 }

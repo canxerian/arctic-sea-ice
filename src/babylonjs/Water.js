@@ -25,6 +25,7 @@ export default class Water {
         const waterMesh = BABYLON.Mesh.CreateGround("water", size, size, 64, scene);
         waterMesh.position.y += 1;
 
+        this.scene = scene;
         this.startTime = (new Date()).getTime();
 
         this.waterMaterial = new BABYLON.ShaderMaterial(
@@ -44,6 +45,7 @@ export default class Water {
                 uniforms: [
                     // BabylonJS built-in uniforms
                     "worldViewProjection",
+                    "world",        // a matrix used to tranforms from object space to world space
 
                     // Vert
                     "_Time",
@@ -55,7 +57,11 @@ export default class Water {
                     "_WaterMaxDepth",
                     "_WaterDeepColour",
                     "_WaterShallowColour",
-                    "_WaterSpeed"
+                    "_WaterSpeed",
+                    "_WaterShininess",
+                    "_SunDirection",
+                    "_NormalBumpScale",
+                    "_CamPosition",
                 ],
                 needAlphaBlending: true
             }
@@ -69,13 +75,20 @@ export default class Water {
         // Frag uniforms
         this.waterMaterial.setTexture("_DepthTex", depthTex);
         this.waterMaterial.setTexture("_RefractionTex", refractionRTT);
-        this.waterMaterial.setTexture("_NormalMap1", new BABYLON.Texture(normalMap1, scene));
+        this.waterMaterial.setTexture("_NormalMap1", new BABYLON.Texture(normalMap1, scene, { samplingMode: BABYLON.Texture.TRILINEAR_SAMPLINGMODE }));
         this.waterMaterial.setFloat("_CamMinZ", scene.activeCamera.minZ);
         this.waterMaterial.setFloat("_CamMaxZ", scene.activeCamera.maxZ);
+        this.waterMaterial.setVector3("_CamPosition", scene.activeCamera.position);
         this.waterMaterial.setFloat("_WaterMaxDepth", SceneData.WaterMaxDepth);
         this.waterMaterial.setVector4("_WaterDeepColour", new BABYLON.Vector4(SceneData.WaterColourDeep.r, SceneData.WaterColourDeep.g, SceneData.WaterColourDeep.b, SceneData.WaterColourDeep.a));
         this.waterMaterial.setVector4("_WaterShallowColour", new BABYLON.Vector4(SceneData.WaterColourShallow.r, SceneData.WaterColourShallow.g, SceneData.WaterColourShallow.b, SceneData.WaterColourShallow.a));
+        this.waterMaterial.setFloat("_WaterShininess", SceneData.WaterShininess);
         this.waterMaterial.setVector2("_WaterSpeed", SceneData.WaterSpeed);
+        this.waterMaterial.setFloat("_NormalBumpScale", SceneData.WaterNormalBumpScale);
+
+        // Placeholder - replace with actual sun (when I create a procedural skybox)
+        this.sun = BABYLON.MeshBuilder.CreateSphere("Sun", { segments: 16, diameter: 1 }, this.scene);
+        this.sun.position = new BABYLON.Vector3(0, 7, 0);
 
         waterMesh.material = this.waterMaterial;
 
@@ -89,11 +102,16 @@ export default class Water {
             this.waterMaterial.setVector4("_WaterDeepColour", new BABYLON.Vector4(SceneData.WaterColourDeep.r, SceneData.WaterColourDeep.g, SceneData.WaterColourDeep.b, SceneData.WaterColourDeep.a));
             this.waterMaterial.setVector4("_WaterShallowColour", new BABYLON.Vector4(SceneData.WaterColourShallow.r, SceneData.WaterColourShallow.g, SceneData.WaterColourShallow.b, SceneData.WaterColourShallow.a));
             this.waterMaterial.setVector2("_WaterSpeed", SceneData.WaterSpeed);
+            this.waterMaterial.setFloat("_NormalBumpScale", SceneData.WaterNormalBumpScale);
+            this.waterMaterial.setFloat("_WaterShininess", SceneData.WaterShininess);
         });
     }
 
     update() {
         const timeMs = (new Date()).getTime() - this.startTime;
         this.waterMaterial.setFloat("_Time", timeMs / 1000);
+
+        this.waterMaterial.setVector3("_SunDirection", this.sun.position);
+        this.waterMaterial.setVector3("_CamPosition", this.scene.activeCamera.position);
     }
 }
