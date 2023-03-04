@@ -1,15 +1,15 @@
 import * as BABYLON from "@babylonjs/core";
 import normalMap1 from "../textures/water_normal_cadhatch_325.jpg";
 
-import waterVertexShader from "./WaterTest.vertex.glsl";
-import waterFragmentShader from "./WaterTest.fragment.glsl";
+import waterVertexShader from "./Water.vertex.glsl";
+import waterFragmentShader from "./Water.fragment.glsl";
 
 import SceneData from "../SceneData.json";
 
-BABYLON.Effect.ShadersStore["waterTestVertexShader"] = waterVertexShader
-BABYLON.Effect.ShadersStore["waterTestFragmentShader"] = waterFragmentShader
+BABYLON.Effect.ShadersStore["waterVertexShader"] = waterVertexShader
+BABYLON.Effect.ShadersStore["waterFragmentShader"] = waterFragmentShader
 
-export default class WaterTest {
+export default class Water {
     /**
      *
      * @param {BABYLON.Scene} scene
@@ -19,14 +19,14 @@ export default class WaterTest {
         const subDivisions = 128;
         this.scene = scene;
         this.startTime = (new Date()).getTime();
-        this.mesh = BABYLON.Mesh.CreateGround("waterTest", size, size, subDivisions, scene);
+        this.mesh = BABYLON.Mesh.CreateGround("water", size, size, subDivisions, scene);
         this.mesh.position.y += 1;
         this.material = new BABYLON.ShaderMaterial(
-            "waterTestShader",
+            "waterShader",
             scene,
             {
-                vertex: "waterTest",
-                fragment: "waterTest",
+                vertex: "water",
+                fragment: "water",
             },
             {
                 attributes: [
