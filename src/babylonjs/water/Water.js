@@ -53,8 +53,8 @@ export default class Water {
                     "_NormalMapSize",
                     "_ColourShallow",
                     "_ColourDeep",
-                    "_FogStart",
-                    "_FogEnd",
+                    "_FogDensity",
+                    "_FogColour",
                 ],
                 needAlphaBlending: true
             }
@@ -81,8 +81,7 @@ export default class Water {
         this.material.setFloat("_NormalMapSize", SceneData.WaterNormalMapSize);
         this.material.setColor3("_ColourShallow", SceneData.WaterColourShallow);
         this.material.setColor3("_ColourDeep", SceneData.WaterColourDeep);
-        this.material.setFloat("_FogStart", SceneData.FogStart);
-        this.material.setFloat("_FogEnd", SceneData.FogEnd);        
-        this.material.setColor3("_FogColour", SceneData.FogColour);        
+        this.material.setFloat("_FogDensity", SceneData.FogDensity);
+        this.material.setColor3("_FogColour", SceneData.FogColour);
     }
 }

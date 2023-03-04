@@ -14,8 +14,7 @@ uniform float _MaxDepth;
 uniform vec3 _ColourDeep;
 uniform vec3 _ColourShallow;
 uniform vec2 _CamNearFar;
-uniform float _FogStart;
-uniform float _FogEnd;
+uniform float _FogDensity;
 uniform vec3 _FogColour;
 
 // Varying (vert to frag parameters)
@@ -91,12 +90,11 @@ void main(void) {
     vec3 lightingColour = vec3(ambient + diffuse + specular);
 
     // Fog
-    // Let's try linear fog to begin with..
     float distanceFromCam = length(_CamPosition - vWorldPosition.xyz);
-    float fog = 1.0 - saturate((_FogEnd - distanceFromCam) / (_FogEnd - _FogStart));
+    float fog = pow(2.0, -pow(distanceFromCam * _FogDensity, 2.0));     // Exponential square
 
     vec3 finalCol = waterColour + lightingColour;
-    finalCol = mix(finalCol, _FogColour, fog);
+    finalCol = mix(finalCol, _FogColour, 1.0 - fog);
 
     gl_FragColor = vec4(finalCol, 1.0);
 }
