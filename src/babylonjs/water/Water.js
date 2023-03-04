@@ -4,7 +4,7 @@ import normalMap1 from "../textures/water_normal_cadhatch_325.jpg";
 import waterVertexShader from "./Water.vertex.glsl";
 import waterFragmentShader from "./Water.fragment.glsl";
 
-import SceneData from "../SceneData.json";
+import SceneData from "../SceneData";
 
 BABYLON.Effect.ShadersStore["waterVertexShader"] = waterVertexShader
 BABYLON.Effect.ShadersStore["waterFragmentShader"] = waterFragmentShader
@@ -73,7 +73,11 @@ export default class Water {
         this.material.setVector3("_CamPosition", this.scene.activeCamera.position);
         this.material.setFloat("_Shininess", SceneData.WaterShininess);
         this.material.setFloat("_WaterMaxDepth", SceneData.WaterMaxDepth);
+        this.material.setFloat("_WaterNormalMapSpeed", SceneData.WaterNormalMapSpeed);
+        this.material.setFloat("_WaterNormalMapSize", SceneData.WaterNormalMapSize);
         this.material.setColor3("_WaterColourShallow", SceneData.WaterColourShallow);
         this.material.setColor3("_WaterColourDeep", SceneData.WaterColourDeep);
+
+        
     }
 }

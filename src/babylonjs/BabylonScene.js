@@ -3,10 +3,11 @@ import "@babylonjs/loaders";
 import { Pane } from "tweakpane";
 
 import arcticModel from "./models/Arctic.glb";
-import SceneData from "./SceneData.json";
+import SceneData from "./SceneData.js";
 
 import envTexture from "./textures/kloppenheim_06_puresky_4k.env";
 import Water from "./water/Water";
+
 
 const Deg2Rad = Math.PI / 180;
 export default class BabylonScene {
@@ -18,8 +19,6 @@ export default class BabylonScene {
         const engine = new BABYLON.Engine(canvas);
         const scene = new BABYLON.Scene(engine);
         const camera = this.createCamera();
-
-        const debugMenu = this.createDebugMenu();
 
         // Gizmo 
         const gizmoManager = new BABYLON.GizmoManager(scene);
@@ -90,50 +89,5 @@ export default class BabylonScene {
         scene.createDefaultSkybox(scene.environmentTexture, true, 10 * scene.activeCamera.maxZ);
         scene.imageProcessingConfiguration.toneMappingEnabled = true;
         scene.imageProcessingConfiguration.toneMappingType = BABYLON.ImageProcessingConfiguration.TONEMAPPING_STANDARD;
-    }
-
-    createDebugMenu() {
-        const pane = new Pane({ title: "Debug Menu" });
-
-        Object.keys(SceneData).forEach((key) => {
-            if (key === "WaterStrength") {
-                pane.addInput(SceneData, key, { min: 0, max: 1 });
-            } 
-            else if (key === "WaterShininess") {
-                pane.addInput(SceneData, key, { min: 0, max: 200 });
-            }
-            else if (key === "WaterMaxDepth") {
-                pane.addInput(SceneData, key, { min: 0, max: 200 });
-            }
-            else if (typeof SceneData[key] === "number") {
-                pane.addInput(SceneData, key, { min: 0, max: 10 });
-            }
-            else if (typeof SceneData[key] === "object" && SceneData[key].r) {
-                pane.addInput(SceneData, key, { color: { type: "float" } });
-            }
-            else {
-                pane.addInput(SceneData, key);
-            }
-        });
-
-        const saveBtn = pane.addButton({ title: "Save", label: "Save" });
-        const onClickSave = async () => {
-            const preset = pane.exportPreset();
-            const opts = {
-                suggestedName: "SceneData",
-                excludeAcceptAllOption: true,
-                types: [{
-                    description: 'JSON',
-                    accept: { 'application/json': ['.json'] },
-                }],
-            };
-            const saveFile = await window.showSaveFilePicker(opts);
-            const writable = await saveFile.createWritable();
-            await writable.write(JSON.stringify(preset));
-            await writable.close();
-        }
-        saveBtn.on("click", onClickSave);
-
-        return pane;
     }
 }

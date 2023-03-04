@@ -4,6 +4,8 @@ uniform sampler2D _NormalMap;
 uniform sampler2D _DepthTex;
 
 uniform float _Time;
+uniform float _WaterNormalMapSpeed;
+uniform float _WaterNormalMapSize;
 uniform vec3 _SunPosition;
 uniform vec3 _CamPosition;
 uniform float _Shininess;
@@ -46,8 +48,9 @@ float getWaterDepth() {
 
 // https://github.com/mrdoob/three.js/blob/dev/examples/jsm/objects/Water.js
 vec3 getNormal( vec2 uv ) {
-    float time = _Time;
-
+    float time = _Time * _WaterNormalMapSpeed;
+    uv *= _WaterNormalMapSize;
+    
     vec2 uv0 = ( uv / 103.0 ) + vec2(time / 17.0, time / 29.0);
     vec2 uv1 = uv / 107.0-vec2( time / -19.0, time / 31.0 );
     vec2 uv2 = uv / vec2( 8907.0, 9803.0 ) + vec2( time / 101.0, time / 97.0 );
