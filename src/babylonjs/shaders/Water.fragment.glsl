@@ -18,7 +18,7 @@ uniform vec3 _CamPosition;
 uniform float _WaterMaxDepth;
 uniform vec4 _WaterDeepColour;
 uniform vec4 _WaterShallowColour;
-uniform vec2 _WaterSpeed;
+uniform float _WaterSpeed;
 uniform float _WaterShininess;
 uniform vec3 _SunDirection;
 uniform float _NormalBumpScale;
@@ -51,48 +51,53 @@ float getWaterDepth(vec2 ndc)
     return wdepth;
 }
 
-vec3 getNormal(vec2 uv)
+vec3 getNoise(vec2 uv)
 {
-    vec3 normal = texture2D(_NormalMap1, vec2(uv.x + _Time * _WaterSpeed.x, uv.y + _Time * _WaterSpeed.y)).xyz;
-    normal = normal * 2.0 - 1.0;
-    return normalize(normal.xzy);
+    // https://github.com/mrdoob/three.js/blob/7da79d5d95839781dcbc54d341d0d7bf6d6dae44/examples/jsm/objects/Water.js
+    float time = _WaterSpeed * _Time;
+    vec2 uv0 = ( uv / 103.0 ) + vec2(time / 17.0, time / 29.0);
+    vec2 uv1 = uv / 107.0-vec2( time / -19.0, time / 31.0 );
+    vec2 uv2 = uv / vec2( 8907.0, 9803.0 ) + vec2( time / 101.0, time / 97.0 );
+    vec2 uv3 = uv / vec2( 1091.0, 1027.0 ) - vec2( time / 109.0, time / -113.0 );
+    vec4 noise = texture2D( _NormalMap1, uv0 ) +
+        texture2D( _NormalMap1, uv1 ) +
+        texture2D( _NormalMap1, uv2 ) +
+        texture2D( _NormalMap1, uv3 );
+    return normalize(noise * 0.5 - 1.0).xyz;
 }
 
 void main(void) 
 {
-    // init baseColor
-    vec4 baseColor = vec4(0.0);
+    vec4 baseColour = vec4(0.0);
     
     // remap frag screen space coords to ndc (-1 to +1)
     vec2 ndc = getNormalisedDeviceCoords();
-    
-    float wdepth = getWaterDepth(ndc);
-    
-    // mix water colors based on depth
-    baseColor = mix(_WaterShallowColour, _WaterDeepColour, wdepth);
-    
-    // mix colors with scene render
-    vec4 refractiveColor = texture2D(_RefractionTex, ndc);
-    baseColor = mix(refractiveColor, baseColor, baseColor.a);
 
-    vec3 normal = getNormal(vUV);
+    float wdepth = getWaterDepth(ndc);
+        
+    // // mix colors with scene render
+    // vec4 refractiveColor = texture2D(_RefractionTex, ndc);
+    // baseColour = mix(refractiveColor, baseColour, baseColour.a);
+
+    vec3 normal = getNoise(vWorldPosition.xz);
+    vec3 sunDir = normalize(_SunDirection);
 
     // Diffuse
-    float diffuse = max(0.0, dot(normal, normalize(_SunDirection)));
+    float diffuse = max(0.0, dot(normal, sunDir));
 
     // Specular
     // https://en.wikibooks.org/wiki/Cg_Programming/Unity/Specular_Highlights
     vec3 viewDir = normalize(_CamPosition.xyz - vWorldPosition.xyz);
-    vec3 lightCol = vec3(0.2, 0.2, 0.6);
-    vec3 specularCol = vec3(0.5, 0.6, 0.6);
-    vec3 reflection = 
-    float specular = pow(max(0.0, dot(reflect(-_SunDirection, normal), viewDir)), _WaterShininess); 
+    vec3 reflection = normalize(reflect(-sunDir, normal));
+    float lightReceivedByEye = dot(viewDir, reflection);
+    float specular = saturate(pow(lightReceivedByEye, _WaterShininess));
 
-    float halfVector = max(0.0, dot(normal, normalize(_SunDirection)));
-
-    gl_FragColor = vec4(vec3(specular), 1.0);
+    // mix water colors based on depth
+    baseColour = mix(_WaterShallowColour, _WaterDeepColour, wdepth);
 
 
-    // baseColor.a = 0.5;
-    // gl_FragColor = baseColor;
+    baseColour.xyz = baseColour.xyz + specular; 
+
+    gl_FragColor = baseColour;
+    // gl_FragColor = vec4(vec3(diffuse + specular), 1.0);
 }

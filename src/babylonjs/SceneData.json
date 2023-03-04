@@ -15,10 +15,7 @@
         "b": 0.7375,
         "a": 1
     },
-    "WaterSpeed": {
-        "x": 0,
-        "y": 0.01
-    },
+    "WaterSpeed": 0.3,
     "WaterNormalBumpScale": 3.0434782608695654,
-    "WaterShininess": 1.0 
+    "WaterShininess": 165.2173913043478
 }

@@ -98,6 +98,9 @@ export default class BabylonScene {
         Object.keys(SceneData).forEach((key) => {
             if (key === "WaterStrength") {
                 pane.addInput(SceneData, key, { min: 0, max: 1 });
+            } 
+            else if (key === "WaterShininess") {
+                pane.addInput(SceneData, key, { min: 0, max: 200 });
             }
             else if (typeof SceneData[key] === "number") {
                 pane.addInput(SceneData, key, { min: 0, max: 10 });

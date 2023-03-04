@@ -83,7 +83,7 @@ export default class Water {
         this.waterMaterial.setVector4("_WaterDeepColour", new BABYLON.Vector4(SceneData.WaterColourDeep.r, SceneData.WaterColourDeep.g, SceneData.WaterColourDeep.b, SceneData.WaterColourDeep.a));
         this.waterMaterial.setVector4("_WaterShallowColour", new BABYLON.Vector4(SceneData.WaterColourShallow.r, SceneData.WaterColourShallow.g, SceneData.WaterColourShallow.b, SceneData.WaterColourShallow.a));
         this.waterMaterial.setFloat("_WaterShininess", SceneData.WaterShininess);
-        this.waterMaterial.setVector2("_WaterSpeed", SceneData.WaterSpeed);
+        this.waterMaterial.setFloat("_WaterSpeed", SceneData.WaterSpeed);
         this.waterMaterial.setFloat("_NormalBumpScale", SceneData.WaterNormalBumpScale);
 
         // Placeholder - replace with actual sun (when I create a procedural skybox)
@@ -101,7 +101,7 @@ export default class Water {
             this.waterMaterial.setFloat("_WaterMaxDepth", SceneData.WaterMaxDepth);
             this.waterMaterial.setVector4("_WaterDeepColour", new BABYLON.Vector4(SceneData.WaterColourDeep.r, SceneData.WaterColourDeep.g, SceneData.WaterColourDeep.b, SceneData.WaterColourDeep.a));
             this.waterMaterial.setVector4("_WaterShallowColour", new BABYLON.Vector4(SceneData.WaterColourShallow.r, SceneData.WaterColourShallow.g, SceneData.WaterColourShallow.b, SceneData.WaterColourShallow.a));
-            this.waterMaterial.setVector2("_WaterSpeed", SceneData.WaterSpeed);
+            this.waterMaterial.setFloat("_WaterSpeed", SceneData.WaterSpeed);
             this.waterMaterial.setFloat("_NormalBumpScale", SceneData.WaterNormalBumpScale);
             this.waterMaterial.setFloat("_WaterShininess", SceneData.WaterShininess);
         });
