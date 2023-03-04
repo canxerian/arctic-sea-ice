@@ -5,6 +5,7 @@ uniform float _Speed;
 uniform sampler2D _NormalMap;
 uniform vec3 _SunPosition;
 uniform vec3 _CamPosition;
+uniform float _Shininess;
 
 // Varying (vert to frag parameters)
 varying vec2 vUV;
@@ -36,17 +37,10 @@ vec3 getNormal( vec2 uv ) {
     return normalize(noise * 0.5 - 1.0);
 }
 
-// void sunLight( const vec3 surfaceNormal, const vec3 eyeDirection, float shiny, float spec, float diffuse, inout vec3 diffuseColor, inout vec3 specularColor ) {
-//     vec3 reflection = normalize( reflect( -_SunPosition, surfaceNormal ) );
-//     float direction = max( 0.0, dot( eyeDirection, reflection ) );
-//     specularColor += pow( direction, shiny ) * sunColo * spec;
-//     diffuseColor += max( dot( _SunPosition, surfaceNormal ), 0.0 ) * sunColor * diffuse;
-// }
-
 void main(void) {
     vec2 ndc = getNormalisedDeviceCoords();
 
-    vec3 normal = getNormal(vWorldPosition.xz);
+    vec3 normal = getNormal(vWorldPosition.xz).xzy;
 
     vec3 sunDir = normalize(_SunPosition);
     
@@ -56,17 +50,13 @@ void main(void) {
     // Diffuse
     float diffuse = saturate(dot(normal, sunDir));
 
-    // Specular
+    // Specular (Blinn-Phong)
     vec3 viewDir = normalize(_CamPosition.xyz - vWorldPosition.xyz);
     vec3 halfDir = normalize(sunDir + viewDir);
-
-    // Dot
     float NdotL = saturate(dot(normal, sunDir));
     float NdotH = saturate(dot(normal, halfDir));
-
-    float _Shininess = 10.0;
     float specular = pow(NdotH, _Shininess);
 
-    vec4 colour = vec4(vec3(ambient + diffuse + specular), 1.0);
-    gl_FragColor = colour;
+    vec4 output = vec4(vec3(ambient + diffuse + specular), 1.0);
+    gl_FragColor = output;
 }

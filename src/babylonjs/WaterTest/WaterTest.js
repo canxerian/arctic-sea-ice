@@ -4,6 +4,8 @@ import normalMap1 from "../textures/water_normal_cadhatch_325.jpg";
 import waterVertexShader from "./WaterTest.vertex.glsl";
 import waterFragmentShader from "./WaterTest.fragment.glsl";
 
+import SceneData from "../SceneData.json";
+
 BABYLON.Effect.ShadersStore["waterTestVertexShader"] = waterVertexShader
 BABYLON.Effect.ShadersStore["waterTestFragmentShader"] = waterFragmentShader
 
@@ -44,6 +46,7 @@ export default class WaterTest {
                     "_Time",
                     "_SunPosition",
                     "_CamPosition",
+                    "_Shininess",
                 ],
                 needAlphaBlending: true
             }
@@ -61,5 +64,6 @@ export default class WaterTest {
         this.material.setFloat("_Time", timeMs / 1000);
         this.material.setVector3("_SunPosition", this.debugSun.position);
         this.material.setVector3("_CamPosition", this.scene.activeCamera.position);
+        this.material.setFloat("_Shininess", SceneData.WaterShininess);
     }
 }
