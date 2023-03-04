@@ -3,7 +3,6 @@ import "@babylonjs/loaders";
 import { Pane } from "tweakpane";
 
 import arcticModel from "./models/Arctic.glb";
-import Water from "./Water";
 import SceneData from "./SceneData.json";
 
 import envTexture from "./textures/kloppenheim_06_puresky_4k.env";
@@ -52,7 +51,6 @@ export default class BabylonScene {
         const hemiLight = new BABYLON.HemisphericLight("HemiLight", new BABYLON.Vector3(1, -1, 3), scene);
         hemiLight.intensity = 3;
 
-        // this.water = new Water(scene, depthTex, refractionRTT, debugMenu);
         this.water = new WaterTest(scene, depthTex);
         
         engine.runRenderLoop(() => {
