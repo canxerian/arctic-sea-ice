@@ -4,15 +4,19 @@ uniform sampler2D _NormalMap;
 uniform sampler2D _DepthTex;
 
 uniform float _Time;
-uniform float _WaterNormalMapSpeed;
-uniform float _WaterNormalMapSize;
+uniform float _NormalMapSpeed;
+uniform float _NormalMapSize;
 uniform vec3 _SunPosition;
 uniform vec3 _CamPosition;
 uniform float _Shininess;
-uniform float _WaterMaxDepth;
-uniform vec3 _WaterColourDeep;
-uniform vec3 _WaterColourShallow;
+uniform float _Specular;
+uniform float _MaxDepth;
+uniform vec3 _ColourDeep;
+uniform vec3 _ColourShallow;
 uniform vec2 _CamNearFar;
+uniform float _FogStart;
+uniform float _FogEnd;
+uniform vec3 _FogColour;
 
 // Varying (vert to frag parameters)
 varying vec2 vUV;
@@ -40,17 +44,17 @@ float getWaterDepth() {
     // calculate water depth scaled to camFar since camFar > camNear
     float waterDepth = camFar * (depthOfObjectBehindWater - linearWaterDepth);
     
-    // get water depth as a ratio of _WaterMaxDepth
-    float wdepth = clamp((waterDepth / _WaterMaxDepth), 0.0, 1.0);
+    // get water depth as a ratio of _MaxDepth
+    float wdepth = clamp((waterDepth / _MaxDepth), 0.0, 1.0);
 
     return wdepth;
 }
 
 // https://github.com/mrdoob/three.js/blob/dev/examples/jsm/objects/Water.js
 vec3 getNormal( vec2 uv ) {
-    float time = _Time * _WaterNormalMapSpeed;
-    uv *= _WaterNormalMapSize;
-    
+    float time = _Time * _NormalMapSpeed;
+    uv *= _NormalMapSize;
+
     vec2 uv0 = ( uv / 103.0 ) + vec2(time / 17.0, time / 29.0);
     vec2 uv1 = uv / 107.0-vec2( time / -19.0, time / 31.0 );
     vec2 uv2 = uv / vec2( 8907.0, 9803.0 ) + vec2( time / 101.0, time / 97.0 );
@@ -69,7 +73,7 @@ void main(void) {
     vec3 sunDir = normalize(_SunPosition);
     
     // Water Colour
-    vec3 waterColour = mix(_WaterColourShallow, _WaterColourDeep, getWaterDepth());
+    vec3 waterColour = mix(_ColourShallow, _ColourDeep, getWaterDepth());
 
     // Ambient
     float ambient = 0.1;
@@ -82,10 +86,17 @@ void main(void) {
     vec3 halfDir = normalize(sunDir + viewDir);
     float NdotL = saturate(dot(normal, sunDir));
     float NdotH = saturate(dot(normal, halfDir));
-    float specular = pow(NdotH, _Shininess);
+    float specular = pow(NdotH, _Shininess) * _Specular;
 
-    vec4 outColour = vec4(vec3(ambient + diffuse + specular), 1.0);
-    outColour.rgb += waterColour;
-    
-    gl_FragColor = outColour;
+    vec3 lightingColour = vec3(ambient + diffuse + specular);
+
+    // Fog
+    // Let's try linear fog to begin with..
+    float distanceFromCam = length(_CamPosition - vWorldPosition.xyz);
+    float fog = 1.0 - saturate((_FogEnd - distanceFromCam) / (_FogEnd - _FogStart));
+
+    vec3 finalCol = waterColour + lightingColour;
+    finalCol = mix(finalCol, _FogColour, fog);
+
+    gl_FragColor = vec4(finalCol, 1.0);
 }

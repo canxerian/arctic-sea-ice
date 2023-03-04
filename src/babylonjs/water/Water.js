@@ -44,14 +44,17 @@ export default class Water {
                     "world",
 
                     /** Our uniforms */
-                    "_Time",
                     "_SunPosition",
                     "_CamPosition",
                     "_Shininess",
-                    "_WaterMaxDepth",
-                    "_WaterColourShallow",
-                    "_WaterColourDeep",
-                    "_CamNearFar",
+                    "_Specular",
+                    "_MaxDepth",
+                    "_NormalMapSpeed",
+                    "_NormalMapSize",
+                    "_ColourShallow",
+                    "_ColourDeep",
+                    "_FogStart",
+                    "_FogEnd",
                 ],
                 needAlphaBlending: true
             }
@@ -72,12 +75,14 @@ export default class Water {
         this.material.setVector3("_SunPosition", this.debugSun.position);
         this.material.setVector3("_CamPosition", this.scene.activeCamera.position);
         this.material.setFloat("_Shininess", SceneData.WaterShininess);
-        this.material.setFloat("_WaterMaxDepth", SceneData.WaterMaxDepth);
-        this.material.setFloat("_WaterNormalMapSpeed", SceneData.WaterNormalMapSpeed);
-        this.material.setFloat("_WaterNormalMapSize", SceneData.WaterNormalMapSize);
-        this.material.setColor3("_WaterColourShallow", SceneData.WaterColourShallow);
-        this.material.setColor3("_WaterColourDeep", SceneData.WaterColourDeep);
-
-        
+        this.material.setFloat("_Specular", SceneData.WaterSpecular);
+        this.material.setFloat("_MaxDepth", SceneData.WaterMaxDepth);
+        this.material.setFloat("_NormalMapSpeed", SceneData.WaterNormalMapSpeed);
+        this.material.setFloat("_NormalMapSize", SceneData.WaterNormalMapSize);
+        this.material.setColor3("_ColourShallow", SceneData.WaterColourShallow);
+        this.material.setColor3("_ColourDeep", SceneData.WaterColourDeep);
+        this.material.setFloat("_FogStart", SceneData.FogStart);
+        this.material.setFloat("_FogEnd", SceneData.FogEnd);        
+        this.material.setColor3("_FogColour", SceneData.FogColour);        
     }
 }
