@@ -14,7 +14,7 @@ export default class WaterTest {
      *
      * @param {BABYLON.Scene} scene
      */
-    constructor(scene) {
+    constructor(scene, depthTex) {
         const size = 1000;
         const subDivisions = 128;
         this.scene = scene;
@@ -35,6 +35,7 @@ export default class WaterTest {
                     "uv"
                 ],
                 samplers: [
+                    "_DepthTex",
                     "_NormalMap",
                 ],
                 uniforms: [
@@ -47,15 +48,21 @@ export default class WaterTest {
                     "_SunPosition",
                     "_CamPosition",
                     "_Shininess",
+                    "_WaterMaxDepth",
+                    "_WaterColourShallow",
+                    "_WaterColourDeep",
+                    "_CamNearFar",
                 ],
                 needAlphaBlending: true
             }
         );
+        this.material.setTexture("_DepthTex", depthTex);
         this.material.setTexture("_NormalMap", new BABYLON.Texture(normalMap1, scene, { samplingMode: BABYLON.Texture.TRILINEAR_SAMPLINGMODE }));
+        this.material.setVector2("_CamNearFar", new BABYLON.Vector2(scene.activeCamera.minZ, scene.activeCamera.maxZ));
 
         this.debugSun = BABYLON.MeshBuilder.CreateSphere("Sun", { segments: 16, diameter: 1 }, this.scene);
-        this.debugSun.position = new BABYLON.Vector3(3, 15, 2);
-        
+        this.debugSun.position = new BABYLON.Vector3(3, 15, 200);
+
         this.mesh.material = this.material;
     }
 
@@ -65,5 +72,8 @@ export default class WaterTest {
         this.material.setVector3("_SunPosition", this.debugSun.position);
         this.material.setVector3("_CamPosition", this.scene.activeCamera.position);
         this.material.setFloat("_Shininess", SceneData.WaterShininess);
+        this.material.setFloat("_WaterMaxDepth", SceneData.WaterMaxDepth);
+        this.material.setColor3("_WaterColourShallow", SceneData.WaterColourShallow);
+        this.material.setColor3("_WaterColourDeep", SceneData.WaterColourDeep);
     }
 }

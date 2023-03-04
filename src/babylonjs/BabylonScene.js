@@ -53,7 +53,7 @@ export default class BabylonScene {
         hemiLight.intensity = 3;
 
         // this.water = new Water(scene, depthTex, refractionRTT, debugMenu);
-        this.water = new WaterTest(scene);
+        this.water = new WaterTest(scene, depthTex);
         
         engine.runRenderLoop(() => {
             this.water.update();
@@ -102,6 +102,9 @@ export default class BabylonScene {
                 pane.addInput(SceneData, key, { min: 0, max: 1 });
             } 
             else if (key === "WaterShininess") {
+                pane.addInput(SceneData, key, { min: 0, max: 200 });
+            }
+            else if (key === "WaterMaxDepth") {
                 pane.addInput(SceneData, key, { min: 0, max: 200 });
             }
             else if (typeof SceneData[key] === "number") {
