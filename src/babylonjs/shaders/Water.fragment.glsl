@@ -74,7 +74,7 @@ void main(void)
     vec2 ndc = getNormalisedDeviceCoords();
 
     float wdepth = getWaterDepth(ndc);
-        
+
     // // mix colors with scene render
     // vec4 refractiveColor = texture2D(_RefractionTex, ndc);
     // baseColour = mix(refractiveColor, baseColour, baseColour.a);
