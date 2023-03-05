@@ -1,5 +1,5 @@
 import * as BABYLON from "@babylonjs/core";
-import normalMap1 from "../textures/water_normal_cadhatch_325.jpg";
+import normalMap1 from "./waternormals.jpg";
 
 import waterVertexShader from "./Water.vertex.glsl";
 import waterFragmentShader from "./Water.fragment.glsl";
