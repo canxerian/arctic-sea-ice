@@ -7,6 +7,7 @@ import envTexture from "./textures/kloppenheim_06_puresky_4k.env";
 import Water from "./water/Water";
 
 const Deg2Rad = Math.PI / 180;
+
 export default class BabylonScene {
     constructor(canvas) {
         this.initialise(canvas);
@@ -30,7 +31,6 @@ export default class BabylonScene {
         const loadedArcticMesh = await BABYLON.SceneLoader.ImportMeshAsync("", arcticModel);
         
         const meshes = scene.getNodes().filter((node) => node instanceof BABYLON.AbstractMesh);
-        console.log(meshes);
 
         // Depth texture setup (for water)
         const depthRenderer = scene.enableDepthRenderer(scene.activeCamera, false);
@@ -87,5 +87,8 @@ export default class BabylonScene {
         scene.createDefaultSkybox(scene.environmentTexture, true, 10 * scene.activeCamera.maxZ);
         scene.imageProcessingConfiguration.toneMappingEnabled = true;
         scene.imageProcessingConfiguration.toneMappingType = BABYLON.ImageProcessingConfiguration.TONEMAPPING_STANDARD;
+    }
+
+    setActiveIceIndex(index) {
     }
 }

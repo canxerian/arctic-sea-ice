@@ -1,10 +1,13 @@
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import ArcticIceData from "../data/ArcticIceData.json";
 import { MonthLookup } from "../data/MonthLookup";
+import { setActiveIceDataIndex } from "../redux/appSlice";
 import "./MainUI.scss";
 
 const MainUI = () => {
-    const [activeIndex, setActiveIndex] = useState(0);
+    const activeIceDataIndex = useSelector(state => state.app.activeIceDataIndex);
+    const dispatch = useDispatch();
 
     const onScroll = (e) => {
         const { height, width, x, y } = e.target.getBoundingClientRect();
@@ -18,15 +21,15 @@ const MainUI = () => {
         const dataIndex = parseInt(centerItem.getAttribute("data-index"));
 
         if (dataIndex) {
-            setActiveIndex(dataIndex);
+            dispatch(setActiveIceDataIndex(dataIndex));
         }
         else {
             // At the extremes of the scoll
             if (e.target.scrollTop < 20) {
-                setActiveIndex(0);
+                dispatch(setActiveIceDataIndex(0));
             }
             else {
-                setActiveIndex(ArcticIceData.data.length - 1);
+                dispatch(setActiveIceDataIndex(ArcticIceData.data.length - 1));
             }
         }
     }
@@ -36,10 +39,10 @@ const MainUI = () => {
 
     const listItems = ArcticIceData.minMaxAreaByYear.map((item, index) => {
         let className;
-        if (index === activeIndex) {
+        if (index === activeIceDataIndex) {
             className = "active";
         }
-        else if (index === activeIndex - 1 || index === activeIndex + 1) {
+        else if (index === activeIceDataIndex - 1 || index === activeIceDataIndex + 1) {
             className = "activeSibling";
         }
 
