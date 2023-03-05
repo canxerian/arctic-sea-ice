@@ -1,7 +1,6 @@
 import * as BABYLON from "@babylonjs/core";
 import "@babylonjs/loaders";
 
-// import arcticModel from "./models/Arctic.glb";
 import arcticModel from "./models/Arctic.babylon";
 
 import envTexture from "./textures/kloppenheim_06_puresky_4k.env";
@@ -29,13 +28,14 @@ export default class BabylonScene {
         sphere.position = new BABYLON.Vector3(-10, 0, 0.5);
 
         const loadedArcticMesh = await BABYLON.SceneLoader.ImportMeshAsync("", arcticModel);
-        // Clear color
-        // scene.clearColor = new BABYLON.Color3(0.1, 0.1, 0.1);
+        
+        const meshes = scene.getNodes().filter((node) => node instanceof BABYLON.AbstractMesh);
+        console.log(meshes);
 
         // Depth texture setup (for water)
         const depthRenderer = scene.enableDepthRenderer(scene.activeCamera, false);
         const depthTex = depthRenderer.getDepthMap();
-        depthTex.renderList = [...loadedArcticMesh.meshes, sphere];
+        depthTex.renderList = [...meshes, sphere];
 
         // Render Target Texture (for water)
         const refractionTex = new BABYLON.RenderTargetTexture("water_refraction", { width: 256, height: 256 }, scene, false, true);
@@ -49,7 +49,7 @@ export default class BabylonScene {
         hemiLight.intensity = 3;
 
         this.water = new Water(scene, depthTex);
-        
+
         engine.runRenderLoop(() => {
             this.water.update();
             scene.render();
