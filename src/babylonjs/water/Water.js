@@ -66,7 +66,7 @@ export default class Water {
         this.material.setVector2("_CamNearFar", new BABYLON.Vector2(scene.activeCamera.minZ, scene.activeCamera.maxZ));
 
         this.debugSun = BABYLON.MeshBuilder.CreateSphere("Sun", { segments: 16, diameter: 1 }, this.scene);
-        this.debugSun.position = new BABYLON.Vector3(80, 15, 100);
+        this.debugSun.position = new BABYLON.Vector3(0, 0, 100);
 
         this.mesh.material = this.material;
     }
