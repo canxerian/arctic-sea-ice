@@ -1,13 +1,11 @@
 import * as BABYLON from "@babylonjs/core";
 import "@babylonjs/loaders";
-import { Pane } from "tweakpane";
 
-import arcticModel from "./models/Arctic.glb";
-import SceneData from "./SceneData.js";
+// import arcticModel from "./models/Arctic.glb";
+import arcticModel from "./models/Arctic.babylon";
 
 import envTexture from "./textures/kloppenheim_06_puresky_4k.env";
 import Water from "./water/Water";
-
 
 const Deg2Rad = Math.PI / 180;
 export default class BabylonScene {
@@ -40,12 +38,12 @@ export default class BabylonScene {
         depthTex.renderList = [...loadedArcticMesh.meshes, sphere];
 
         // Render Target Texture (for water)
-        const refractionRTT = new BABYLON.RenderTargetTexture("water_refraction", { width: 256, height: 256 }, scene, false, true);
-        refractionRTT.wrapU = BABYLON.Constants.TEXTURE_MIRROR_ADDRESSMODE;
-        refractionRTT.wrapV = BABYLON.Constants.TEXTURE_MIRROR_ADDRESSMODE;
-        refractionRTT.ignoreCameraViewport = true;
-        refractionRTT.renderList = depthTex.renderList;
-        refractionRTT.refreshRate = 1;
+        const refractionTex = new BABYLON.RenderTargetTexture("water_refraction", { width: 256, height: 256 }, scene, false, true);
+        refractionTex.wrapU = BABYLON.Constants.TEXTURE_MIRROR_ADDRESSMODE;
+        refractionTex.wrapV = BABYLON.Constants.TEXTURE_MIRROR_ADDRESSMODE;
+        refractionTex.ignoreCameraViewport = true;
+        refractionTex.renderList = depthTex.renderList;
+        refractionTex.refreshRate = 1;
 
         const hemiLight = new BABYLON.HemisphericLight("HemiLight", new BABYLON.Vector3(1, -1, 3), scene);
         hemiLight.intensity = 3;

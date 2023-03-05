@@ -11,8 +11,8 @@ BABYLON.Effect.ShadersStore["waterFragmentShader"] = waterFragmentShader
 
 export default class Water {
     /**
-     *
      * @param {BABYLON.Scene} scene
+     * @param {BABYLON.Texture} depthTex
      */
     constructor(scene, depthTex) {
         const size = 1000;
@@ -37,6 +37,7 @@ export default class Water {
                 samplers: [
                     "_DepthTex",
                     "_NormalMap",
+                    "_RefractionTex",
                 ],
                 uniforms: [
                     /** BabylonJS built-in https://doc.babylonjs.com/features/featuresDeepDive/materials/shaders/introToShaders#built-in-inputs */
@@ -64,7 +65,7 @@ export default class Water {
         this.material.setVector2("_CamNearFar", new BABYLON.Vector2(scene.activeCamera.minZ, scene.activeCamera.maxZ));
 
         this.debugSun = BABYLON.MeshBuilder.CreateSphere("Sun", { segments: 16, diameter: 1 }, this.scene);
-        this.debugSun.position = new BABYLON.Vector3(3, 15, 200);
+        this.debugSun.position = new BABYLON.Vector3(3, 15, 100);
 
         this.mesh.material = this.material;
     }

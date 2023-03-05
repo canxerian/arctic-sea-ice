@@ -96,5 +96,6 @@ void main(void) {
     vec3 finalCol = waterColour + lightingColour;
     finalCol = mix(finalCol, _FogColour, 1.0 - fog);
 
-    gl_FragColor = vec4(finalCol, 1.0);
+    // gl_FragColor = vec4(finalCol, 1.0);
+    gl_FragColor = refraction;
 }
