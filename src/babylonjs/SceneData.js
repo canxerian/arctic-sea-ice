@@ -5,6 +5,7 @@ class SceneData {
     WaterMaxDepth = 50.0;
     WaterShininess = 1.0;
     WaterSpecular = 1.0;
+    WaterSpecularColour = { r: 0, g: 0, b: 0 };
     WaterNormalMapSpeed = 1.0;
     WaterNormalMapSize = 1.0;
     WaterColourShallow = { r: 0, g: 0, b: 0 };
@@ -16,6 +17,7 @@ class SceneData {
         this.pane = new Pane({ title: "Debug Menu" });
         this.pane.addInput(this, "WaterMaxDepth", { min: 0.0, max: 40.0 });
         this.pane.addInput(this, "WaterSpecular", { min: 0.0, max: 5.0 });
+        this.pane.addInput(this, "WaterSpecularColour", { color: { type: "float" } });
         this.pane.addInput(this, "WaterShininess", { min: 0.0, max: 100.0 });
         this.pane.addInput(this, "WaterNormalMapSpeed", { min: 0.0, max: 2.0 });
         this.pane.addInput(this, "WaterNormalMapSize", { min: 0.0, max: 10.0 });

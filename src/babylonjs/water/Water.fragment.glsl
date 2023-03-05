@@ -10,6 +10,7 @@ uniform vec3 _SunPosition;
 uniform vec3 _CamPosition;
 uniform float _Shininess;
 uniform float _Specular;
+uniform vec3 _SpecularColour;
 uniform float _MaxDepth;
 uniform vec3 _ColourDeep;
 uniform vec3 _ColourShallow;
@@ -86,8 +87,9 @@ void main(void) {
     float NdotL = saturate(dot(normal, sunDir));
     float NdotH = saturate(dot(normal, halfDir));
     float specular = pow(NdotH, _Shininess) * _Specular;
+    vec3 specularColour = specular * _SpecularColour;
 
-    vec3 lightingColour = vec3(ambient + diffuse + specular);
+    vec3 lightingColour = vec3(ambient + diffuse) + specularColour;
 
     // Fog
     float distanceFromCam = length(_CamPosition - vWorldPosition.xyz);

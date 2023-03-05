@@ -49,6 +49,7 @@ export default class Water {
                     "_CamPosition",
                     "_Shininess",
                     "_Specular",
+                    "_SpecularColour",
                     "_MaxDepth",
                     "_NormalMapSpeed",
                     "_NormalMapSize",
@@ -65,7 +66,7 @@ export default class Water {
         this.material.setVector2("_CamNearFar", new BABYLON.Vector2(scene.activeCamera.minZ, scene.activeCamera.maxZ));
 
         this.debugSun = BABYLON.MeshBuilder.CreateSphere("Sun", { segments: 16, diameter: 1 }, this.scene);
-        this.debugSun.position = new BABYLON.Vector3(3, 15, 100);
+        this.debugSun.position = new BABYLON.Vector3(80, 15, 100);
 
         this.mesh.material = this.material;
     }
@@ -77,6 +78,7 @@ export default class Water {
         this.material.setVector3("_CamPosition", this.scene.activeCamera.position);
         this.material.setFloat("_Shininess", SceneData.WaterShininess);
         this.material.setFloat("_Specular", SceneData.WaterSpecular);
+        this.material.setColor3("_SpecularColour", SceneData.WaterSpecularColour);
         this.material.setFloat("_MaxDepth", SceneData.WaterMaxDepth);
         this.material.setFloat("_NormalMapSpeed", SceneData.WaterNormalMapSpeed);
         this.material.setFloat("_NormalMapSize", SceneData.WaterNormalMapSize);
