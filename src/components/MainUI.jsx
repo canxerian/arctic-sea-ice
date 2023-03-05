@@ -23,7 +23,7 @@ const MainUI = () => {
         if (dataIndex) {
             dispatch(setActiveIceDataIndex(dataIndex));
         }
-        else {
+        else if (!isNaN(dataIndex)) {
             // At the extremes of the scoll
             if (e.target.scrollTop < 20) {
                 dispatch(setActiveIceDataIndex(0));
