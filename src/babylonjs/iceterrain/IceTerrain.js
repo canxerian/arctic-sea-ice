@@ -4,6 +4,7 @@ import iceTerrainVertexShader from "./IceTerrain.vertex.glsl";
 import iceTerrainFragmentShader from "./IceTerrain.fragment.glsl";
 
 import sampleImage from "./N_198001_conc_v3.0.png";
+import { getElapsedTimeMs } from "../TimeElapsed";
 
 BABYLON.Effect.ShadersStore["iceTerrainVertexShader"] = iceTerrainVertexShader;
 BABYLON.Effect.ShadersStore["iceTerrainFragmentShader"] = iceTerrainFragmentShader;
@@ -34,14 +35,22 @@ export default class IceTerrain {
             },
             {
                 attributes: [
-                    "position"
+                    "position",
                 ],
                 uniforms: [
-                    "worldViewProjection"
+                    "worldViewProjection",
+                    "world",
+
+                    "_Time"
                 ]
             }
         );
 
         this.mesh.material = this.material;
+    }
+
+    update() {
+        const timeMs = getElapsedTimeMs();
+        this.material.setFloat("_Time", timeMs);
     }
 }

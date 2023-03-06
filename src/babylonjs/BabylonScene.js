@@ -55,6 +55,7 @@ export default class BabylonScene {
 
         engine.runRenderLoop(() => {
             this.water.update();
+            this.iceTerrain.update();
             scene.render();
         });
 
