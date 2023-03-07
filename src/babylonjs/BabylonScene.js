@@ -32,8 +32,12 @@ export default class BabylonScene {
 
         const meshes = scene.getNodes().filter((node) => node instanceof BABYLON.AbstractMesh);
 
+        // Debug sun (used only for positions to test lighting)
+        this.debugSun = BABYLON.MeshBuilder.CreateSphere("Sun", { segments: 16, diameter: 1 }, this.scene);
+        this.debugSun.position = new BABYLON.Vector3(0, 10, 10);
+
         // Ice Terrain
-        this.iceTerrain = new IceTerrain(scene);
+        this.iceTerrain = new IceTerrain(scene, this.debugSun);
 
         // Depth texture setup (for water)
         const depthRenderer = scene.enableDepthRenderer(scene.activeCamera, false);
@@ -50,8 +54,7 @@ export default class BabylonScene {
 
         const light = new BABYLON.DirectionalLight("DirectionalLight", new BABYLON.Vector3(0, -1, 0), scene);
 
-
-        this.water = new Water(scene, depthTex);
+        this.water = new Water(scene, depthTex, this.debugSun);
 
         engine.runRenderLoop(() => {
             this.water.update();

@@ -13,11 +13,13 @@ export default class Water {
     /**
      * @param {BABYLON.Scene} scene
      * @param {BABYLON.Texture} depthTex
+     * @param {BABYLON.Node} sun
      */
-    constructor(scene, depthTex) {
+    constructor(scene, depthTex, sun) {
         const size = 1000;
         const subDivisions = 128;
         this.scene = scene;
+        this.sun = sun;
         this.startTime = (new Date()).getTime();
         this.mesh = BABYLON.Mesh.CreateGround("water", size, size, subDivisions, scene);
         this.mesh.position.y += 1;
@@ -65,16 +67,13 @@ export default class Water {
         this.material.setTexture("_NormalMap", new BABYLON.Texture(normalMap1, scene, { samplingMode: BABYLON.Texture.TRILINEAR_SAMPLINGMODE }));
         this.material.setVector2("_CamNearFar", new BABYLON.Vector2(scene.activeCamera.minZ, scene.activeCamera.maxZ));
 
-        this.debugSun = BABYLON.MeshBuilder.CreateSphere("Sun", { segments: 16, diameter: 1 }, this.scene);
-        this.debugSun.position = new BABYLON.Vector3(0, 0, 100);
-
         this.mesh.material = this.material;
     }
 
     update() {
         const timeMs = (new Date()).getTime() - this.startTime;
         this.material.setFloat("_Time", timeMs / 1000);
-        this.material.setVector3("_SunPosition", this.debugSun.position);
+        this.material.setVector3("_SunPosition", this.sun.position);
         this.material.setVector3("_CamPosition", this.scene.activeCamera.position);
         this.material.setFloat("_Shininess", SceneData.WaterShininess);
         this.material.setFloat("_Specular", SceneData.WaterSpecular);

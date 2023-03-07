@@ -11,7 +11,9 @@ class SceneData {
     WaterColourShallow = { r: 0, g: 0, b: 0 };
     WaterColourDeep = { r: 0, g: 0, b: 0 };
     FogDensity = 0.01;
-    FogColour = { r: 1, g: 1, b: 1 }
+    FogColour = { r: 1, g: 1, b: 1 };
+    TerrainDisplaceThreshold = 0.86;
+    TerrainDisplaceScale = 1.0;
 
     constructor() {
         this.pane = new Pane({ title: "Debug Menu" });
@@ -25,6 +27,8 @@ class SceneData {
         this.pane.addInput(this, "WaterColourDeep", { color: { type: "float" } });
         this.pane.addInput(this, "FogDensity", { min: 0.0, max: 0.1 });
         this.pane.addInput(this, "FogColour", { color: { type: "float" } });
+        this.pane.addInput(this, "TerrainDisplaceThreshold", { min: 0.0, max: 1.0 });
+        this.pane.addInput(this, "TerrainDisplaceScale", { min: 0.0, max: 10.0 });
 
         this.pane.importPreset(SavedData);
 
@@ -49,9 +53,12 @@ class SceneData {
     }
 }
 
-let instance;
-if (!instance) {
-    instance = new SceneData();
+/**
+ * @type {SceneData}
+ */
+let sceneDataInstance;
+if (!sceneDataInstance) {
+    sceneDataInstance = new SceneData();
 }
 
-export default instance;
+export default sceneDataInstance;

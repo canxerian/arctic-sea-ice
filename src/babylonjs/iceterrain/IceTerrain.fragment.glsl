@@ -1,10 +1,16 @@
 precision highp float;
 
 varying vec3 vWorldNormal;
-varying vec3 vTangent;
+varying vec2 vUV;
+
+uniform vec3 _SunPosition;
+uniform sampler2D _IceExtentImg;
 
 void main(void) {
-    vec3 lightPos = normalize(vec3(5, 10, 2));         // Made up light position
-    float diffuse = dot(normalize(vWorldNormal), lightPos);
-    gl_FragColor = vec4(vec3(diffuse), 1.0);               // Just return the colour white for every fragment
+    float diffuse = clamp(0.0, 1.0, dot(normalize(vWorldNormal), normalize(_SunPosition)));
+
+    vec4 albedo = texture2D(_IceExtentImg, vUV);
+    // gl_FragColor = albedo;
+
+    gl_FragColor = vec4(vec3(diffuse), 1.0) + albedo;
 }

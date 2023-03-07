@@ -1,34 +1,40 @@
 precision highp float;
 
-attribute vec3 position;    // vertices from the mesh
+attribute vec3 position;            // vertices from the mesh
+attribute vec2 uv;
 
 uniform mat4 worldViewProjection;   // Used to calculate position on screen (projection)
 uniform mat4 world;                 // Used to convert local position to world position
 
 uniform float _Time;
+uniform sampler2D _IceExtentImg;
+uniform float _DisplaceThreshold;
+uniform float _DisplaceScale;
 
 varying vec3 vWorldNormal;
+varying vec2 vUV;
 
-float newPosY(vec3 pos) {
-    return sin(_Time * 10.0 + position.x);
+float displace(vec2 uv) {
+    vec4 tex = texture2D(_IceExtentImg, uv);
+    float displacement = (tex.r + tex.g + tex.b) / 3.0;
+    displacement = smoothstep(_DisplaceThreshold, _DisplaceThreshold + 0.1, displacement);
+    return displacement * _DisplaceScale;
 }
 
 void main(void) {
     vec3 newPosition = position;
-    newPosition.y = newPosY(newPosition);
+    newPosition.y = displace(uv);
 
-    // Re-create normal (the direction at right-angles to our surface)
-    // Create two positions to the right and in front of the current position
-    vec3 posPlusRight = position + vec3(0.1, 0.0, 0.0);
-    posPlusRight.y = newPosY(posPlusRight);
+    vec3 tangent = position + vec3(0.01, 0.0, 0.0);
+    vec3 bitangent = position + vec3(0.0, 0.0, -0.01);
 
-    vec3 posPlusForward = position + vec3(0.0, 0.1, 0.0);
-    posPlusForward.y = newPosY(posPlusForward);
+    tangent.y = displace(tangent.xy);
+    bitangent.y = displace(bitangent.xz);
 
-    // Now take the cross product of these new positions
-    vec3 newNormal = cross(posPlusForward, posPlusRight);
+    vec3 normal = normalize(cross(bitangent - newPosition, tangent - newPosition));
+    vWorldNormal = normal;
 
-    vWorldNormal = normalize(newNormal).xyz;
+    vUV = uv;
 
     gl_Position = worldViewProjection * vec4(newPosition, 1.0);
 }
