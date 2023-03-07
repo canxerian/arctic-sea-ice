@@ -46,27 +46,28 @@ float displace(vec2 _uv) {
 }
 
 void main(void) {
+    // vec3 newPosition = position;
+    // newPosition.y = displace(uv);
+
+    // vec3 tangent = position + vec3(0.001, 0, 0);
+    // vec3 bitangent = position + vec3(0, 0, -0.001);
+
+    // tangent.y = displace(uv + vec2(0.0, 0.001));
+    // bitangent.y = displace(uv + vec2(0.001, 0.0));
+
+    // vec3 normal = cross(tangent - newPosition, bitangent - newPosition);
+    // normal = normalize(world * vec4(normal, 0.0)).xyz;
+    // vWorldNormal = normal;
+
     vec3 newPosition = position;
-    newPosition.y = displace(uv);
-
-    vec3 tangent = position + vec3(0.001, 0, 0);
-    vec3 bitangent = position + vec3(0, 0, -0.001);
-
-    tangent.y = displace(uv + vec2(0.0, 0.001));
-    bitangent.y = displace(uv + vec2(0.001, 0.0));
-
-    vec3 normal = cross(tangent - newPosition, bitangent - newPosition);
-    normal = normalize(world * vec4(normal, 0.0)).xyz;
-    vWorldNormal = normal;
 
     vec3 outColour;
     float height;
     lookup(texture2D(_IceExtentImg, uv).rgb, outColour, height);
 
+    newPosition.y = height * _DisplaceScale;
     vUV = uv;
     vColour = outColour;
-    newPosition.y = height * _DisplaceScale;
-
 
     gl_Position = worldViewProjection * vec4(newPosition, 1.0);
 }

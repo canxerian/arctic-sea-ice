@@ -61,7 +61,6 @@ export default class IceTerrain {
                     "_SunPosition",
                     "_DisplaceThreshold",
                     "_DisplaceScale",
-                    "_DebugLUT",
                 ]
             }
         );
@@ -90,6 +89,5 @@ export default class IceTerrain {
         this.material.setVector3("_SunPosition", this.sun.position);
         this.material.setFloat("_DisplaceThreshold", sceneDataInstance.TerrainDisplaceThreshold);
         this.material.setFloat("_DisplaceScale", sceneDataInstance.TerrainDisplaceScale);
-        this.material.setFloat("_DebugLUT", sceneDataInstance.DebugLUT);
     }
 }
