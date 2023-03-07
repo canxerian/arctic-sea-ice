@@ -14,8 +14,8 @@ uniform float _DisplaceScale;
 varying vec3 vWorldNormal;
 varying vec2 vUV;
 
-float displace(vec2 uv) {
-    vec4 tex = texture2D(_IceExtentImg, uv);
+float displace(vec2 _uv) {
+    vec4 tex = texture2D(_IceExtentImg, _uv);
     float displacement = (tex.r + tex.g + tex.b) / 3.0;
     displacement = smoothstep(_DisplaceThreshold, _DisplaceThreshold + 0.1, displacement);
     return displacement * _DisplaceScale;
@@ -25,13 +25,14 @@ void main(void) {
     vec3 newPosition = position;
     newPosition.y = displace(uv);
 
-    vec3 tangent = position + vec3(0.01, 0.0, 0.0);
-    vec3 bitangent = position + vec3(0.0, 0.0, -0.01);
+    vec3 tangent = position + vec3(0.001, 0, 0);
+    vec3 bitangent = position + vec3(0, 0, -0.001);
 
-    tangent.y = displace(tangent.xy);
-    bitangent.y = displace(bitangent.xz);
+    tangent.y = displace(uv + vec2(0.0, 0.001));
+    bitangent.y = displace(uv + vec2(0.001, 0.0));
 
-    vec3 normal = normalize(cross(bitangent - newPosition, tangent - newPosition));
+    vec3 normal = cross(tangent - newPosition, bitangent - newPosition);
+    normal = normalize(world * vec4(normal, 0.0)).xyz;
     vWorldNormal = normal;
 
     vUV = uv;

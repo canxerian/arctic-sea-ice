@@ -3,7 +3,10 @@ import * as BABYLON from "@babylonjs/core";
 import iceTerrainVertexShader from "./IceTerrain.vertex.glsl";
 import iceTerrainFragmentShader from "./IceTerrain.fragment.glsl";
 
-import iceExtentImg from "./N_198001_conc_v3.0.png";
+import iceExtentImg1 from "./N_198001_conc_v3.0.png";
+import iceExtentImg2 from "./N_198301_conc_v3.0.png";
+import iceExtentImg3 from "./N_198701_conc_v3.0.png";
+
 import { getElapsedTimeMs } from "../TimeElapsed";
 import sceneDataInstance from "../SceneData";
 
@@ -24,9 +27,13 @@ export default class IceTerrain {
         // Create a plane
         const size = 100.0;
         const subDivisions = 512;
+        this.scene = scene;
         this.sun = sun;
         this.mesh = BABYLON.Mesh.CreateGround("iceTerrain", size, size, subDivisions, scene);
         this.mesh.position.y = 5;
+        this.extentImg1 = new BABYLON.Texture(iceExtentImg1, scene);
+        this.extentImg2 = new BABYLON.Texture(iceExtentImg2, scene);
+        this.extentImg3 = new BABYLON.Texture(iceExtentImg3, scene);
 
         // Create the material that will reference the shaders we created
         this.material = new BABYLON.ShaderMaterial(
@@ -55,9 +62,27 @@ export default class IceTerrain {
                 ]
             }
         );
-        this.material.setTexture("_IceExtentImg", new BABYLON.Texture(iceExtentImg, scene));
+        this.material.setTexture("_IceExtentImg", this.extentImg1);
 
         this.mesh.material = this.material;
+    }
+
+    updateDataIndex(index) {
+        console.log("index", index);
+        if (this.extentImg) {
+            this.extentImg.dispose();
+        }
+
+        const imgIndex = index % 3;
+        if (imgIndex === 0) {
+            this.material.setTexture("_IceExtentImg", this.extentImg1);
+        }
+        else if (imgIndex === 1) {
+            this.material.setTexture("_IceExtentImg", this.extentImg2);
+        }
+        else {
+            this.material.setTexture("_IceExtentImg", this.extentImg3);
+        }
     }
 
     update() {

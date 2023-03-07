@@ -34,7 +34,7 @@ export default class BabylonScene {
 
         // Debug sun (used only for positions to test lighting)
         this.debugSun = BABYLON.MeshBuilder.CreateSphere("Sun", { segments: 16, diameter: 1 }, this.scene);
-        this.debugSun.position = new BABYLON.Vector3(0, 10, 10);
+        this.debugSun.position = new BABYLON.Vector3(0, 10, 100);
 
         // Ice Terrain
         this.iceTerrain = new IceTerrain(scene, this.debugSun);
@@ -97,5 +97,8 @@ export default class BabylonScene {
     }
 
     setActiveIceIndex(index) {
+        if (this.iceTerrain) {
+            this.iceTerrain.updateDataIndex(index);
+        }
     }
 }
