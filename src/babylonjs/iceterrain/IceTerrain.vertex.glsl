@@ -23,7 +23,7 @@ void lookup(vec3 pixel, inout vec3 outColour, inout float height) {
     float offset = 0.01;
 
     vec3 nearestColour = vec3(0, 0, 0);
-    float nearestDist = 0.4;
+    float nearestDist = 0.8;
     for (int i = 0; i < lookupNumSteps; i++) {
         vec3 currentCol = texture2D(_HeightLUT, vec2(lookupInterval * float(i) + 0.01, 0)).rgb;
         float dist = distance(pixel, currentCol);
