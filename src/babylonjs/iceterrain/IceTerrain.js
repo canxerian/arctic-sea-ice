@@ -3,6 +3,7 @@ import * as BABYLON from "@babylonjs/core";
 import iceTerrainVertexShader from "./IceTerrain.vertex.glsl";
 import iceTerrainFragmentShader from "./IceTerrain.fragment.glsl";
 
+import seaIceConcLUT from "./SeaIceConcentrationLUT.png";
 import iceExtentImg1 from "./N_198001_conc_v3.0.png";
 import iceExtentImg2 from "./N_198301_conc_v3.0.png";
 import iceExtentImg3 from "./N_198701_conc_v3.0.png";
@@ -46,6 +47,7 @@ export default class IceTerrain {
             {
                 samplers: [
                     "_IceExtentImg",
+                    "_HeightLUT",
                 ],
                 attributes: [
                     "position",
@@ -59,20 +61,17 @@ export default class IceTerrain {
                     "_SunPosition",
                     "_DisplaceThreshold",
                     "_DisplaceScale",
+                    "_DebugLUT",
                 ]
             }
         );
         this.material.setTexture("_IceExtentImg", this.extentImg1);
+        this.material.setTexture("_HeightLUT", new BABYLON.Texture(seaIceConcLUT), scene);
 
         this.mesh.material = this.material;
     }
 
     updateDataIndex(index) {
-        console.log("index", index);
-        if (this.extentImg) {
-            this.extentImg.dispose();
-        }
-
         const imgIndex = index % 3;
         if (imgIndex === 0) {
             this.material.setTexture("_IceExtentImg", this.extentImg1);
@@ -91,5 +90,6 @@ export default class IceTerrain {
         this.material.setVector3("_SunPosition", this.sun.position);
         this.material.setFloat("_DisplaceThreshold", sceneDataInstance.TerrainDisplaceThreshold);
         this.material.setFloat("_DisplaceScale", sceneDataInstance.TerrainDisplaceScale);
+        this.material.setFloat("_DebugLUT", sceneDataInstance.DebugLUT);
     }
 }

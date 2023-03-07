@@ -8,11 +8,35 @@ uniform mat4 world;                 // Used to convert local position to world p
 
 uniform float _Time;
 uniform sampler2D _IceExtentImg;
+uniform sampler2D _HeightLUT;
 uniform float _DisplaceThreshold;
 uniform float _DisplaceScale;
 
 varying vec3 vWorldNormal;
 varying vec2 vUV;
+varying vec3 vColour;
+
+const int lookupNumSteps = 19;
+const float lookupInterval = 1.0 / float(lookupNumSteps);
+
+void lookup(vec3 pixel, inout vec3 outColour, inout float height) {
+    float offset = 0.01;
+
+    vec3 nearestColour = vec3(0, 0, 0);
+    float nearestDist = 0.4;
+    for (int i = 0; i < lookupNumSteps; i++) {
+        vec3 currentCol = texture2D(_HeightLUT, vec2(lookupInterval * float(i) + 0.01, 0)).rgb;
+        float dist = distance(pixel, currentCol);
+
+        if (dist < nearestDist) {
+            nearestColour = currentCol;
+            nearestDist = dist;
+            height = float(i) / float(lookupNumSteps);      // normalise
+        }
+    }
+
+    outColour = nearestColour;
+}
 
 float displace(vec2 _uv) {
     vec4 tex = texture2D(_IceExtentImg, _uv);
@@ -35,7 +59,14 @@ void main(void) {
     normal = normalize(world * vec4(normal, 0.0)).xyz;
     vWorldNormal = normal;
 
+    vec3 outColour;
+    float height;
+    lookup(texture2D(_IceExtentImg, uv).rgb, outColour, height);
+
     vUV = uv;
+    vColour = outColour;
+    newPosition.y = height * _DisplaceScale;
+
 
     gl_Position = worldViewProjection * vec4(newPosition, 1.0);
 }
