@@ -74,7 +74,7 @@ export default class BabylonScene {
         );
         cam.lowerRadiusLimit = 10;
         cam.upperRadiusLimit = 100;
-        cam.lowerBetaLimit = 0 * Deg2Rad;
+        cam.lowerBetaLimit = 1 * Deg2Rad;
         cam.upperBetaLimit = 80 * Deg2Rad;
         cam.minZ = 0.01;
         cam.maxZ = 1000;
