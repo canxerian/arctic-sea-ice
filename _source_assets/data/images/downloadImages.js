@@ -16,24 +16,16 @@ const monthPrefixes = [
     "12_Dec",
 ];
 
-const startYear = 1979;
+const startYear = 1978;
 const endYear = 2023;
-const tempImgPath = path.resolve(__dirname, 'temp.png');
 
 const getUrl = (monthPrefix, year) => {
     const monthNumber = monthPrefix.substring(0, 2);
     return `https://masie_web.apps.nsidc.org/pub/DATASETS/NOAA/G02135/north/monthly/images/${monthPrefix}/N_${year}${monthNumber}_conc_v3.0.png`
 };
 
-const downloadImageAndProcess = async (url) => {
-    try {
-        const image = await Jimp.read(url);
-        image.crop(28, 30, 292, 446);
-        image.write(tempImgPath);
-    }
-    catch (e) {
-        console.error(e);
-    }
+const getSavePath = (filename) => {
+    return path.resolve(__dirname, "test", filename);
 }
 
 const downloadImages = async () => {
@@ -42,8 +34,17 @@ const downloadImages = async () => {
             const monthPrefix = monthPrefixes[j];
             const url = getUrl(monthPrefix, i);
 
-            await downloadImageAndProcess(url);
-            return;
+            try {
+                const filename = path.basename(url);
+                const image = await Jimp.read(url);
+                image.crop(28, 30, 292, 446);
+                image.write(getSavePath(filename));
+                
+                return;
+            }
+            catch (e) {
+                console.error(url);
+            }
         }
     }
 }
