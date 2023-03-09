@@ -28,6 +28,7 @@ const getUrl = (monthPrefix, year) => {
 const downloadImageAndProcess = async (url) => {
     try {
         const image = await Jimp.read(url);
+        image.crop(28, 30, 292, 446);
         image.write(tempImgPath);
     }
     catch (e) {
