@@ -1,8 +1,7 @@
-const { data } = require('browserslist');
 const csvtojson = require('csvtojson');
 const fs = require('fs');
 
-const outputPath = "../../src/Data/ArcticIceData.json";
+const outputPath = "../../../src/Data/ArcticIceData.json";
 
 /**
  * Returns a string format for a given month
