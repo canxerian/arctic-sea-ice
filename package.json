@@ -152,6 +152,8 @@
     "csvtojson": "^2.0.10",
     "gh-pages": "^5.0.0",
     "glslify-loader": "^2.0.0",
+    "image-downloader": "^4.3.0",
+    "jimp": "^0.22.7",
     "raw-loader": "^4.0.2",
     "sass": "^1.58.0"
   }
