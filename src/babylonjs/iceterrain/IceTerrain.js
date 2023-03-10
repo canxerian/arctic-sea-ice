@@ -3,6 +3,9 @@ import * as BABYLON from "@babylonjs/core";
 import iceTerrainVertexShader from "./IceTerrain.vertex.glsl";
 import iceTerrainFragmentShader from "./IceTerrain.fragment.glsl";
 
+import ArcticIceData from "../../data/ArcticIceData.json";
+import s from "./images/N_197811_conc_v3.0.png";
+
 import seaIceConcLUT from "./SeaIceConcentrationLUT.png";
 import iceExtentImg1 from "./N_198001_conc_v3.0.png";
 import iceExtentImg2 from "./N_198301_conc_v3.0.png";
@@ -13,6 +16,12 @@ import sceneDataInstance from "../SceneData";
 
 BABYLON.Effect.ShadersStore["iceTerrainVertexShader"] = iceTerrainVertexShader;
 BABYLON.Effect.ShadersStore["iceTerrainFragmentShader"] = iceTerrainFragmentShader;
+
+const getImageName = (dataIndex) => {
+    const data = ArcticIceData.minMaxAreaByYear[dataIndex];
+    const month = (data.month).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
+    return `N_${data.year}${month}_conc_v3.0`;
+}
 
 /**
  * Component for generating a terrain mesh that uses NSIDC ice extent image to
@@ -26,11 +35,11 @@ export default class IceTerrain {
      */
     constructor(scene, sun) {
         // Create a plane
-        const size = 100.0;
+        // const size = 100.0;
         const subDivisions = 512;
         this.scene = scene;
         this.sun = sun;
-        this.mesh = BABYLON.Mesh.CreateGround("iceTerrain", size, size, subDivisions, scene);
+        this.mesh = BABYLON.Mesh.CreateGround("iceTerrain", 292 / 3.0, 446 / 3.0, subDivisions, scene);
         this.mesh.position.y = 5;
         this.extentImg1 = new BABYLON.Texture(iceExtentImg1, scene);
         this.extentImg2 = new BABYLON.Texture(iceExtentImg2, scene);
@@ -71,16 +80,25 @@ export default class IceTerrain {
     }
 
     updateDataIndex(index) {
-        const imgIndex = index % 3;
-        if (imgIndex === 0) {
-            this.material.setTexture("_IceExtentImg", this.extentImg1);
+        if (this.extentImg) {
+            this.extentImg.dispose();
         }
-        else if (imgIndex === 1) {
-            this.material.setTexture("_IceExtentImg", this.extentImg2);
-        }
-        else {
-            this.material.setTexture("_IceExtentImg", this.extentImg3);
-        }
+
+        const imagePath = getImageName(index);
+        import("./images/" + imagePath + ".png").then(image => {
+            this.extentImg = new BABYLON.Texture(image.default, this.scene);
+            this.material.setTexture("_IceExtentImg", this.extentImg)
+        });
+        // const imgIndex = index % 3;
+        // if (imgIndex === 0) {
+        //     this.material.setTexture("_IceExtentImg", this.extentImg1);
+        // }
+        // else if (imgIndex === 1) {
+        //     this.material.setTexture("_IceExtentImg", this.extentImg2);
+        // }
+        // else {
+        //     this.material.setTexture("_IceExtentImg", this.extentImg3);
+        // }
     }
 
     update() {

@@ -35,10 +35,10 @@ const downloadImages = async () => {
             const url = getUrl(monthPrefix, i);
 
             try {
-                const filename = path.basename(url);
+                const savePath = getSavePath(path.basename(url));
                 const image = await Jimp.read(url);
                 image.crop(28, 30, 292, 446);
-                image.write(getSavePath(filename));
+                image.write(savePath);
                 
                 return;
             }
