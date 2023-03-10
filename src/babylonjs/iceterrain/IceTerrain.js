@@ -14,9 +14,14 @@ BABYLON.Effect.ShadersStore["iceTerrainVertexShader"] = iceTerrainVertexShader;
 BABYLON.Effect.ShadersStore["iceTerrainFragmentShader"] = iceTerrainFragmentShader;
 
 const getImageName = (dataIndex) => {
-    const data = ArcticIceData.minMaxAreaByYear[dataIndex];
-    const month = (data.month).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
-    return `N_${data.year}${month}_conc_v3.0`;
+    try {
+        const data = ArcticIceData.minMaxAreaByYear[dataIndex];
+        const month = (data.month).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
+        return `N_${data.year}${month}_conc_v3.0`;
+    }
+    catch (e) {
+        console.error(dataIndex);
+    }
 }
 
 /**
@@ -37,7 +42,6 @@ export default class IceTerrain {
         this.scene = scene;
         this.sun = sun;
         this.mesh = BABYLON.Mesh.CreateGround("iceTerrain", 292 / 3.0, 446 / 3.0, subDivisions, scene);
-        this.mesh.position.y = 5;
 
         // Create the material that will reference the shaders we created
         this.material = new BABYLON.ShaderMaterial(
@@ -70,6 +74,7 @@ export default class IceTerrain {
         this.material.setTexture("_HeightLUT", new BABYLON.Texture(seaIceConcLUT), scene);
 
         this.mesh.material = this.material;
+        this.updateDataIndex(0);
     }
 
     updateDataIndex(index) {

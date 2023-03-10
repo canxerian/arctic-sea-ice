@@ -29,6 +29,7 @@ class SceneData {
         this.pane.addInput(this, "FogColour", { color: { type: "float" } });
         this.pane.addInput(this, "TerrainDisplaceThreshold", { min: 0.0, max: 1.0 });
         this.pane.addInput(this, "TerrainDisplaceScale", { min: 0.0, max: 10.0 });
+        this.pane.expanded = false;
 
         this.pane.importPreset(SavedData);
 

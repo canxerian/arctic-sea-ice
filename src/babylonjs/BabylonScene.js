@@ -28,7 +28,7 @@ export default class BabylonScene {
         const sphere = BABYLON.MeshBuilder.CreateSphere("sphere", { segments: 16, diameter: 3 }, this.scene);
         sphere.position = new BABYLON.Vector3(-10, 0, 0.5);
 
-        const loadedArcticMesh = await BABYLON.SceneLoader.ImportMeshAsync("", arcticModel);
+        // const loadedArcticMesh = await BABYLON.SceneLoader.ImportMeshAsync("", arcticModel);
 
         const meshes = scene.getNodes().filter((node) => node instanceof BABYLON.AbstractMesh);
 
@@ -42,7 +42,7 @@ export default class BabylonScene {
         // Depth texture setup (for water)
         const depthRenderer = scene.enableDepthRenderer(scene.activeCamera, false);
         const depthTex = depthRenderer.getDepthMap();
-        depthTex.renderList = [...meshes, sphere, this.iceTerrain.mesh];
+        depthTex.renderList = [...meshes, sphere, /* this.iceTerrain.mesh */];
 
         // Render Target Texture (for water)
         const refractionTex = new BABYLON.RenderTargetTexture("water_refraction", { width: 256, height: 256 }, scene, false, true);

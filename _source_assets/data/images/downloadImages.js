@@ -37,13 +37,15 @@ const downloadImages = async () => {
             try {
                 const savePath = getSavePath(path.basename(url));
                 const image = await Jimp.read(url);
-                image.crop(28, 30, 292, 446);
+                image.crop(28, 30, 292, 426);
                 image.write(savePath);
-                
+
+                console.log("Processed", savePath);
+
                 return;
             }
             catch (e) {
-                console.error(url);
+                // console.error(url);
             }
         }
     }

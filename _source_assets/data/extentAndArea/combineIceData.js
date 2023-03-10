@@ -93,7 +93,6 @@ const process = async () => {
 
     arcticIceData.data = await getCsvArray();
 
-
     arcticIceData.minMaxAreaByYear = getMinMaxForProperty(arcticIceData.data, "area");
     arcticIceData.minMaxExtentByYear = getMinMaxForProperty(arcticIceData.data, "extent");
 
