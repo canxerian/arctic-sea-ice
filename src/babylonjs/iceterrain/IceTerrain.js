@@ -4,12 +4,8 @@ import iceTerrainVertexShader from "./IceTerrain.vertex.glsl";
 import iceTerrainFragmentShader from "./IceTerrain.fragment.glsl";
 
 import ArcticIceData from "../../data/ArcticIceData.json";
-import s from "./images/N_197811_conc_v3.0.png";
 
 import seaIceConcLUT from "./SeaIceConcentrationLUT.png";
-import iceExtentImg1 from "./N_198001_conc_v3.0.png";
-import iceExtentImg2 from "./N_198301_conc_v3.0.png";
-import iceExtentImg3 from "./N_198701_conc_v3.0.png";
 
 import { getElapsedTimeMs } from "../TimeElapsed";
 import sceneDataInstance from "../SceneData";
@@ -28,9 +24,10 @@ const getImageName = (dataIndex) => {
  * drive vertex displacement
  */
 export default class IceTerrain {
+    extentTextures = {};
     /**
-     * 
-     * @param {BABYLON.Scene} scene 
+     *
+     * @param {BABYLON.Scene} scene
      * @param {BABYLON.Node} sun
      */
     constructor(scene, sun) {
@@ -41,9 +38,6 @@ export default class IceTerrain {
         this.sun = sun;
         this.mesh = BABYLON.Mesh.CreateGround("iceTerrain", 292 / 3.0, 446 / 3.0, subDivisions, scene);
         this.mesh.position.y = 5;
-        this.extentImg1 = new BABYLON.Texture(iceExtentImg1, scene);
-        this.extentImg2 = new BABYLON.Texture(iceExtentImg2, scene);
-        this.extentImg3 = new BABYLON.Texture(iceExtentImg3, scene);
 
         // Create the material that will reference the shaders we created
         this.material = new BABYLON.ShaderMaterial(
@@ -73,22 +67,24 @@ export default class IceTerrain {
                 ]
             }
         );
-        this.material.setTexture("_IceExtentImg", this.extentImg1);
         this.material.setTexture("_HeightLUT", new BABYLON.Texture(seaIceConcLUT), scene);
 
         this.mesh.material = this.material;
     }
 
     updateDataIndex(index) {
-        if (this.extentImg) {
-            this.extentImg.dispose();
-        }
-
         const imagePath = getImageName(index);
-        import("./images/" + imagePath + ".png").then(image => {
-            this.extentImg = new BABYLON.Texture(image.default, this.scene);
-            this.material.setTexture("_IceExtentImg", this.extentImg)
-        });
+
+        if (this.extentTextures[imagePath]) {
+            this.material.setTexture("_IceExtentImg", this.extentTextures[imagePath]);
+        }
+        else {
+            import("./images/" + imagePath + ".png").then(image => {
+                this.extentTextures[imagePath] = new BABYLON.Texture(image.default, this.scene, null, null, null, () => {
+                    this.material.setTexture("_IceExtentImg", this.extentTextures[imagePath]);
+                });
+            });
+        }
         // const imgIndex = index % 3;
         // if (imgIndex === 0) {
         //     this.material.setTexture("_IceExtentImg", this.extentImg1);
