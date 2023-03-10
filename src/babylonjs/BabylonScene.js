@@ -1,9 +1,7 @@
 import * as BABYLON from "@babylonjs/core";
 import "@babylonjs/loaders";
 import Water from "./water/Water";
-import arcticModel from "./models/Arctic.babylon";
 import envTexture from "./textures/kloppenheim_06_puresky_4k.env";
-import ArcticIceData from "../data/ArcticIceData.json";
 import IceTerrain from "./iceterrain/IceTerrain";
 
 const Deg2Rad = Math.PI / 180;

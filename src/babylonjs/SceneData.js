@@ -14,6 +14,7 @@ class SceneData {
     FogColour = { r: 1, g: 1, b: 1 };
     TerrainDisplaceThreshold = 0.86;
     TerrainDisplaceScale = 1.0;
+    TerrainLutThreshold = 0;
 
     constructor() {
         this.pane = new Pane({ title: "Debug Menu" });
@@ -29,6 +30,7 @@ class SceneData {
         this.pane.addInput(this, "FogColour", { color: { type: "float" } });
         this.pane.addInput(this, "TerrainDisplaceThreshold", { min: 0.0, max: 1.0 });
         this.pane.addInput(this, "TerrainDisplaceScale", { min: 0.0, max: 10.0 });
+        this.pane.addInput(this, "TerrainLutThreshold", { min: 0, max: 18, step: 1 });
         this.pane.expanded = false;
 
         this.pane.importPreset(SavedData);

@@ -8,9 +8,9 @@ uniform sampler2D _IceExtentImg;
 varying vec3 vColour;
 
 void main(void) {
-    if (vColour.r < 0.1) {
-        discard;
-    }
+    // if (length(vColour) < 0.1) {
+    //     discard;
+    // }
 
     // float diffuse = clamp(dot(normalize(vWorldNormal), normalize(_SunPosition)), 0.0, 1.0);
 

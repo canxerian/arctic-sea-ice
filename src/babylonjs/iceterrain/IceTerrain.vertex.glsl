@@ -11,12 +11,13 @@ uniform sampler2D _IceExtentImg;
 uniform sampler2D _HeightLUT;
 uniform float _DisplaceThreshold;
 uniform float _DisplaceScale;
+uniform int _LutThreshold;
 
 varying vec3 vWorldNormal;
 varying vec2 vUV;
 varying vec3 vColour;
 
-const int lookupNumSteps = 19;
+const int lookupNumSteps = 18;
 const float lookupInterval = 1.0 / float(lookupNumSteps);
 
 void lookup(vec3 pixel, inout vec3 outColour, inout float height) {
@@ -24,7 +25,7 @@ void lookup(vec3 pixel, inout vec3 outColour, inout float height) {
 
     vec3 nearestColour = vec3(0, 0, 0);
     float nearestDist = 0.1;
-    for (int i = 3; i < lookupNumSteps; i++) {
+    for (int i = _LutThreshold; i < lookupNumSteps; i++) {
         vec3 currentCol = texture2D(_HeightLUT, vec2(lookupInterval * float(i) + 0.01, 0)).rgb;
         float dist = distance(pixel, currentCol);
 

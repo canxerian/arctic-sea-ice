@@ -68,6 +68,7 @@ export default class IceTerrain {
                     "_SunPosition",
                     "_DisplaceThreshold",
                     "_DisplaceScale",
+                    "_LutThreshold"
                 ]
             }
         );
@@ -90,16 +91,6 @@ export default class IceTerrain {
                 });
             });
         }
-        // const imgIndex = index % 3;
-        // if (imgIndex === 0) {
-        //     this.material.setTexture("_IceExtentImg", this.extentImg1);
-        // }
-        // else if (imgIndex === 1) {
-        //     this.material.setTexture("_IceExtentImg", this.extentImg2);
-        // }
-        // else {
-        //     this.material.setTexture("_IceExtentImg", this.extentImg3);
-        // }
     }
 
     update() {
@@ -108,5 +99,6 @@ export default class IceTerrain {
         this.material.setVector3("_SunPosition", this.sun.position);
         this.material.setFloat("_DisplaceThreshold", sceneDataInstance.TerrainDisplaceThreshold);
         this.material.setFloat("_DisplaceScale", sceneDataInstance.TerrainDisplaceScale);
+        this.material.setInt("_LutThreshold", sceneDataInstance.TerrainLutThreshold);
     }
 }
