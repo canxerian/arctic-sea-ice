@@ -13,9 +13,12 @@ import sceneDataInstance from "../SceneData";
 BABYLON.Effect.ShadersStore["iceTerrainVertexShader"] = iceTerrainVertexShader;
 BABYLON.Effect.ShadersStore["iceTerrainFragmentShader"] = iceTerrainFragmentShader;
 
+const terrainImgWidth = 292;
+const terrainImgHeight = 446;
+
 const getImageName = (dataIndex) => {
     try {
-        const data = ArcticIceData.minMaxAreaByYear[dataIndex];
+        const data = ArcticIceData.data[dataIndex];
         const month = (data.month).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
         return `N_${data.year}${month}_conc_v3.0`;
     }
@@ -36,12 +39,11 @@ export default class IceTerrain {
      * @param {BABYLON.Node} sun
      */
     constructor(scene, sun) {
-        // Create a plane
-        // const size = 100.0;
         const subDivisions = 512;
+        const scale = 0.5;
         this.scene = scene;
         this.sun = sun;
-        this.mesh = BABYLON.Mesh.CreateGround("iceTerrain", 292 / 3.0, 446 / 3.0, subDivisions, scene);
+        this.mesh = BABYLON.Mesh.CreateGround("iceTerrain", terrainImgWidth * scale, terrainImgHeight * scale, subDivisions, scene);
 
         // Create the material that will reference the shaders we created
         this.material = new BABYLON.ShaderMaterial(
@@ -78,18 +80,25 @@ export default class IceTerrain {
         this.updateDataIndex(0);
     }
 
-    updateDataIndex(index) {
+    async updateDataIndex(index) {
         const imagePath = getImageName(index);
 
         if (this.extentTextures[imagePath]) {
             this.material.setTexture("_IceExtentImg", this.extentTextures[imagePath]);
         }
         else {
-            import("./images/" + imagePath + ".png").then(image => {
+            try {
+                const image = await import("./images/" + imagePath + ".png");
+
+                // .then(image => {
                 this.extentTextures[imagePath] = new BABYLON.Texture(image.default, this.scene, null, null, null, () => {
                     this.material.setTexture("_IceExtentImg", this.extentTextures[imagePath]);
                 });
-            });
+                // });
+            }
+            catch (e) {
+                console.error("Failed to load", imagePath, e);
+            }
         }
     }
 

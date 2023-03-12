@@ -37,7 +37,7 @@ const MainUI = () => {
     const extentRange = ArcticIceData.maxExtent - ArcticIceData.minExtent;
     const areaRange = ArcticIceData.maxArea - ArcticIceData.minArea;
 
-    const listItems = ArcticIceData.minMaxAreaByYear.map((item, index) => {
+    const listItems = ArcticIceData.data.map((item, index) => {
         let className;
         if (index === activeIceDataIndex) {
             className = "active";
