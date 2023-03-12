@@ -90,11 +90,9 @@ export default class IceTerrain {
             try {
                 const image = await import("./images/" + imagePath + ".png");
 
-                // .then(image => {
                 this.extentTextures[imagePath] = new BABYLON.Texture(image.default, this.scene, null, null, null, () => {
                     this.material.setTexture("_IceExtentImg", this.extentTextures[imagePath]);
                 });
-                // });
             }
             catch (e) {
                 console.error("Failed to load", imagePath, e);
