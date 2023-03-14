@@ -3,6 +3,7 @@ import "@babylonjs/loaders";
 import Water from "./water/Water";
 import envTexture from "./textures/kloppenheim_06_puresky_4k.env";
 import IceTerrain from "./iceterrain/IceTerrain";
+import GlobeModel from "./models/Globe.babylon";
 
 const Deg2Rad = Math.PI / 180;
 
@@ -27,6 +28,8 @@ export default class BabylonScene {
         sphere.position = new BABYLON.Vector3(-10, 0, 0.5);
 
         // const loadedArcticMesh = await BABYLON.SceneLoader.ImportMeshAsync("", arcticModel);
+
+        const globeMesh = await BABYLON.SceneLoader.ImportMeshAsync("", GlobeModel);
 
         const meshes = scene.getNodes().filter((node) => node instanceof BABYLON.AbstractMesh);
 
@@ -60,9 +63,32 @@ export default class BabylonScene {
             scene.render();
         });
 
+        const prevCamera = { alpha: camera.alpha, beta: camera.beta, radius: camera };
+        let zoomStartRadius = 0.0;
+        let prevInertialRadiusOffset = 0.0;
+        scene.onPointerObservable.add((pointerInfo) => {
+            if (pointerInfo.type === BABYLON.PointerEventTypes.POINTERMOVE && pointerInfo.event.pressure > 0) {
+                prevCamera.alpha = camera.alpha;
+                prevCamera.beta = camera.beta;
+            }
+           
+        });
+
+        // detect when we've started zooming
+
+        scene.onBeforeRenderObservable.add(() => {
+            const t = BABYLON.Scalar.InverseLerp(camera.lowerRadiusLimit, camera.upperRadiusLimit, camera.radius);
+
+            if (prevCamera.radius !== camera.radius) {
+                camera.beta = BABYLON.Scalar.Lerp(1 * Deg2Rad, prevCamera.beta, t);
+                camera.alpha = BABYLON.Scalar.Lerp(90 * Deg2Rad, prevCamera.alpha, t);
+                prevCamera.radius = camera.radius;
+            }
+        });
+
         window.addEventListener("resize", () => {
             engine.resize();
-        })
+        });
     }
 
     createCamera(canvas) {
