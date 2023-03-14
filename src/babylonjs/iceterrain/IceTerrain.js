@@ -1,14 +1,14 @@
 import * as BABYLON from "@babylonjs/core";
 
+import { getElapsedTimeMs } from "../TimeElapsed";
+import sceneDataInstance from "../SceneData";
+
 import iceTerrainVertexShader from "./IceTerrain.vertex.glsl";
 import iceTerrainFragmentShader from "./IceTerrain.fragment.glsl";
 
+import GlobeModel from "../models/Globe.babylon";
 import ArcticIceData from "../../data/ArcticIceData.json";
-
 import seaIceConcLUT from "./SeaIceConcentrationLUT.png";
-
-import { getElapsedTimeMs } from "../TimeElapsed";
-import sceneDataInstance from "../SceneData";
 
 BABYLON.Effect.ShadersStore["iceTerrainVertexShader"] = iceTerrainVertexShader;
 BABYLON.Effect.ShadersStore["iceTerrainFragmentShader"] = iceTerrainFragmentShader;
@@ -70,7 +70,8 @@ export default class IceTerrain {
                     "_SunPosition",
                     "_DisplaceThreshold",
                     "_DisplaceScale",
-                    "_LutThreshold"
+                    "_LutThreshold",
+                    "_CamZoomNormalised"
                 ]
             }
         );
@@ -78,6 +79,14 @@ export default class IceTerrain {
 
         this.mesh.material = this.material;
         this.updateDataIndex(0);
+
+        this.init();
+    }
+
+    async init() {
+        const globeMesh = await BABYLON.SceneLoader.ImportMeshAsync("", GlobeModel);
+
+        globeMesh.meshes[1].material = this.material;
     }
 
     async updateDataIndex(index) {
@@ -107,5 +116,9 @@ export default class IceTerrain {
         this.material.setFloat("_DisplaceThreshold", sceneDataInstance.TerrainDisplaceThreshold);
         this.material.setFloat("_DisplaceScale", sceneDataInstance.TerrainDisplaceScale);
         this.material.setInt("_LutThreshold", sceneDataInstance.TerrainLutThreshold);
+    }
+
+    setCameraZoom(normalizedZoom) {
+        this.material.setFloat("_CamZoomNormalised", normalizedZoom);
     }
 }

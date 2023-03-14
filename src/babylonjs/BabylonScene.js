@@ -3,7 +3,6 @@ import "@babylonjs/loaders";
 import Water from "./water/Water";
 import envTexture from "./textures/kloppenheim_06_puresky_4k.env";
 import IceTerrain from "./iceterrain/IceTerrain";
-import GlobeModel from "./models/Globe.babylon";
 import OnValueChange from "./OnValueChange";
 
 const Deg2Rad = Math.PI / 180;
@@ -29,8 +28,6 @@ export default class BabylonScene {
         sphere.position = new BABYLON.Vector3(-10, 0, 0.5);
 
         // const loadedArcticMesh = await BABYLON.SceneLoader.ImportMeshAsync("", arcticModel);
-
-        const globeMesh = await BABYLON.SceneLoader.ImportMeshAsync("", GlobeModel);
 
         const meshes = scene.getNodes().filter((node) => node instanceof BABYLON.AbstractMesh);
 
@@ -76,13 +73,14 @@ export default class BabylonScene {
             onAlpha.update();
             onBeta.update();
 
-            const t = BABYLON.Scalar.InverseLerp(camera.lowerRadiusLimit, camera.upperRadiusLimit, camera.radius);
+            const camZoomNormalized = BABYLON.Scalar.InverseLerp(camera.lowerRadiusLimit, camera.upperRadiusLimit, camera.radius);
             if (prevCamera.radius !== camera.radius) {
-                camera.alpha = BABYLON.Scalar.Lerp(90 * Deg2Rad, prevCamera.alpha, t);
-                camera.beta = BABYLON.Scalar.Lerp(1 * Deg2Rad, prevCamera.beta, t);
+                camera.alpha = BABYLON.Scalar.Lerp(90 * Deg2Rad, prevCamera.alpha, camZoomNormalized);
+                camera.beta = BABYLON.Scalar.Lerp(1 * Deg2Rad, prevCamera.beta, camZoomNormalized);
 
                 prevCamera.radius = camera.radius;
             }
+            this.iceTerrain.setCameraZoom(camZoomNormalized);
         });
 
         window.addEventListener("resize", () => {
@@ -98,8 +96,8 @@ export default class BabylonScene {
             60,
             new BABYLON.Vector3(0, 0, 0)
         );
-        cam.lowerRadiusLimit = 10;
-        cam.upperRadiusLimit = 100;
+        cam.lowerRadiusLimit = 50;
+        cam.upperRadiusLimit = 200;
         cam.lowerBetaLimit = 1 * Deg2Rad;
         cam.upperBetaLimit = 80 * Deg2Rad;
         cam.minZ = 0.01;

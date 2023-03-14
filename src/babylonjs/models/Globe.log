@@ -25,16 +25,16 @@ Exporter version: 2.93.5, Blender version: 3.4.1
 		processing begun of material:  Material.003
 			processing texture N_197811_conc_v3_0
 				texture type:  diffuseTexture, mapped using: "UVMap"
-		num positions      :  1525
-		num normals        :  1525
+		num positions      :  118620
+		num normals        :  118620
 		num tangents       :  0
-		num uvs            :  3050
+		num uvs            :  237240
 		num uvs2           :  0
 		num colors         :  0
-		num triangles      :  512
+		num triangles      :  131072
 ========= Writing of JSON file started =========
 	writing mesh:  Sphere
 	writing mesh:  ImagePlane
 ========= Writing of JSON file completed =========
 ========= end of processing =========
-elapsed time:  0 min, 0.1415 secs
+elapsed time:  0 min, 13.1711 secs

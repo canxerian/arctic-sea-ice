@@ -12,6 +12,7 @@ uniform sampler2D _HeightLUT;
 uniform float _DisplaceThreshold;
 uniform float _DisplaceScale;
 uniform int _LutThreshold;
+uniform float _CamZoomNormalised;
 
 varying vec3 vWorldNormal;
 varying vec2 vUV;
@@ -47,26 +48,15 @@ float displace(vec2 _uv) {
 }
 
 void main(void) {
-    // vec3 newPosition = position;
-    // newPosition.y = displace(uv);
-
-    // vec3 tangent = position + vec3(0.001, 0, 0);
-    // vec3 bitangent = position + vec3(0, 0, -0.001);
-
-    // tangent.y = displace(uv + vec2(0.0, 0.001));
-    // bitangent.y = displace(uv + vec2(0.001, 0.0));
-
-    // vec3 normal = cross(tangent - newPosition, bitangent - newPosition);
-    // normal = normalize(world * vec4(normal, 0.0)).xyz;
-    // vWorldNormal = normal;
-
     vec3 newPosition = position;
 
     vec3 outColour;
     float height;
     lookup(texture2D(_IceExtentImg, uv).rgb, outColour, height);
 
-    newPosition.y = height * _DisplaceScale;
+    float camZoom = smoothstep(0.0, 0.2, _CamZoomNormalised);
+    newPosition.y = mix(0.0, newPosition.y + height * _DisplaceScale, camZoom);
+
     vUV = uv;
     vColour = outColour;
 
