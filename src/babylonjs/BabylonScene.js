@@ -4,36 +4,9 @@ import Water from "./water/Water";
 import envTexture from "./textures/kloppenheim_06_puresky_4k.env";
 import IceTerrain from "./iceterrain/IceTerrain";
 import GlobeModel from "./models/Globe.babylon";
+import OnValueChange from "./OnValueChange";
 
 const Deg2Rad = Math.PI / 180;
-
-/**
- * Raise onChangeStart/onChangeEnd events on a value on an object 
- * first changes and then resumes
- */
-class OnValueChange {
-    constructor(obj, key, onChangeBegin, onChangeEnd) {
-        this.isChanged = false;
-        this.initialValue = obj[key];
-        this.obj = obj;
-        this.key = key;
-        this.onChangeBegin = onChangeBegin;
-        this.onChangeEnd = onChangeEnd;
-    }
-
-    update() {
-        if (this.obj[this.key] !== this.initialValue) {
-            if (!this.isChanged) {
-                this.isChanged = true;
-                this.onChangeBegin?.();
-            }
-        }
-        else if (this.obj[this.key] === this.initialValue && this.isChanged) {
-            this.isChanged = false;
-            this.onChangeEnd?.();
-        }
-    }
-}
 
 export default class BabylonScene {
     constructor(canvas) {
@@ -99,27 +72,17 @@ export default class BabylonScene {
         const onBeta = new OnValueChange(camera, "inertialBetaOffset", null, () => prevCamera.beta = camera.beta);
 
         scene.onBeforeRenderObservable.add(() => {
-            const t = BABYLON.Scalar.InverseLerp(camera.lowerRadiusLimit, camera.upperRadiusLimit, camera.radius);
-            if (prevCamera.radius !== camera.radius) {
-                camera.beta = BABYLON.Scalar.Lerp(1 * Deg2Rad, prevCamera.beta, t);
-                camera.alpha = BABYLON.Scalar.Lerp(90 * Deg2Rad, prevCamera.alpha, t);
-                prevCamera.radius = camera.radius;
-            }
-
             onRadius.update();
             onAlpha.update();
             onBeta.update();
-            // if (camera.inertialRadiusOffset !== 0) {
-            //     if (!isZooming) {
-            //         // Started zooming
-            //         // prevCamera.radius = camera.radius;
-            //         isZooming = true;
-            //     }
-            // }
-            // else if (camera.inertialRadiusOffset === 0 && isZooming) {
-            //     // Stopped zooming
-            //     isZooming = false;
-            // }
+
+            const t = BABYLON.Scalar.InverseLerp(camera.lowerRadiusLimit, camera.upperRadiusLimit, camera.radius);
+            if (prevCamera.radius !== camera.radius) {
+                camera.alpha = BABYLON.Scalar.Lerp(90 * Deg2Rad, prevCamera.alpha, t);
+                camera.beta = BABYLON.Scalar.Lerp(1 * Deg2Rad, prevCamera.beta, t);
+
+                prevCamera.radius = camera.radius;
+            }
         });
 
         window.addEventListener("resize", () => {
