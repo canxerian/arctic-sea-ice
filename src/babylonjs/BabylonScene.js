@@ -7,6 +7,34 @@ import GlobeModel from "./models/Globe.babylon";
 
 const Deg2Rad = Math.PI / 180;
 
+/**
+ * Raise onChangeStart/onChangeEnd events on a value on an object 
+ * first changes and then resumes
+ */
+class OnValueChange {
+    constructor(obj, key, onChangeBegin, onChangeEnd) {
+        this.isChanged = false;
+        this.initialValue = obj[key];
+        this.obj = obj;
+        this.key = key;
+        this.onChangeBegin = onChangeBegin;
+        this.onChangeEnd = onChangeEnd;
+    }
+
+    update() {
+        if (this.obj[this.key] !== this.initialValue) {
+            if (!this.isChanged) {
+                this.isChanged = true;
+                this.onChangeBegin?.();
+            }
+        }
+        else if (this.obj[this.key] === this.initialValue && this.isChanged) {
+            this.isChanged = false;
+            this.onChangeEnd?.();
+        }
+    }
+}
+
 export default class BabylonScene {
     constructor(canvas) {
         this.initialise(canvas);
@@ -63,27 +91,35 @@ export default class BabylonScene {
             scene.render();
         });
 
-        const prevCamera = { alpha: camera.alpha, beta: camera.beta, radius: camera };
-        let zoomStartRadius = 0.0;
-        let prevInertialRadiusOffset = 0.0;
-        scene.onPointerObservable.add((pointerInfo) => {
-            if (pointerInfo.type === BABYLON.PointerEventTypes.POINTERMOVE && pointerInfo.event.pressure > 0) {
-                prevCamera.alpha = camera.alpha;
-                prevCamera.beta = camera.beta;
-            }
-           
-        });
+        // Object containing camera rotation values to lerp between when user zooms in/out
+        const prevCamera = { alpha: camera.alpha, beta: camera.beta, radius: camera.radius };
 
-        // detect when we've started zooming
+        const onRadius = new OnValueChange(camera, "inertialRadiusOffset", null, () => prevCamera.radius = camera.radius);
+        const onAlpha = new OnValueChange(camera, "inertialAlphaOffset", null, () => prevCamera.alpha = camera.alpha);
+        const onBeta = new OnValueChange(camera, "inertialBetaOffset", null, () => prevCamera.beta = camera.beta);
 
         scene.onBeforeRenderObservable.add(() => {
             const t = BABYLON.Scalar.InverseLerp(camera.lowerRadiusLimit, camera.upperRadiusLimit, camera.radius);
-
             if (prevCamera.radius !== camera.radius) {
                 camera.beta = BABYLON.Scalar.Lerp(1 * Deg2Rad, prevCamera.beta, t);
                 camera.alpha = BABYLON.Scalar.Lerp(90 * Deg2Rad, prevCamera.alpha, t);
                 prevCamera.radius = camera.radius;
             }
+
+            onRadius.update();
+            onAlpha.update();
+            onBeta.update();
+            // if (camera.inertialRadiusOffset !== 0) {
+            //     if (!isZooming) {
+            //         // Started zooming
+            //         // prevCamera.radius = camera.radius;
+            //         isZooming = true;
+            //     }
+            // }
+            // else if (camera.inertialRadiusOffset === 0 && isZooming) {
+            //     // Stopped zooming
+            //     isZooming = false;
+            // }
         });
 
         window.addEventListener("resize", () => {
