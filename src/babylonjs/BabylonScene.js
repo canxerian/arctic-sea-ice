@@ -39,24 +39,24 @@ export default class BabylonScene {
         this.iceTerrain = new IceTerrain(scene, this.debugSun);
 
         // Depth texture setup (for water)
-        const depthRenderer = scene.enableDepthRenderer(scene.activeCamera, false);
-        const depthTex = depthRenderer.getDepthMap();
-        depthTex.renderList = [...meshes, sphere, /* this.iceTerrain.mesh */];
+        // const depthRenderer = scene.enableDepthRenderer(scene.activeCamera, false);
+        // const depthTex = depthRenderer.getDepthMap();
+        // depthTex.renderList = [...meshes, sphere, /* this.iceTerrain.mesh */];
 
         // Render Target Texture (for water)
-        const refractionTex = new BABYLON.RenderTargetTexture("water_refraction", { width: 256, height: 256 }, scene, false, true);
-        refractionTex.wrapU = BABYLON.Constants.TEXTURE_MIRROR_ADDRESSMODE;
-        refractionTex.wrapV = BABYLON.Constants.TEXTURE_MIRROR_ADDRESSMODE;
-        refractionTex.ignoreCameraViewport = true;
-        refractionTex.renderList = depthTex.renderList;
-        refractionTex.refreshRate = 1;
+        // const refractionTex = new BABYLON.RenderTargetTexture("water_refraction", { width: 256, height: 256 }, scene, false, true);
+        // refractionTex.wrapU = BABYLON.Constants.TEXTURE_MIRROR_ADDRESSMODE;
+        // refractionTex.wrapV = BABYLON.Constants.TEXTURE_MIRROR_ADDRESSMODE;
+        // refractionTex.ignoreCameraViewport = true;
+        // refractionTex.renderList = depthTex.renderList;
+        // refractionTex.refreshRate = 1;
 
         const light = new BABYLON.DirectionalLight("DirectionalLight", new BABYLON.Vector3(0, -1, 0), scene);
 
-        this.water = new Water(scene, depthTex, this.debugSun);
+        // this.water = new Water(scene, depthTex, this.debugSun);
 
         engine.runRenderLoop(() => {
-            this.water.update();
+            // this.water.update();
             this.iceTerrain.update();
             scene.render();
         });
@@ -93,7 +93,7 @@ export default class BabylonScene {
             "Main Camera",
             -90 * Deg2Rad,
             70 * Deg2Rad,
-            60,
+            100,
             new BABYLON.Vector3(0, 0, 0)
         );
         cam.lowerRadiusLimit = 50;
