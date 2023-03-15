@@ -7,6 +7,15 @@ import OnValueChange from "./OnValueChange";
 
 const Deg2Rad = Math.PI / 180;
 
+const CameraState = {
+    Idle: 0,
+    Rotating: 1,
+    Zooming: 2
+};
+
+const MaxZoomAlphaTarget = 90 * Deg2Rad;
+const MaxZoomBetaTarget = 1 * Deg2Rad;
+
 export default class BabylonScene {
     constructor(canvas) {
         this.initialise(canvas);
@@ -61,26 +70,30 @@ export default class BabylonScene {
             scene.render();
         });
 
-        // Object containing camera rotation values to lerp between when user zooms in/out
-        const prevCamera = { alpha: camera.alpha, beta: camera.beta, radius: camera.radius };
-
-        const onRadius = new OnValueChange(camera, "inertialRadiusOffset", null, () => prevCamera.radius = camera.radius);
-        const onAlpha = new OnValueChange(camera, "inertialAlphaOffset", null, () => prevCamera.alpha = camera.alpha);
-        const onBeta = new OnValueChange(camera, "inertialBetaOffset", null, () => prevCamera.beta = camera.beta);
-
         scene.onBeforeRenderObservable.add(() => {
-            onRadius.update();
-            onAlpha.update();
-            onBeta.update();
+            const alphaInertia = Math.abs(camera.inertialAlphaOffset);
+            const betaInertia = Math.abs(camera.inertialBetaOffset);
+            const radiusInertia = Math.abs(camera.inertialRadiusOffset) * 0.01;     // Weighted, so that alpha/beta rotating takes precedence
+            let cameraStatus = CameraState.Idle;
 
-            const camZoomNormalized = BABYLON.Scalar.InverseLerp(camera.lowerRadiusLimit, camera.upperRadiusLimit, camera.radius);
-            if (prevCamera.radius !== camera.radius) {
-                camera.alpha = BABYLON.Scalar.Lerp(90 * Deg2Rad, prevCamera.alpha, camZoomNormalized);
-                camera.beta = BABYLON.Scalar.Lerp(1 * Deg2Rad, prevCamera.beta, camZoomNormalized);
-
-                prevCamera.radius = camera.radius;
+            if (alphaInertia > radiusInertia || betaInertia > radiusInertia) {
+                cameraStatus = CameraState.Rotating;
             }
-            this.iceTerrain.setCameraZoom(camZoomNormalized);
+            else if (radiusInertia > alphaInertia && radiusInertia > betaInertia) {
+                cameraStatus = CameraState.Zooming;
+            }
+
+            const camZoomNormalized = 1 - BABYLON.Scalar.InverseLerp(camera.lowerRadiusLimit, camera.upperRadiusLimit, camera.radius);
+            if (cameraStatus === CameraState.Zooming) {
+                const alphaDelta = BABYLON.Scalar.Lerp(camera.alpha, MaxZoomAlphaTarget, camZoomNormalized);
+                const betaDelta = BABYLON.Scalar.Lerp(camera.beta, MaxZoomBetaTarget, camZoomNormalized);
+                camera.alpha = BABYLON.Scalar.Lerp(camera.alpha, alphaDelta, 0.1);
+                camera.beta = BABYLON.Scalar.Lerp(camera.beta, betaDelta, 0.1);
+            }
+            if (camZoomNormalized === 1) {
+                camera.alpha = MaxZoomAlphaTarget;
+                camera.beta = MaxZoomBetaTarget;
+            }
         });
 
         window.addEventListener("resize", () => {
@@ -96,7 +109,7 @@ export default class BabylonScene {
             100,
             new BABYLON.Vector3(0, 0, 0)
         );
-        cam.lowerRadiusLimit = 50;
+        cam.lowerRadiusLimit = 70;
         cam.upperRadiusLimit = 200;
         cam.lowerBetaLimit = 1 * Deg2Rad;
         cam.upperBetaLimit = 80 * Deg2Rad;
@@ -122,4 +135,8 @@ export default class BabylonScene {
             this.iceTerrain.updateDataIndex(index);
         }
     }
+}
+
+const toNearest = (value, x) => {
+    return Math.round(value / x) * x;
 }
