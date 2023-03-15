@@ -45,7 +45,7 @@ export default class BabylonScene {
         this.debugSun.position = new BABYLON.Vector3(0, 10, 100);
 
         // Ice Terrain
-        this.iceTerrain = new IceTerrain(scene, this.debugSun);
+        this.iceTerrain = await IceTerrain.Create(scene, this.debugSun);
 
         // Depth texture setup (for water)
         // const depthRenderer = scene.enableDepthRenderer(scene.activeCamera, false);

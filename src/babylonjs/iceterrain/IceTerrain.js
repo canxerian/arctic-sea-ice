@@ -35,11 +35,30 @@ export default class IceTerrain {
     extentTextures = {};
 
     /**
+     * Creates an instance of IceTerrain
+     * 
+     * @param {*} scene 
+     * @param {*} sun 
+     * @returns {Promise<IceTerrain>}
+     */
+    static Create(scene, sun) {
+        const iceTerrain = new IceTerrain(scene, sun);
+
+        return new Promise((resolve) => {
+            resolve(iceTerrain);
+        });
+    }
+
+    /**
      *
      * @param {BABYLON.Scene} scene
      * @param {BABYLON.Node} sun
      */
     constructor(scene, sun) {
+        this.init(scene, sun);
+    }
+
+    async init(scene, sun) {
         const subDivisions = 512;
         const scale = 0.5;
         this.scene = scene;
@@ -81,10 +100,6 @@ export default class IceTerrain {
         this.mesh.material = this.material;
         this.updateDataIndex(0);
 
-        this.init();
-    }
-
-    async init() {
         const globeMesh = await BABYLON.SceneLoader.ImportMeshAsync("", GlobeModel);
         this.globe = globeMesh.meshes[0];
         this.globeImagePlane = globeMesh.meshes[1];
