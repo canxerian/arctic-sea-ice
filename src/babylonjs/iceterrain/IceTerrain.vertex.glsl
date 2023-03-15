@@ -54,7 +54,9 @@ void main(void) {
     float height;
     lookup(texture2D(_IceExtentImg, uv).rgb, outColour, height);
 
-    float camZoom = smoothstep(0.0, 0.2, _CamZoomNormalised);
+    // float camZoom = smoothstep(0.0, 0.2, _CamZoomNormalised);
+    float camZoom = smoothstep(1.0, 0.99, _CamZoomNormalised);
+
     newPosition.y = mix(0.0, newPosition.y + height * _DisplaceScale, camZoom);
 
     vUV = uv;

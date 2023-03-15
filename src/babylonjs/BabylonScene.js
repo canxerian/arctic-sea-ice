@@ -94,6 +94,8 @@ export default class BabylonScene {
                 camera.alpha = MaxZoomAlphaTarget;
                 camera.beta = MaxZoomBetaTarget;
             }
+
+            this.iceTerrain.setCameraZoom(camZoomNormalized);
         });
 
         window.addEventListener("resize", () => {

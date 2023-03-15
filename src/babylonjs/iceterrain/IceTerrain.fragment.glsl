@@ -15,7 +15,7 @@ void main(void) {
 
     // float diffuse = clamp(dot(normalize(vWorldNormal), normalize(_SunPosition)), 0.0, 1.0);
 
-    float camZoom = smoothstep(0.0, 0.1, _CamZoomNormalised);
+    float camZoom = smoothstep(1.0, 0.96, _CamZoomNormalised);
     vec3 albedo = texture2D(_IceExtentImg, vUV).rgb;
     vec4 outCol = vec4(mix(albedo, vColour, camZoom), 1.0);
     
