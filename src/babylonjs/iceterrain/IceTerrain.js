@@ -33,6 +33,7 @@ const getImageName = (dataIndex) => {
  */
 export default class IceTerrain {
     extentTextures = {};
+
     /**
      *
      * @param {BABYLON.Scene} scene
@@ -85,8 +86,9 @@ export default class IceTerrain {
 
     async init() {
         const globeMesh = await BABYLON.SceneLoader.ImportMeshAsync("", GlobeModel);
-
-        globeMesh.meshes[1].material = this.material;
+        this.globe = globeMesh.meshes[0];
+        this.globeImagePlane = globeMesh.meshes[1];
+        this.globeImagePlane.material = this.material;
     }
 
     async updateDataIndex(index) {
