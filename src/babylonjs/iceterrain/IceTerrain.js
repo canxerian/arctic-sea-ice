@@ -41,8 +41,9 @@ export default class IceTerrain {
      * @param {*} sun 
      * @returns {Promise<IceTerrain>}
      */
-    static Create(scene, sun) {
+    static async Create(scene, sun) {
         const iceTerrain = new IceTerrain(scene, sun);
+        await iceTerrain.init(scene, sun);
 
         return new Promise((resolve) => {
             resolve(iceTerrain);
@@ -50,12 +51,15 @@ export default class IceTerrain {
     }
 
     /**
-     *
-     * @param {BABYLON.Scene} scene
-     * @param {BABYLON.Node} sun
+     * @param {BABYLON.Vector3} newPosition
      */
-    constructor(scene, sun) {
-        this.init(scene, sun);
+    set position(newPosition) {
+        console.log("set new pos", newPosition)
+        this._position = newPosition;
+
+        this.globe.position = newPosition;
+        this.globeImagePlane.position = newPosition;
+        this.mesh.position = newPosition;
     }
 
     async init(scene, sun) {
@@ -104,6 +108,12 @@ export default class IceTerrain {
         this.globe = globeMesh.meshes[0];
         this.globeImagePlane = globeMesh.meshes[1];
         this.globeImagePlane.material = this.material;
+
+        this.parent = new BABYLON.AbstractMesh("IceTerrainParent", scene);
+        this.parent.addChild(this.globe);
+        this.parent.addChild(this.globeImagePlane);
+        this.parent.addChild(this.mesh);
+
     }
 
     async updateDataIndex(index) {

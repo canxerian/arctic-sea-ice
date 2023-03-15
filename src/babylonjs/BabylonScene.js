@@ -24,14 +24,10 @@ export default class BabylonScene {
     async initialise(canvas) {
         const engine = new BABYLON.Engine(canvas);
         const scene = new BABYLON.Scene(engine);
-        const camera = this.createCamera();
 
         // Gizmo 
         const gizmoManager = new BABYLON.GizmoManager(scene);
         gizmoManager.positionGizmoEnabled = true;
-
-        // Skybox
-        this.createSkybox(scene);
 
         const sphere = BABYLON.MeshBuilder.CreateSphere("sphere", { segments: 16, diameter: 3 }, this.scene);
         sphere.position = new BABYLON.Vector3(-10, 0, 0.5);
@@ -46,6 +42,12 @@ export default class BabylonScene {
 
         // Ice Terrain
         this.iceTerrain = await IceTerrain.Create(scene, this.debugSun);
+
+        // Camera
+        const camera = this.createCamera(this.iceTerrain.parent.position);
+
+        // Skybox
+        this.createSkybox(scene);
 
         // Depth texture setup (for water)
         // const depthRenderer = scene.enableDepthRenderer(scene.activeCamera, false);
@@ -103,13 +105,14 @@ export default class BabylonScene {
         });
     }
 
-    createCamera(canvas) {
+    createCamera(targetPosition) {
         const cam = new BABYLON.ArcRotateCamera(
             "Main Camera",
             -90 * Deg2Rad,
             70 * Deg2Rad,
             100,
-            new BABYLON.Vector3(0, 0, 0)
+            // new BABYLON.Vector3(0, 0, 0)
+            targetPosition
         );
         cam.lowerRadiusLimit = 70;
         cam.upperRadiusLimit = 200;
@@ -117,7 +120,7 @@ export default class BabylonScene {
         cam.upperBetaLimit = 80 * Deg2Rad;
         cam.minZ = 0.01;
         cam.maxZ = 1000;
-        cam.attachControl(canvas, true, true);
+        cam.attachControl(null, true, true);
         return cam;
     }
 
