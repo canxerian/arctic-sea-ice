@@ -1,7 +1,7 @@
 import * as BABYLON from "@babylonjs/core";
 import "@babylonjs/loaders";
 import Water from "./water/Water";
-import envTexture from "./textures/kloppenheim_06_puresky_4k.env";
+import envTexture from "./textures/kloppenheim_02_puresky_4k.env";
 import IceTerrain from "./iceterrain/IceTerrain";
 import OnValueChange from "./OnValueChange";
 
