@@ -65,35 +65,7 @@ export default class IceTerrain {
         this.sun = sun;
 
         // Create the material that will reference the shaders we created
-        this.material = new BABYLON.ShaderMaterial(
-            "iceTerrain",
-            scene,
-            {
-                vertex: "iceTerrain",
-                fragment: "iceTerrain",
-            },
-            {
-                samplers: [
-                    "_IceExtentImg",
-                    "_HeightLUT",
-                ],
-                attributes: [
-                    "position",
-                    "uv"
-                ],
-                uniforms: [
-                    "worldViewProjection",
-                    "world",
-
-                    "_Time",
-                    "_SunPosition",
-                    "_DisplaceThreshold",
-                    "_DisplaceScale",
-                    "_LutThreshold",
-                    "_CamZoomNormalised"
-                ]
-            }
-        );
+        this.material = this.createShaderMaterial();
         this.material.setTexture("_HeightLUT", new BABYLON.Texture(seaIceConcLUT), scene);
 
         this.updateDataIndex(0);
@@ -135,6 +107,38 @@ export default class IceTerrain {
         this.material.setFloat("_DisplaceThreshold", sceneDataInstance.TerrainDisplaceThreshold);
         this.material.setFloat("_DisplaceScale", sceneDataInstance.TerrainDisplaceScale);
         this.material.setInt("_LutThreshold", sceneDataInstance.TerrainLutThreshold);
+    }
+
+    createShaderMaterial() {
+        return new BABYLON.ShaderMaterial(
+            "iceTerrain",
+            this.scene,
+            {
+                vertex: "iceTerrain",
+                fragment: "iceTerrain",
+            },
+            {
+                samplers: [
+                    "_IceExtentImg",
+                    "_HeightLUT",
+                ],
+                attributes: [
+                    "position",
+                    "uv"
+                ],
+                uniforms: [
+                    "worldViewProjection",
+                    "world",
+
+                    "_Time",
+                    "_SunPosition",
+                    "_DisplaceThreshold",
+                    "_DisplaceScale",
+                    "_LutThreshold",
+                    "_CamZoomNormalised"
+                ]
+            }
+        );
     }
 
     setCameraZoom(normalizedZoom) {
