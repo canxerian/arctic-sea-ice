@@ -6,15 +6,12 @@ import sceneDataInstance from "../SceneData";
 import iceTerrainVertexShader from "./IceTerrain.vertex.glsl";
 import iceTerrainFragmentShader from "./IceTerrain.fragment.glsl";
 
-import GlobeModel from "../models/Globe.babylon";
+import GlobeModel from "../models/Globe3.babylon";
 import ArcticIceData from "../../data/ArcticIceData.json";
 import seaIceConcLUT from "./SeaIceConcentrationLUT.png";
 
 BABYLON.Effect.ShadersStore["iceTerrainVertexShader"] = iceTerrainVertexShader;
 BABYLON.Effect.ShadersStore["iceTerrainFragmentShader"] = iceTerrainFragmentShader;
-
-const terrainImgWidth = 292;
-const terrainImgHeight = 446;
 
 const getImageName = (dataIndex) => {
     try {
@@ -59,7 +56,6 @@ export default class IceTerrain {
 
         this.globe.position = newPosition;
         this.globeImagePlane.position = newPosition;
-        this.mesh.position = newPosition;
     }
 
     async init(scene, sun) {
@@ -67,7 +63,6 @@ export default class IceTerrain {
         const scale = 0.5;
         this.scene = scene;
         this.sun = sun;
-        this.mesh = BABYLON.Mesh.CreateGround("iceTerrain", terrainImgWidth * scale, terrainImgHeight * scale, subDivisions, scene);
 
         // Create the material that will reference the shaders we created
         this.material = new BABYLON.ShaderMaterial(
@@ -101,7 +96,6 @@ export default class IceTerrain {
         );
         this.material.setTexture("_HeightLUT", new BABYLON.Texture(seaIceConcLUT), scene);
 
-        this.mesh.material = this.material;
         this.updateDataIndex(0);
 
         const globeMesh = await BABYLON.SceneLoader.ImportMeshAsync("", GlobeModel);
@@ -112,8 +106,6 @@ export default class IceTerrain {
         this.parent = new BABYLON.AbstractMesh("IceTerrainParent", scene);
         this.parent.addChild(this.globe);
         this.parent.addChild(this.globeImagePlane);
-        this.parent.addChild(this.mesh);
-
     }
 
     async updateDataIndex(index) {
