@@ -111,7 +111,6 @@ export default class BabylonScene {
             -90 * Deg2Rad,
             70 * Deg2Rad,
             100,
-            // new BABYLON.Vector3(0, 0, 0)
             targetPosition
         );
         cam.lowerRadiusLimit = 70;
@@ -120,6 +119,7 @@ export default class BabylonScene {
         cam.upperBetaLimit = 80 * Deg2Rad;
         cam.minZ = 0.01;
         cam.maxZ = 1000;
+        cam.viewport = new BABYLON.Viewport(-0.3, 0, 1.3, 1);
         cam.attachControl(null, true, true);
         return cam;
     }
