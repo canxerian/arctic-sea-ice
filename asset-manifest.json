@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/Arctic-Sea-Ice.JS/static/css/main.fdd56203.css",
-    "main.js": "/Arctic-Sea-Ice.JS/static/js/main.a55ed99c.js",
+    "main.js": "/Arctic-Sea-Ice.JS/static/js/main.92161253.js",
     "static/js/61260.2407ad0b.chunk.js": "/Arctic-Sea-Ice.JS/static/js/61260.2407ad0b.chunk.js",
     "static/js/89403.b98a0716.chunk.js": "/Arctic-Sea-Ice.JS/static/js/89403.b98a0716.chunk.js",
     "static/js/71201.9742397c.chunk.js": "/Arctic-Sea-Ice.JS/static/js/71201.9742397c.chunk.js",
@@ -535,8 +535,10 @@
     "static/js/77603.6cca3b28.chunk.js": "/Arctic-Sea-Ice.JS/static/js/77603.6cca3b28.chunk.js",
     "static/js/3911.496e1846.chunk.js": "/Arctic-Sea-Ice.JS/static/js/3911.496e1846.chunk.js",
     "static/js/787.1cf17955.chunk.js": "/Arctic-Sea-Ice.JS/static/js/787.1cf17955.chunk.js",
-    "static/media/kloppenheim_06_puresky_4k.env": "/Arctic-Sea-Ice.JS/static/media/kloppenheim_06_puresky_4k.24fc699346f503d7ba1d.env",
+    "static/media/Globe3.glb": "/Arctic-Sea-Ice.JS/static/media/Globe3.739f103f83e4e96b4759.glb",
+    "static/media/kloppenheim_02_puresky_4k.env": "/Arctic-Sea-Ice.JS/static/media/kloppenheim_02_puresky_4k.08bda779e7be5c19f655.env",
     "static/media/waternormals.jpg": "/Arctic-Sea-Ice.JS/static/media/waternormals.537ec85b965d414829ab.jpg",
+    "static/media/EarthNormalMap.JPEG": "/Arctic-Sea-Ice.JS/static/media/EarthNormalMap.3bf0d3b07e6e331418c3.JPEG",
     "static/media/N_198602_conc_v3.0.png": "/Arctic-Sea-Ice.JS/static/media/N_198602_conc_v3.0.3ef14ac5dda17eb222ed.png",
     "static/media/N_198603_conc_v3.0.png": "/Arctic-Sea-Ice.JS/static/media/N_198603_conc_v3.0.3e2cf31e2e5be78d5214.png",
     "static/media/N_197903_conc_v3.0.png": "/Arctic-Sea-Ice.JS/static/media/N_197903_conc_v3.0.cdc3fea56905536f2eb0.png",
@@ -1071,11 +1073,11 @@
     "static/media/N_201710_conc_v3.0.png": "/Arctic-Sea-Ice.JS/static/media/N_201710_conc_v3.0.e421557570601d283aec.png",
     "index.html": "/Arctic-Sea-Ice.JS/index.html",
     "main.fdd56203.css.map": "/Arctic-Sea-Ice.JS/static/css/main.fdd56203.css.map",
-    "main.a55ed99c.js.map": "/Arctic-Sea-Ice.JS/static/js/main.a55ed99c.js.map",
+    "main.92161253.js.map": "/Arctic-Sea-Ice.JS/static/js/main.92161253.js.map",
     "787.1cf17955.chunk.js.map": "/Arctic-Sea-Ice.JS/static/js/787.1cf17955.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.fdd56203.css",
-    "static/js/main.a55ed99c.js"
+    "static/js/main.92161253.js"
   ]
 }
