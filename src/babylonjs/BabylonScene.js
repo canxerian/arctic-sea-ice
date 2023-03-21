@@ -15,6 +15,7 @@ const CameraState = {
 
 const MaxZoomAlphaTarget = 90 * Deg2Rad;
 const MaxZoomBetaTarget = 1 * Deg2Rad;
+
 export default class BabylonScene {
     constructor(canvas) {
         this.initialise(canvas);

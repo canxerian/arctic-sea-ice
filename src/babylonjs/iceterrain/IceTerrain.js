@@ -6,7 +6,7 @@ import sceneDataInstance from "../SceneData";
 import iceTerrainVertexShader from "./IceTerrain.vertex.glsl";
 import iceTerrainFragmentShader from "./IceTerrain.fragment.glsl";
 
-import GlobeModel from "../models/Globe/Globe3.babylon";
+import GlobeModel from "../models/Globe/Globe3.glb";
 import ArcticIceData from "../../data/ArcticIceData.json";
 import seaIceConcLUT from "./SeaIceConcentrationLUT.png";
 
@@ -74,11 +74,10 @@ export default class IceTerrain {
         this.updateDataIndex(0);
 
         const globeMesh = await BABYLON.SceneLoader.ImportMeshAsync("", GlobeModel);
-        this.globe = globeMesh.meshes[0];
-        this.globeImagePlane = globeMesh.meshes[1];
-        this.globeImagePlane.material = this.material;
 
-        this.globe.material = this.createEarthMaterial();
+        this.globe = globeMesh.meshes.find(mesh => mesh.name === "Sphere");
+        this.globeImagePlane = globeMesh.meshes.find(mesh => mesh.name === "ImagePlane");
+        this.globeImagePlane.material = this.material;
 
         this.parent = new BABYLON.AbstractMesh("IceTerrainParent", scene);
         this.parent.addChild(this.globe);
@@ -146,17 +145,10 @@ export default class IceTerrain {
         );
     }
 
-    createEarthMaterial() {
-        const mat = new BABYLON.PBRMaterial("EarthPBR", this.scene);
-        mat.bumpTexture = new BABYLON.Texture(globeNormal, this.scene);
-        mat.metallic = 0;
-        mat.roughness = 0;
-        return mat;
-    }
-
     setCameraZoom(normalizedZoom) {
         this.material.setFloat("_CamZoomNormalised", normalizedZoom);
-        this.globe.scaling = BABYLON.Vector3.One().scale(smoothstep(0.999, 0.99, normalizedZoom));
+        const scale = smoothstep(0.999, 0.97, normalizedZoom);
+        this.globe.scaling = new BABYLON.Vector3(scale, -scale, scale); // negative Y due to .glb coordinate
     }
 }
 

@@ -9,9 +9,9 @@ uniform vec3 _SunPosition;
 uniform float _CamZoomNormalised;
 
 void main(void) {
-    // if (length(vColour) < 0.1) {
-    //     discard;
-    // }
+    if (length(vColour) < 0.1 && _CamZoomNormalised < 0.99) {
+        discard;
+    }
 
     // float diffuse = clamp(dot(normalize(vWorldNormal), normalize(_SunPosition)), 0.0, 1.0);
 
