@@ -108,10 +108,10 @@ export default class IceTerrain {
     update() {
         const timeMs = getElapsedTimeMs();
         this.material.setFloat("_Time", timeMs);
-        this.material.setVector3("_SunPosition", this.sun.position);
         this.material.setFloat("_DisplaceThreshold", sceneDataInstance.TerrainDisplaceThreshold);
         this.material.setFloat("_DisplaceScale", sceneDataInstance.TerrainDisplaceScale);
         this.material.setInt("_LutThreshold", sceneDataInstance.TerrainLutThreshold);
+        this.material.setFloat("_FlattenedPosY", sceneDataInstance.TerrainImageFlattedPosY);
     }
 
     createShaderMaterial() {
@@ -136,11 +136,11 @@ export default class IceTerrain {
                     "world",
 
                     "_Time",
-                    "_SunPosition",
                     "_DisplaceThreshold",
                     "_DisplaceScale",
                     "_LutThreshold",
-                    "_CamZoomNormalised"
+                    "_CamZoomNormalised",
+                    "_FlattenedPosY"
                 ]
             }
         );
@@ -156,5 +156,11 @@ export default class IceTerrain {
 
     setCameraZoom(normalizedZoom) {
         this.material.setFloat("_CamZoomNormalised", normalizedZoom);
+        this.globe.scaling = BABYLON.Vector3.One().scale(smoothstep(0.999, 0.99, normalizedZoom));
     }
 }
+
+const smoothstep = (min, max, value) => {
+    var x = Math.max(0, Math.min(1, (value - min) / (max - min)));
+    return x * x * (3 - 2 * x);
+};

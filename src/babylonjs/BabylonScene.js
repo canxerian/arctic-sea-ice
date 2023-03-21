@@ -15,7 +15,6 @@ const CameraState = {
 
 const MaxZoomAlphaTarget = 90 * Deg2Rad;
 const MaxZoomBetaTarget = 1 * Deg2Rad;
-
 export default class BabylonScene {
     constructor(canvas) {
         this.initialise(canvas);
@@ -29,19 +28,14 @@ export default class BabylonScene {
         const gizmoManager = new BABYLON.GizmoManager(scene);
         gizmoManager.positionGizmoEnabled = true;
 
-        const sphere = BABYLON.MeshBuilder.CreateSphere("sphere", { segments: 16, diameter: 3 }, this.scene);
-        sphere.position = new BABYLON.Vector3(-10, 0, 0.5);
-
-        // const loadedArcticMesh = await BABYLON.SceneLoader.ImportMeshAsync("", arcticModel);
-
-        const meshes = scene.getNodes().filter((node) => node instanceof BABYLON.AbstractMesh);
+        // const meshes = scene.getNodes().filter((node) => node instanceof BABYLON.AbstractMesh);
 
         // Debug sun (used only for positions to test lighting)
-        this.debugSun = BABYLON.MeshBuilder.CreateSphere("Sun", { segments: 16, diameter: 1 }, this.scene);
-        this.debugSun.position = new BABYLON.Vector3(0, 10, 100);
+        // this.debugSun = BABYLON.MeshBuilder.CreateSphere("Sun", { segments: 16, diameter: 1 }, this.scene);
+        // this.debugSun.position = new BABYLON.Vector3(0, 10, 100);
 
         // Ice Terrain
-        this.iceTerrain = await IceTerrain.Create(scene, this.debugSun);
+        this.iceTerrain = await IceTerrain.Create(scene);
 
         // Camera
         const camera = this.createCamera(this.iceTerrain.parent.position);

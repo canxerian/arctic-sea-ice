@@ -13,6 +13,7 @@ uniform float _DisplaceThreshold;
 uniform float _DisplaceScale;
 uniform int _LutThreshold;
 uniform float _CamZoomNormalised;
+uniform float _FlattenedPosY;       // position.y value when cam is fully zoomed in
 
 varying vec3 vWorldNormal;
 varying vec2 vUV;
@@ -57,7 +58,7 @@ void main(void) {
     // float camZoom = smoothstep(0.0, 0.2, _CamZoomNormalised);
     float camZoom = smoothstep(1.0, 0.99, _CamZoomNormalised);
 
-    newPosition.y = mix(0.0, newPosition.y + height * _DisplaceScale, camZoom);
+    newPosition.y = mix(_FlattenedPosY, newPosition.y + height * _DisplaceScale, camZoom);
 
     vUV = uv;
     vColour = outColour;
