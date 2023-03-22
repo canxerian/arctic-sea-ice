@@ -1,9 +1,7 @@
 import * as BABYLON from "@babylonjs/core";
 import "@babylonjs/loaders";
-import Water from "./water/Water";
 import envTexture from "./textures/kloppenheim_02_puresky_4k.env";
 import IceTerrain from "./iceterrain/IceTerrain";
-import OnValueChange from "./OnValueChange";
 
 const Deg2Rad = Math.PI / 180;
 
@@ -31,38 +29,24 @@ export default class BabylonScene {
 
         // const meshes = scene.getNodes().filter((node) => node instanceof BABYLON.AbstractMesh);
 
-        // Debug sun (used only for positions to test lighting)
-        // this.debugSun = BABYLON.MeshBuilder.CreateSphere("Sun", { segments: 16, diameter: 1 }, this.scene);
-        // this.debugSun.position = new BABYLON.Vector3(0, 10, 100);
-
         // Ice Terrain
         this.iceTerrain = await IceTerrain.Create(scene);
 
         // Camera
         const camera = this.createCamera(this.iceTerrain.parent.position);
 
+        this.createBackground(scene, engine);
+
         // Skybox
-        this.createSkybox(scene);
+        // this.createSkybox(scene);
 
-        // Depth texture setup (for water)
-        // const depthRenderer = scene.enableDepthRenderer(scene.activeCamera, false);
-        // const depthTex = depthRenderer.getDepthMap();
-        // depthTex.renderList = [...meshes, sphere, /* this.iceTerrain.mesh */];
+        // const light = new BABYLON.DirectionalLight("DirectionalLight", new BABYLON.Vector3(0, -1, 0), scene);
 
-        // Render Target Texture (for water)
-        // const refractionTex = new BABYLON.RenderTargetTexture("water_refraction", { width: 256, height: 256 }, scene, false, true);
-        // refractionTex.wrapU = BABYLON.Constants.TEXTURE_MIRROR_ADDRESSMODE;
-        // refractionTex.wrapV = BABYLON.Constants.TEXTURE_MIRROR_ADDRESSMODE;
-        // refractionTex.ignoreCameraViewport = true;
-        // refractionTex.renderList = depthTex.renderList;
-        // refractionTex.refreshRate = 1;
-
-        const light = new BABYLON.DirectionalLight("DirectionalLight", new BABYLON.Vector3(0, -1, 0), scene);
-
-        // this.water = new Water(scene, depthTex, this.debugSun);
+        const light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(1, 1, 0), scene);
+        light.groundColor = new BABYLON.Color3(1, 1, 1);
+        light.intensity = 1;
 
         engine.runRenderLoop(() => {
-            // this.water.update();
             this.iceTerrain.update();
             scene.render();
         });
@@ -128,6 +112,40 @@ export default class BabylonScene {
         scene.createDefaultSkybox(scene.environmentTexture, true, 10 * scene.activeCamera.maxZ);
         scene.imageProcessingConfiguration.toneMappingEnabled = true;
         scene.imageProcessingConfiguration.toneMappingType = BABYLON.ImageProcessingConfiguration.TONEMAPPING_STANDARD;
+    }
+
+    createBackground(scene, engine) {
+        // Create a render target.
+        const rtt = new BABYLON.RenderTargetTexture("", 512, scene)
+
+        // Create the background from it
+        const background = new BABYLON.Layer("background", null, scene);
+        background.isBackground = true;
+        background.texture = rtt;
+
+        // Create the background effect.
+        const renderImage = new BABYLON.EffectWrapper({
+            engine: engine,
+            fragmentShader: `
+            vec3 col1 = vec3(0.14, 0.18, 0.24);
+            vec3 col2 = vec3(0.24, 0.21, 0.27);
+
+            varying vec2 vUV;
+
+            void main(void) {
+                float t = clamp(vUV.x + vUV.y, 0.0, 1.0);
+                vec3 col = mix(col1, col2, t);
+                gl_FragColor = vec4(col, 1.0);
+            }`
+        });
+
+        // When the effect has been ready,
+        // Create the effect render and change which effects will be renderered
+        renderImage.effect.executeWhenCompiled(() => {
+            // Render the effect in the RTT.
+            const renderer = new BABYLON.EffectRenderer(engine);
+            renderer.render(renderImage, rtt);
+        });
     }
 
     setActiveIceIndex(index) {
