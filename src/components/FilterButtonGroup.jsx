@@ -1,30 +1,33 @@
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setCurrentFilter } from "../redux/appSlice";
+import FilterOptions from "../redux/FilterOptions";
 import "./FilterButtonGroup.scss";
 
-const FilterButton = ({ index, label, isActive, onClick }) => {
+const FilterButton = ({ label, isActive, onClick }) => {
     const classes = ["filter-button"];
     if (isActive) {
         classes.push("active");
     }
-    return <button key={index} className={classes.join(" ")} onClick={() => onClick(index)}>{label}</button>
+    return <button className={classes.join(" ")} onClick={() => onClick(label)}>{label}</button>
 }
 
 /**
  * Render a group of buttons where only one can be selected
- * @param {object} obj 
- * @param {Array<string>} obj.labels array of button labels 
- * @returns React
  */
-const FilterButtonGroup = ({ labels }) => {
-    const [activeIndex, setActiveIndex] = useState(-1);
+const FilterButtonGroup = () => {
+    const currentFilter = useSelector(state => state.app.currentFilter);
+    const dispatch = useDispatch();
+
+    const filters = Object.values(FilterOptions);
 
     return (
         <div className="filter-button-group">
-            {labels.map((option, index) => <FilterButton
-                index={index}
-                label={option}
-                isActive={index === activeIndex}
-                onClick={(index) => setActiveIndex(index)} />)}
+            {filters.map(filter => <FilterButton key={filter}
+                label={filter}
+                isActive={filter === currentFilter}
+                onClick={label => dispatch(setCurrentFilter(label))}
+            />)}
         </div>
     )
 }

@@ -61,18 +61,11 @@ const MainUI = () => {
     listItems.unshift(<li key="first"></li>);
     listItems.push(<li key="last"></li>);
 
-    const options = [
-        "All",
-        "Yearly minimum",
-        "Yearly maximum",
-        "Yearly min/max"
-    ];
-
     return (
         <aside id="data-list-aside">
             <section id="filter-section">
                 <h1>Filter by:</h1>
-                <FilterButtonGroup labels={options} />
+                <FilterButtonGroup />
             </section>
             <section id="data-list-section">
                 <ul onScroll={onScroll}>
