@@ -11,9 +11,8 @@
     ul {
         background-color: blue;
         overflow-x: hidden;
-        overflow-y: scroll;
+        overflow-y: auto;
 
-        display: inline-block;
         width: 100%;
         height: 60%;
         box-sizing: border-box;
