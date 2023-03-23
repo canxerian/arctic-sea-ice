@@ -6,43 +6,40 @@
     height: 100vh;
     box-sizing: border-box;
     padding: 20px;
-    display: flex;
-    flex-direction: column;
     background-color: black;
 
     #filter-section {
         background-color: red;
-        height: 200px;
+        height: 10%;
     }
 
     #data-list-section {
-        height: 400px;
-        background-color: blue;
-    }
+        height: 86%;
+        
+        ul {
+            overflow-x: hidden;
+            overflow-y: auto;
 
-    ul {
-        overflow-x: hidden;
-        overflow-y: auto;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
 
-        width: 100%;
-        height: 60%;
-        box-sizing: border-box;
+            li {
+                transition: font-weight 0.2s font-size 0.2;
+                &:first-child,
+                &:last-child {
+                    height: 50%;
+                }
 
-        li {
-            transition: font-weight 0.2s font-size 0.2;
-            &:first-child,
-            &:last-child {
-                height: 54%;
-            }
+                &.active {
+                    // font-size: 30px;
+                    font-weight: 800;
+                }
 
-            &.active {
-                // font-size: 30px;
-                font-weight: 800;
-            }
-            
-            &.activeSibling {
-                // font-size: 20px;
-                // font-weight: 400;
+                &.activeSibling {
+                    // font-size: 20px;
+                    // font-weight: 400;
+                }
             }
         }
     }
