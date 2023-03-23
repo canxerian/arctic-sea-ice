@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ArcticIceData from "../data/ArcticIceData.json";
 import { MonthLookup } from "../data/MonthLookup";
 import { setActiveIceDataIndex } from "../redux/appSlice";
+import FilterButtonGroup from "./FilterButtonGroup";
 import "./MainUI.scss";
 
 const MainUI = () => {
@@ -47,7 +48,7 @@ const MainUI = () => {
         }
 
         const areaPercent = (item.area - ArcticIceData.minArea) / areaRange * 100;
-        const bgColour = "#5B7099";        
+        const bgColour = "#5B7099";
         const backgroundStyle = { background: `linear-gradient(90deg, ${bgColour} ${areaPercent}%, transparent 0%)` }
 
         return <li data-index={index} key={index} className={className} style={backgroundStyle}>
@@ -60,10 +61,18 @@ const MainUI = () => {
     listItems.unshift(<li key="first"></li>);
     listItems.push(<li key="last"></li>);
 
+    const options = [
+        "All",
+        "Yearly minimum",
+        "Yearly maximum",
+        "Yearly min/max"
+    ];
+
     return (
         <aside id="data-list-aside">
             <section id="filter-section">
                 <h1>Filter by:</h1>
+                <FilterButtonGroup labels={options} />
             </section>
             <section id="data-list-section">
                 <ul onScroll={onScroll}>

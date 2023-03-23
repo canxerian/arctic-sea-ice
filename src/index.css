@@ -2,11 +2,16 @@
 
 body {
   margin: 0;
-  font-family: 'Tajawal', 'Roboto', 'Helvetica Neue', sans-serif; 
+  font-family: 'Tajawal', 'Roboto', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
   overflow: hidden;
+  background-color: #3d3544;
+}
+
+* {
+  color: #fff;
 }
 
 code {
