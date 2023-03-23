@@ -60,6 +60,7 @@ const MainUI = () => {
 
     return (
         <aside id="data-list-aside">
+            <h1>Filter by:</h1>
             <ul onScroll={onScroll}>
                 {listItems}
             </ul>
