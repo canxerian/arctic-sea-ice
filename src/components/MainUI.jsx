@@ -58,13 +58,22 @@ const MainUI = () => {
         </li>
     });
 
+    // Create two empty list items at beginning/end. In CSS these are set to approx 50% height, 
+    // so that actual list items appear in the center.
+    listItems.unshift(<li key="first"></li>);
+    listItems.push(<li key="last"></li>);
+
     return (
         <aside id="data-list-aside">
-            <h1>Filter by:</h1>
-            <ul onScroll={onScroll}>
-                {listItems}
-            </ul>
-        </aside>
+            <section id="filter-section">
+                <h1>Filter by:</h1>
+            </section>
+            <section id="data-list-section">
+                <ul onScroll={onScroll}>
+                    {listItems}
+                </ul>
+            </section>
+        </aside >
     );
 }
 
