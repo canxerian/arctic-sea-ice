@@ -25,6 +25,8 @@
             box-sizing: border-box;
 
             li {
+                color: #ffffff;
+                padding: 1px 6px;
                 transition: font-weight 0.2s font-size 0.2;
                 &:first-child,
                 &:last-child {

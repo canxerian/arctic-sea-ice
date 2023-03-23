@@ -46,11 +46,8 @@ const MainUI = () => {
             className = "activeSibling";
         }
 
-        const minColour = "red";
-        const maxColour = "green";
-
         const areaPercent = (item.area - ArcticIceData.minArea) / areaRange * 100;
-        const bgColour = areaPercent < 30 ? "red" : "green";
+        const bgColour = "#5B7099";        
         const backgroundStyle = { background: `linear-gradient(90deg, ${bgColour} ${areaPercent}%, transparent 0%)` }
 
         return <li data-index={index} key={index} className={className} style={backgroundStyle}>
