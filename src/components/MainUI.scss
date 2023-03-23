@@ -2,7 +2,7 @@
     position: absolute;
     right: 0;
     top: 0;
-    width: 300px;
+    width: 350px;
     height: 100vh;
     box-sizing: border-box;
     background-color: red;
@@ -13,12 +13,23 @@
         overflow-x: hidden;
         overflow-y: scroll;
 
-        height: 100%;
-        padding: 48vh 0;
+        display: inline-block;
+        width: 100%;
+        height: 60%;
         box-sizing: border-box;
 
         li {
             transition: font-weight 0.2s font-size 0.2;
+            &:first-child {
+                height: 54%;
+                display: flex;
+                flex-direction: column-reverse;
+            }
+
+            &:last-child {
+                height: 54%;
+            }
+
             &.active {
                 // font-size: 30px;
                 font-weight: 800;
