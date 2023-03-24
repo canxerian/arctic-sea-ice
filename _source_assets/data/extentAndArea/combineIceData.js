@@ -2,7 +2,7 @@ const csvtojson = require('csvtojson');
 const fs = require('fs');
 const path = require('path');
 
-const outputPath = "../../../src/Data/ArcticIceData.json";
+const outputPath = path.join(__dirname, "../../../src/Data/ArcticIceData.json");
 
 /**
  * @typedef {Object} IceDataItem
@@ -27,8 +27,12 @@ const outputPath = "../../../src/Data/ArcticIceData.json";
 const process = async () => {
     let arcticIceData = {
         data: [],
-        minMaxAreaByYear: [],               // The min and max entries for each year, sorted by time
-        minMaxExtentByYear: [],
+        yearlyMinMaxArea: [],               // The min and max entries for each year, sorted by time
+        yearlyMinMaxExtent: [],
+        yearlyMaxArea: [],
+        yearlyMaxExtent: [],
+        yearlyMinArea: [],
+        yearlyMinExtent: [],
         minExtent: Number.MAX_VALUE,
         maxExtent: Number.MIN_VALUE,
         minArea: Number.MAX_VALUE,
@@ -37,12 +41,24 @@ const process = async () => {
 
     arcticIceData.data = await getCsvArray();
 
-    // filterYearlyMinMaxByProperty(arcticIceData.data, "area", (min, max) => {
-    //     console.log("min", min, "max", max);
-    // });
+    filterYearlyMinMaxByProperty(arcticIceData.data, "area", (min, max) => {
+        arcticIceData.yearlyMinArea.push(min);
+        arcticIceData.yearlyMaxArea.push(max);
+        arcticIceData.yearlyMinMaxArea.push(min, max);
+    });
 
-    arcticIceData.minMaxAreaByYear = getMinMaxForProperty(arcticIceData.data, "area");
-    arcticIceData.minMaxExtentByYear = getMinMaxForProperty(arcticIceData.data, "extent");
+    filterYearlyMinMaxByProperty(arcticIceData.data, "extent", (min, max) => {
+        arcticIceData.yearlyMinExtent.push(min);
+        arcticIceData.yearlyMaxExtent.push(max);
+        arcticIceData.yearlyMinMaxExtent.push(min, max);
+    });
+
+    arcticIceData.yearlyMinArea.sort((a, b) => getDateHash(a.year, a.month) - getDateHash(b.year, b.month));
+    arcticIceData.yearlyMaxArea.sort((a, b) => getDateHash(a.year, a.month) - getDateHash(b.year, b.month));
+    arcticIceData.yearlyMinMaxArea.sort((a, b) => getDateHash(a.year, a.month) - getDateHash(b.year, b.month));
+    arcticIceData.yearlyMinExtent.sort((a, b) => getDateHash(a.year, a.month) - getDateHash(b.year, b.month));
+    arcticIceData.yearlyMaxExtent.sort((a, b) => getDateHash(a.year, a.month) - getDateHash(b.year, b.month));
+    arcticIceData.yearlyMinMaxExtent.sort((a, b) => getDateHash(a.year, a.month) - getDateHash(b.year, b.month));
 
     // Find min max extent and area
     for (let i = 0; i < arcticIceData.data.length; i++) {
@@ -53,9 +69,12 @@ const process = async () => {
         arcticIceData.maxArea = Math.max(dataItem.area, arcticIceData.maxArea);
     }
 
-    assertOrder(arcticIceData.data);
-    assertOrder(arcticIceData.minMaxAreaByYear);
-    assertOrder(arcticIceData.minMaxExtentByYear);
+    assertOrder(arcticIceData.yearlyMinArea);
+    assertOrder(arcticIceData.yearlyMaxArea);
+    assertOrder(arcticIceData.yearlyMinMaxArea);
+    assertOrder(arcticIceData.yearlyMinExtent);
+    assertOrder(arcticIceData.yearlyMaxExtent);
+    assertOrder(arcticIceData.yearlyMinMaxExtent);
 
     await fs.promises.writeFile(outputPath, JSON.stringify(arcticIceData));
 }
@@ -98,44 +117,44 @@ const getCsvArray = async () => {
     return dataArray;
 }
 
-/**
- * Traverses {dataArray} for min/max entries of a {property} for a given year. 
- * @param {*} dataArray 
- * @param {*} property 
- * 
- * @returns Sorted array (by time) containing min/max entries for a given year
- */
-const getMinMaxForProperty = (dataArray, property) => {
-    const minMaxarray = [];
+// /**
+//  * Traverses {dataArray} for min/max entries of a {property} for a given year. 
+//  * @param {*} dataArray 
+//  * @param {*} property 
+//  * 
+//  * @returns Sorted array (by time) containing min/max entries for a given year
+//  */
+// const getMinMaxForProperty = (dataArray, property) => {
+//     const minMaxarray = [];
 
-    // Find min/max entries for each year
-    let prevDataItem = dataArray[0];
-    let minAreaData = prevDataItem;
-    let maxAreaData = prevDataItem;
+//     // Find min/max entries for each year
+//     let prevDataItem = dataArray[0];
+//     let minAreaData = prevDataItem;
+//     let maxAreaData = prevDataItem;
 
-    for (let i = 1; i < dataArray.length; i++) {
-        const dataItem = dataArray[i];
+//     for (let i = 1; i < dataArray.length; i++) {
+//         const dataItem = dataArray[i];
 
-        if (prevDataItem.year !== dataItem.year) {
-            minMaxarray.push(maxAreaData, minAreaData);
-            minAreaData = dataItem;
-            maxAreaData = dataItem;
-        }
+//         if (prevDataItem.year !== dataItem.year) {
+//             minMaxarray.push(maxAreaData, minAreaData);
+//             minAreaData = dataItem;
+//             maxAreaData = dataItem;
+//         }
 
-        if (dataItem[property] < minAreaData[property]) {
-            minAreaData = dataItem;
-        }
-        if (dataItem[property] > maxAreaData[property]) {
-            maxAreaData = dataItem;
-        }
+//         if (dataItem[property] < minAreaData[property]) {
+//             minAreaData = dataItem;
+//         }
+//         if (dataItem[property] > maxAreaData[property]) {
+//             maxAreaData = dataItem;
+//         }
 
-        prevDataItem = dataItem;
-    }
+//         prevDataItem = dataItem;
+//     }
 
-    minMaxarray.sort((a, b) => getDateHash(a.year, a.month) - getDateHash(b.year, b.month));
+//     minMaxarray.sort((a, b) => getDateHash(a.year, a.month) - getDateHash(b.year, b.month));
 
-    return minMaxarray;
-}
+//     return minMaxarray;
+// }
 
 /**
  * Traverses data array for min / max of a given property.
@@ -192,7 +211,7 @@ const assertOrder = (dataArrar) => {
         const compNumA = getDateHash(a.year, a.month);
         const compNumB = getDateHash(b.year, b.month);
 
-        console.assert(compNumA < compNumB, `a: ${compNumA}, b: ${compNumB}`);
+        console.assert(compNumA <= compNumB, `a: ${compNumA}, b: ${compNumB}`);
     }
 }
 
