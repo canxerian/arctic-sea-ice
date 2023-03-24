@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentFilter } from "../redux/appSlice";
-import FilterOptions from "../redux/FilterOptions";
+import { FilterOptions } from "../redux/FilterOptions";
 import "./FilterButtonGroup.scss";
 
 const FilterButton = ({ label, isActive, onClick }) => {

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import FilterOptions from './FilterOptions';
+import { FilterOptions } from './FilterOptions';
 
 export const appSlice = createSlice({
     name: 'app',
