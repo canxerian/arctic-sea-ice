@@ -1,14 +1,29 @@
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ArcticIceData from "../data/ArcticIceData.json";
 import { MonthLookup } from "../data/MonthLookup";
 import { setActiveIceDataIndex } from "../redux/appSlice";
+import FilterOptions from "../redux/FilterOptions";
 import FilterButtonGroup from "./FilterButtonGroup";
 import "./MainUI.scss";
 
+const getData = (filterOption) => {
+    if (filterOption === FilterOptions.all) {
+        return ArcticIceData.data;
+    }
+    else if (filterOption === FilterOptions.yearlyMinMax) {
+        return ArcticIceData.minMaxAreaByYear;
+    }
+    else {
+        return ArcticIceData.data;
+    }
+}
+
 const MainUI = () => {
     const activeIceDataIndex = useSelector(state => state.app.activeIceDataIndex);
+    const filterOption = useSelector(state => state.app.currentFilter);
     const dispatch = useDispatch();
+
+    const dataArray = getData(filterOption);
 
     const onScroll = (e) => {
         const { height, width, x, y } = e.target.getBoundingClientRect();
@@ -30,7 +45,7 @@ const MainUI = () => {
                 dispatch(setActiveIceDataIndex(0));
             }
             else {
-                dispatch(setActiveIceDataIndex(ArcticIceData.data.length - 1));
+                dispatch(setActiveIceDataIndex(dataArray.length - 1));
             }
         }
     }
@@ -38,7 +53,7 @@ const MainUI = () => {
     const extentRange = ArcticIceData.maxExtent - ArcticIceData.minExtent;
     const areaRange = ArcticIceData.maxArea - ArcticIceData.minArea;
 
-    const listItems = ArcticIceData.data.map((item, index) => {
+    const listItems = dataArray.map((item, index) => {
         let className;
         if (index === activeIceDataIndex) {
             className = "active";
@@ -52,7 +67,7 @@ const MainUI = () => {
         const backgroundStyle = { background: `linear-gradient(90deg, ${bgColour} ${areaPercent}%, transparent 0%)` }
 
         return <li data-index={index} key={index} className={className} style={backgroundStyle}>
-            {item.year} {MonthLookup[item.mo]} - {areaPercent.toFixed(2)}%
+            {item.year} {MonthLookup[item.month]} - {item.area}
         </li>
     });
 
@@ -66,6 +81,7 @@ const MainUI = () => {
             <section id="filter-section">
                 <h1>Filter by:</h1>
                 <FilterButtonGroup />
+                <p>In million sq km</p>
             </section>
             <section id="data-list-section">
                 <ul onScroll={onScroll}>

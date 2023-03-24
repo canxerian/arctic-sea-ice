@@ -25,9 +25,9 @@
             box-sizing: border-box;
 
             li {
-                color: #ffffff;
                 padding: 1px 6px;
                 transition: font-weight 0.2s font-size 0.2;
+                color: #c4c2c2;
                 &:first-child,
                 &:last-child {
                     height: 50%;
@@ -36,6 +36,7 @@
                 &.active {
                     // font-size: 30px;
                     font-weight: 800;
+                    color: #ffffff;
                 }
 
                 &.activeSibling {
