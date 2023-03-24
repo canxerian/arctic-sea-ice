@@ -10,12 +10,14 @@ const getData = (filterOption) => {
     if (filterOption === FilterOptions.all) {
         return ArcticIceData.data;
     }
-    else if (filterOption === FilterOptions.yearlyMinMax) {
+    else if (filterOption === FilterOptions.yearlyMinMaxArea) {
         return ArcticIceData.minMaxAreaByYear;
     }
-    else {
-        return ArcticIceData.data;
+    else if (filterOption === FilterOptions.yearlyMinMaxExtent) {
+        return ArcticIceData.minMaxExtentByYear;
     }
+
+    throw "Not implemented - filter option";
 }
 
 const MainUI = () => {

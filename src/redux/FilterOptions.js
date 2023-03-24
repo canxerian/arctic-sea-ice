@@ -1,8 +1,7 @@
 const FilterOptions = {
     all: "All",
-    yearlyMin: "Yearly minimum",
-    yearlyMax: "Yearly maximum",
-    yearlyMinMax: "Yearly min/max"
+    yearlyMinMaxArea: "Yearly min/max area",
+    yearlyMinMaxExtent: "Yearly min/max extent",
 };
 
 export default FilterOptions;
