@@ -1,7 +1,24 @@
 const csvtojson = require('csvtojson');
 const fs = require('fs');
+const path = require('path');
 
 const outputPath = "../../../src/Data/ArcticIceData.json";
+
+/**
+ * @typedef {Object} IceDataItem
+ * @property {number} year data year
+ * @property {number} month data month
+ * @property {number} extent extent, in million sq km
+ * @property {number} area area, in million sq km
+ */
+
+/**
+ * Callback for filterYearlyMinMaxByProperty
+ *
+ * @callback filterByYearCallback
+ * @param {IceDataItem} min - the minimum data item
+ * @param {IceDataItem} max - the maximum data item
+ */
 
 /**
  * Traverses input .csv files, combines the values in to a single sorted array
@@ -19,6 +36,10 @@ const process = async () => {
     };
 
     arcticIceData.data = await getCsvArray();
+
+    // filterYearlyMinMaxByProperty(arcticIceData.data, "area", (min, max) => {
+    //     console.log("min", min, "max", max);
+    // });
 
     arcticIceData.minMaxAreaByYear = getMinMaxForProperty(arcticIceData.data, "area");
     arcticIceData.minMaxExtentByYear = getMinMaxForProperty(arcticIceData.data, "extent");
@@ -55,9 +76,9 @@ const getCsvArray = async () => {
     // Read CSV and combine in to a single array
     for (let i = 1; i <= 12; i++) {
         const month = getMonth(i);
-        const path = `./N_${month}_extent_v3.0.csv`;
+        const filepath = path.join(__dirname, `./N_${month}_extent_v3.0.csv`);
 
-        const json = await csvtojson().fromFile(path);
+        const json = await csvtojson().fromFile(filepath);
 
         // Stick all data points in to a single array and then sort later
         dataArray = dataArray.concat(json);
@@ -112,8 +133,44 @@ const getMinMaxForProperty = (dataArray, property) => {
     }
 
     minMaxarray.sort((a, b) => getDateHash(a.year, a.month) - getDateHash(b.year, b.month));
-    
+
     return minMaxarray;
+}
+
+/**
+ * Traverses data array for min / max of a given property.
+ * Callback is called for each year traversed with ({min, max})
+ * @param {*} dataArray 
+ * @param {*} property 
+ * @param {filterByYearCallback} filterCallback 
+ * @returns 
+ */
+const filterYearlyMinMaxByProperty = (dataArray, property, filterCallback) => {
+    // Find min/max entries for each year
+    let prevDataItem = dataArray[0];
+    let minData = prevDataItem;
+    let maxData = prevDataItem;
+
+    for (let i = 1; i < dataArray.length; i++) {
+        const dataItem = dataArray[i];
+
+        if (prevDataItem.year !== dataItem.year) {
+            filterCallback(minData, maxData);
+            minData = dataItem;
+            maxData = dataItem;
+        }
+
+        if (dataItem[property] < minData[property]) {
+            minData = dataItem;
+        }
+        if (dataItem[property] > maxData[property]) {
+            maxData = dataItem;
+        }
+
+        prevDataItem = dataItem;
+    }
+
+    filterCallback(minData, maxData);
 }
 
 /**
