@@ -1,6 +1,5 @@
 import * as BABYLON from "@babylonjs/core";
 import "@babylonjs/loaders";
-import envTexture from "./textures/kloppenheim_02_puresky_4k.env";
 import IceTerrain from "./iceterrain/IceTerrain";
 import { GradientMaterial } from "@babylonjs/materials";
 import StylisedSky from "./stylisedSky/StylisedSky";
@@ -95,7 +94,7 @@ export default class BabylonScene {
             100,
             targetPosition
         );
-        cam.lowerRadiusLimit = 70;
+        cam.lowerRadiusLimit = 90;
         cam.upperRadiusLimit = 200;
         cam.lowerBetaLimit = 1 * Deg2Rad;
         cam.upperBetaLimit = 80 * Deg2Rad;

@@ -6,7 +6,7 @@ import sceneDataInstance from "../SceneData";
 import iceTerrainVertexShader from "./IceTerrain.vertex.glsl";
 import iceTerrainFragmentShader from "./IceTerrain.fragment.glsl";
 
-import GlobeModel from "../models/Globe/Globe3.glb";
+import GlobeModel from "./Globe4.glb";
 import seaIceConcLUT from "./SeaIceConcentrationLUT.png";
 
 import { store } from "../../redux/store";
@@ -152,6 +152,9 @@ export default class IceTerrain {
         this.material.setFloat("_CamZoomNormalised", normalizedZoom);
         const scale = smoothstep(0.999, 0.989, normalizedZoom);
         this.globe.scaling = new BABYLON.Vector3(scale, -scale, scale); // negative Y due to .glb coordinate
+
+        // TODO - scale plane to avoid edge artifact
+        // this.globeImagePlane.scaling = new BABYLON.Vector3(scale, -scale, scale); // negative Y due to .glb coordinate
     }
 }
 
