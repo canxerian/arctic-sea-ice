@@ -10,7 +10,7 @@ BABYLON.Effect.ShadersStore["stylisedSkyFragmentShader"] = fragmentShader;
 export default class StylisedSky {
     constructor(scene) {
         this.sphere = BABYLON.MeshBuilder.CreateSphere("StylisedSky", {
-            diameter: 400,
+            diameter: 420,
             segments: 32,
         }, scene);
 
