@@ -7,6 +7,7 @@ varying vec3 vColour;
 uniform sampler2D _IceExtentImg;
 uniform vec3 _SunPosition;
 uniform float _CamZoomNormalised;
+uniform vec4 _IceImageCrop;
 
 void main(void) {
     if (length(vColour) < 0.1 && _CamZoomNormalised < 0.99) {
@@ -15,8 +16,10 @@ void main(void) {
 
     // float diffuse = clamp(dot(normalize(vWorldNormal), normalize(_SunPosition)), 0.0, 1.0);
 
+    vec2 uv = vUV;
+
     float camZoom = smoothstep(1.0, 0.96, _CamZoomNormalised);
-    vec3 albedo = texture2D(_IceExtentImg, vUV).rgb;
+    vec3 albedo = texture2D(_IceExtentImg, uv).rgb;
     vec4 outCol = vec4(mix(albedo, vColour, camZoom), 1.0);
     
     gl_FragColor = outCol;

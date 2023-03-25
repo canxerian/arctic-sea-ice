@@ -18,6 +18,7 @@ BABYLON.Effect.ShadersStore["iceTerrainFragmentShader"] = iceTerrainFragmentShad
 
 const getImageName = (dataIndex) => {
     try {
+        // TODO - change to current filter
         const data = ArcticIceData.data[dataIndex];
         const month = (data.month).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
         return `N_${data.year}${month}_conc_v3.0`;
@@ -92,7 +93,8 @@ export default class IceTerrain {
         }
         else {
             try {
-                const image = await import("./images/" + imagePath + ".png");
+                // const image = await import("./images/" + imagePath + ".png");
+                const image = await import("./Test.png");
 
                 this.extentTextures[imagePath] = new BABYLON.Texture(image.default, this.scene, null, null, null, () => {
                     this.material.setTexture("_IceExtentImg", this.extentTextures[imagePath]);
@@ -111,6 +113,7 @@ export default class IceTerrain {
         this.material.setFloat("_DisplaceScale", sceneDataInstance.TerrainDisplaceScale);
         this.material.setInt("_LutThreshold", sceneDataInstance.TerrainLutThreshold);
         this.material.setFloat("_FlattenedPosY", sceneDataInstance.TerrainImageFlattedPosY);
+        this.material.setVector4("_IceImageCrop", sceneDataInstance.IceImageCrop);
     }
 
     createShaderMaterial() {
@@ -139,7 +142,8 @@ export default class IceTerrain {
                     "_DisplaceScale",
                     "_LutThreshold",
                     "_CamZoomNormalised",
-                    "_FlattenedPosY"
+                    "_FlattenedPosY",
+                    "_IceImageCrop",
                 ]
             }
         );
