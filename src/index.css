@@ -1,12 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@200&display=swap');
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Tajawal', 'Roboto', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
   overflow: hidden;
+  background-color: #3d3544;
+}
+
+* {
+  color: #fff;
 }
 
 code {
@@ -15,6 +20,10 @@ code {
 }
 
 ul,
-li {
+li,
+h1,
+p {
   list-style-type: none;
+  margin: 0;
+  padding: 0;
 }

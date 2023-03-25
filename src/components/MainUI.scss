@@ -1,34 +1,44 @@
-#data-list-aside {
+#main-ui {
     position: absolute;
     right: 0;
     top: 0;
-    width: 300px;
+    width: 40vw;
     height: 100vh;
-    background: none;
+    box-sizing: border-box;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+
+    > * {
+        margin-bottom: 20px;
+    }
 
     ul {
+        background-image: url("../images/grid-background.png");
+        mask-image: linear-gradient(to bottom, transparent 0%, black 15% 85%, transparent 100%);
         overflow-x: hidden;
-        overflow-y: scroll;
+        overflow-y: auto;
 
-        // Position center vertically
-        position: relative;
-        top: 50%;
-        transform: translateY(-50%);
-        margin: auto;
-        height: 90%;
-        padding: 48vh 0;
-        box-sizing: border-box;
+        width: 100%;
 
         li {
+            padding: 1px 6px;
             transition: font-weight 0.2s font-size 0.2;
-            &.active {
-                // font-size: 30px;
-                font-weight: 800;
+            color: #c4c2c2;
+            &:first-child,
+            &:last-child {
+                height: 50%;
             }
-            &.activeSibling {
-                // font-size: 20px;
-                // font-weight: 400;
+
+            &.active {
+                font-weight: 800;
+                color: #ffffff;
             }
         }
+    }
+
+    p#graph-label {
+        text-align: right;
+        font-style: italic;
     }
 }

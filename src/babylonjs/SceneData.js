@@ -15,6 +15,8 @@ class SceneData {
     TerrainDisplaceThreshold = 0.86;
     TerrainDisplaceScale = 1.0;
     TerrainLutThreshold = 0;
+    TerrainImageFlattedPosY = 0;
+    IceImageCrop = { x: 0.0, y: 0.0, z: 1.0, w: 1.0 };
 
     constructor() {
         this.pane = new Pane({ title: "Debug Menu" });
@@ -31,6 +33,13 @@ class SceneData {
         this.pane.addInput(this, "TerrainDisplaceThreshold", { min: 0.0, max: 1.0 });
         this.pane.addInput(this, "TerrainDisplaceScale", { min: 0.0, max: 10.0 });
         this.pane.addInput(this, "TerrainLutThreshold", { min: 0, max: 18, step: 1 });
+        this.pane.addInput(this, "TerrainImageFlattedPosY", { min: 0, max: 50, step: 1 });
+        this.pane.addInput(this, "IceImageCrop", {
+            x: { min: 0, max: 1, step: 0.01 },
+            y: { min: 0, max: 1, step: 0.01 },
+            z: { min: 0, max: 1, step: 0.01 },
+            w: { min: 0, max: 1, step: 0.01 },
+        });
         this.pane.expanded = false;
 
         this.pane.importPreset(SavedData);

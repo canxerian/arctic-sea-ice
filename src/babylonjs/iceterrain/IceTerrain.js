@@ -1,24 +1,25 @@
 import * as BABYLON from "@babylonjs/core";
 
+import { getElapsedTimeMs } from "../TimeElapsed";
+import sceneDataInstance from "../SceneData";
+
 import iceTerrainVertexShader from "./IceTerrain.vertex.glsl";
 import iceTerrainFragmentShader from "./IceTerrain.fragment.glsl";
 
-import ArcticIceData from "../../data/ArcticIceData.json";
-
+import GlobeModel from "../models/Globe/Globe3.glb";
 import seaIceConcLUT from "./SeaIceConcentrationLUT.png";
 
-import { getElapsedTimeMs } from "../TimeElapsed";
-import sceneDataInstance from "../SceneData";
+import { store } from "../../redux/store";
+import { FilterOptionDataLookup } from "../../redux/FilterOptions";
 
 BABYLON.Effect.ShadersStore["iceTerrainVertexShader"] = iceTerrainVertexShader;
 BABYLON.Effect.ShadersStore["iceTerrainFragmentShader"] = iceTerrainFragmentShader;
 
-const terrainImgWidth = 292;
-const terrainImgHeight = 446;
-
 const getImageName = (dataIndex) => {
     try {
-        const data = ArcticIceData.data[dataIndex];
+        const currentFilter = store.getState().app.currentFilter;
+        const dataSet = FilterOptionDataLookup[currentFilter];
+        const data = dataSet[dataIndex];
         const month = (data.month).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
         return `N_${data.year}${month}_conc_v3.0`;
     }
@@ -33,22 +34,91 @@ const getImageName = (dataIndex) => {
  */
 export default class IceTerrain {
     extentTextures = {};
+
     /**
-     *
-     * @param {BABYLON.Scene} scene
-     * @param {BABYLON.Node} sun
+     * Creates an instance of IceTerrain
+     * 
+     * @param {*} scene 
+     * @param {*} sun 
+     * @returns {Promise<IceTerrain>}
      */
-    constructor(scene, sun) {
+    static async Create(scene, sun) {
+        const iceTerrain = new IceTerrain(scene, sun);
+        await iceTerrain.init(scene, sun);
+
+        return new Promise((resolve) => {
+            resolve(iceTerrain);
+        });
+    }
+
+    /**
+     * @param {BABYLON.Vector3} newPosition
+     */
+    set position(newPosition) {
+        this._position = newPosition;
+
+        this.globe.position = newPosition;
+        this.globeImagePlane.position = newPosition;
+    }
+
+    async init(scene, sun) {
         const subDivisions = 512;
         const scale = 0.5;
         this.scene = scene;
         this.sun = sun;
-        this.mesh = BABYLON.Mesh.CreateGround("iceTerrain", terrainImgWidth * scale, terrainImgHeight * scale, subDivisions, scene);
 
         // Create the material that will reference the shaders we created
-        this.material = new BABYLON.ShaderMaterial(
+        this.material = this.createShaderMaterial();
+        this.material.setTexture("_HeightLUT", new BABYLON.Texture(seaIceConcLUT), scene);
+
+        this.updateDataIndex(0);
+
+        const globeMesh = await BABYLON.SceneLoader.ImportMeshAsync("", GlobeModel);
+
+        this.globe = globeMesh.meshes.find(mesh => mesh.name === "Sphere");
+        this.globeImagePlane = globeMesh.meshes.find(mesh => mesh.name === "ImagePlane");
+        this.globeImagePlane.material = this.material;
+
+        this.parent = new BABYLON.AbstractMesh("IceTerrainParent", scene);
+        this.parent.addChild(this.globe);
+        this.parent.addChild(this.globeImagePlane);
+    }
+
+    async updateDataIndex(index) {
+        const imagePath = getImageName(index);
+
+        if (this.extentTextures[imagePath]) {
+            this.material.setTexture("_IceExtentImg", this.extentTextures[imagePath]);
+        }
+        else {
+            try {
+                const image = await import("./images/" + imagePath + ".png");
+                // const image = await import("./Test.png");
+
+                this.extentTextures[imagePath] = new BABYLON.Texture(image.default, this.scene, null, null, null, () => {
+                    this.material.setTexture("_IceExtentImg", this.extentTextures[imagePath]);
+                });
+            }
+            catch (e) {
+                console.error("Failed to load", imagePath, e);
+            }
+        }
+    }
+
+    update() {
+        const timeMs = getElapsedTimeMs();
+        this.material.setFloat("_Time", timeMs);
+        this.material.setFloat("_DisplaceThreshold", sceneDataInstance.TerrainDisplaceThreshold);
+        this.material.setFloat("_DisplaceScale", sceneDataInstance.TerrainDisplaceScale);
+        this.material.setInt("_LutThreshold", sceneDataInstance.TerrainLutThreshold);
+        this.material.setFloat("_FlattenedPosY", sceneDataInstance.TerrainImageFlattedPosY);
+        this.material.setVector4("_IceImageCrop", sceneDataInstance.IceImageCrop);
+    }
+
+    createShaderMaterial() {
+        return new BABYLON.ShaderMaterial(
             "iceTerrain",
-            scene,
+            this.scene,
             {
                 vertex: "iceTerrain",
                 fragment: "iceTerrain",
@@ -67,45 +137,25 @@ export default class IceTerrain {
                     "world",
 
                     "_Time",
-                    "_SunPosition",
                     "_DisplaceThreshold",
                     "_DisplaceScale",
-                    "_LutThreshold"
+                    "_LutThreshold",
+                    "_CamZoomNormalised",
+                    "_FlattenedPosY",
+                    "_IceImageCrop",
                 ]
             }
         );
-        this.material.setTexture("_HeightLUT", new BABYLON.Texture(seaIceConcLUT), scene);
-
-        this.mesh.material = this.material;
-        this.updateDataIndex(0);
     }
 
-    async updateDataIndex(index) {
-        const imagePath = getImageName(index);
-
-        if (this.extentTextures[imagePath]) {
-            this.material.setTexture("_IceExtentImg", this.extentTextures[imagePath]);
-        }
-        else {
-            try {
-                const image = await import("./images/" + imagePath + ".png");
-
-                this.extentTextures[imagePath] = new BABYLON.Texture(image.default, this.scene, null, null, null, () => {
-                    this.material.setTexture("_IceExtentImg", this.extentTextures[imagePath]);
-                });
-            }
-            catch (e) {
-                console.error("Failed to load", imagePath, e);
-            }
-        }
-    }
-
-    update() {
-        const timeMs = getElapsedTimeMs();
-        this.material.setFloat("_Time", timeMs);
-        this.material.setVector3("_SunPosition", this.sun.position);
-        this.material.setFloat("_DisplaceThreshold", sceneDataInstance.TerrainDisplaceThreshold);
-        this.material.setFloat("_DisplaceScale", sceneDataInstance.TerrainDisplaceScale);
-        this.material.setInt("_LutThreshold", sceneDataInstance.TerrainLutThreshold);
+    setCameraZoom(normalizedZoom) {
+        this.material.setFloat("_CamZoomNormalised", normalizedZoom);
+        const scale = smoothstep(0.999, 0.97, normalizedZoom);
+        this.globe.scaling = new BABYLON.Vector3(scale, -scale, scale); // negative Y due to .glb coordinate
     }
 }
+
+const smoothstep = (min, max, value) => {
+    var x = Math.max(0, Math.min(1, (value - min) / (max - min)));
+    return x * x * (3 - 2 * x);
+};

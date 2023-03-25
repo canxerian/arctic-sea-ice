@@ -8,14 +8,14 @@ const { useRef, useEffect } = require("react")
 const BabylonCanvas = () => {
     const canvasRef = useRef();
     const babylonSceneRef = useRef();
-    const activeIceDataIndex = useSelector(state => state.app.activeIceDataIndex);
+    const appState = useSelector(state => state.app);
 
     useEffect(() => {
         if (!babylonSceneRef.current) {
             babylonSceneRef.current = new BabylonScene(canvasRef.current);
         }
-        babylonSceneRef.current.setActiveIceIndex(activeIceDataIndex);
-    }, [activeIceDataIndex]);
+        babylonSceneRef.current.setActiveIceIndex(appState.activeIceDataIndex);
+    }, [appState.activeIceDataIndex, appState.currentFilter]);
 
     return (
         <canvas ref={canvasRef} id="babylon-canvas" />

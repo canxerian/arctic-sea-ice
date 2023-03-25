@@ -1,10 +1,18 @@
 import * as BABYLON from "@babylonjs/core";
 import "@babylonjs/loaders";
-import Water from "./water/Water";
-import envTexture from "./textures/kloppenheim_06_puresky_4k.env";
+import envTexture from "./textures/kloppenheim_02_puresky_4k.env";
 import IceTerrain from "./iceterrain/IceTerrain";
 
 const Deg2Rad = Math.PI / 180;
+
+const CameraState = {
+    Idle: 0,
+    Rotating: 1,
+    Zooming: 2
+};
+
+const MaxZoomAlphaTarget = 90 * Deg2Rad;
+const MaxZoomBetaTarget = 1 * Deg2Rad;
 
 export default class BabylonScene {
     constructor(canvas) {
@@ -14,72 +22,84 @@ export default class BabylonScene {
     async initialise(canvas) {
         const engine = new BABYLON.Engine(canvas);
         const scene = new BABYLON.Scene(engine);
-        const camera = this.createCamera();
 
         // Gizmo 
         const gizmoManager = new BABYLON.GizmoManager(scene);
         gizmoManager.positionGizmoEnabled = true;
 
-        // Skybox
-        this.createSkybox(scene);
-
-        const sphere = BABYLON.MeshBuilder.CreateSphere("sphere", { segments: 16, diameter: 3 }, this.scene);
-        sphere.position = new BABYLON.Vector3(-10, 0, 0.5);
-
-        // const loadedArcticMesh = await BABYLON.SceneLoader.ImportMeshAsync("", arcticModel);
-
-        const meshes = scene.getNodes().filter((node) => node instanceof BABYLON.AbstractMesh);
-
-        // Debug sun (used only for positions to test lighting)
-        this.debugSun = BABYLON.MeshBuilder.CreateSphere("Sun", { segments: 16, diameter: 1 }, this.scene);
-        this.debugSun.position = new BABYLON.Vector3(0, 10, 100);
+        // const meshes = scene.getNodes().filter((node) => node instanceof BABYLON.AbstractMesh);
 
         // Ice Terrain
-        this.iceTerrain = new IceTerrain(scene, this.debugSun);
+        this.iceTerrain = await IceTerrain.Create(scene);
 
-        // Depth texture setup (for water)
-        const depthRenderer = scene.enableDepthRenderer(scene.activeCamera, false);
-        const depthTex = depthRenderer.getDepthMap();
-        depthTex.renderList = [...meshes, sphere, /* this.iceTerrain.mesh */];
+        // Camera
+        const camera = this.createCamera(this.iceTerrain.parent.position);
 
-        // Render Target Texture (for water)
-        const refractionTex = new BABYLON.RenderTargetTexture("water_refraction", { width: 256, height: 256 }, scene, false, true);
-        refractionTex.wrapU = BABYLON.Constants.TEXTURE_MIRROR_ADDRESSMODE;
-        refractionTex.wrapV = BABYLON.Constants.TEXTURE_MIRROR_ADDRESSMODE;
-        refractionTex.ignoreCameraViewport = true;
-        refractionTex.renderList = depthTex.renderList;
-        refractionTex.refreshRate = 1;
+        this.createBackground(scene, engine);
 
-        const light = new BABYLON.DirectionalLight("DirectionalLight", new BABYLON.Vector3(0, -1, 0), scene);
+        // Skybox
+        // this.createSkybox(scene);
 
-        this.water = new Water(scene, depthTex, this.debugSun);
+        // const light = new BABYLON.DirectionalLight("DirectionalLight", new BABYLON.Vector3(0, -1, 0), scene);
+
+        const light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(1, 1, 0), scene);
+        light.groundColor = new BABYLON.Color3(1, 1, 1);
+        light.intensity = 1;
 
         engine.runRenderLoop(() => {
-            this.water.update();
             this.iceTerrain.update();
             scene.render();
         });
 
+        scene.onBeforeRenderObservable.add(() => {
+            const alphaInertia = Math.abs(camera.inertialAlphaOffset);
+            const betaInertia = Math.abs(camera.inertialBetaOffset);
+            const radiusInertia = Math.abs(camera.inertialRadiusOffset) * 0.01;     // Weighted, so that alpha/beta rotating takes precedence
+            let cameraStatus = CameraState.Idle;
+
+            if (alphaInertia > radiusInertia || betaInertia > radiusInertia) {
+                cameraStatus = CameraState.Rotating;
+            }
+            else if (radiusInertia > alphaInertia && radiusInertia > betaInertia) {
+                cameraStatus = CameraState.Zooming;
+            }
+
+            const camZoomNormalized = 1 - BABYLON.Scalar.InverseLerp(camera.lowerRadiusLimit, camera.upperRadiusLimit, camera.radius);
+            if (cameraStatus === CameraState.Zooming) {
+                const alphaDelta = BABYLON.Scalar.Lerp(camera.alpha, MaxZoomAlphaTarget, camZoomNormalized);
+                const betaDelta = BABYLON.Scalar.Lerp(camera.beta, MaxZoomBetaTarget, camZoomNormalized);
+                camera.alpha = BABYLON.Scalar.Lerp(camera.alpha, alphaDelta, 0.1);
+                camera.beta = BABYLON.Scalar.Lerp(camera.beta, betaDelta, 0.1);
+            }
+            if (camZoomNormalized === 1) {
+                camera.alpha = MaxZoomAlphaTarget;
+                camera.beta = MaxZoomBetaTarget;
+            }
+
+            this.iceTerrain.setCameraZoom(camZoomNormalized);
+        });
+
         window.addEventListener("resize", () => {
             engine.resize();
-        })
+        });
     }
 
-    createCamera(canvas) {
+    createCamera(targetPosition) {
         const cam = new BABYLON.ArcRotateCamera(
             "Main Camera",
             -90 * Deg2Rad,
             70 * Deg2Rad,
-            60,
-            new BABYLON.Vector3(0, 0, 0)
+            100,
+            targetPosition
         );
-        cam.lowerRadiusLimit = 10;
-        cam.upperRadiusLimit = 100;
+        cam.lowerRadiusLimit = 70;
+        cam.upperRadiusLimit = 200;
         cam.lowerBetaLimit = 1 * Deg2Rad;
         cam.upperBetaLimit = 80 * Deg2Rad;
         cam.minZ = 0.01;
         cam.maxZ = 1000;
-        cam.attachControl(canvas, true, true);
+        cam.viewport = new BABYLON.Viewport(-0.3, 0, 1.3, 1);
+        cam.attachControl(null, true, true);
         return cam;
     }
 
@@ -94,9 +114,47 @@ export default class BabylonScene {
         scene.imageProcessingConfiguration.toneMappingType = BABYLON.ImageProcessingConfiguration.TONEMAPPING_STANDARD;
     }
 
+    createBackground(scene, engine) {
+        // Create a render target.
+        const rtt = new BABYLON.RenderTargetTexture("", 512, scene)
+
+        // Create the background from it
+        const background = new BABYLON.Layer("background", null, scene);
+        background.isBackground = true;
+        background.texture = rtt;
+
+        // Create the background effect.
+        const renderImage = new BABYLON.EffectWrapper({
+            engine: engine,
+            fragmentShader: `
+            vec3 col1 = vec3(0.14, 0.18, 0.24);
+            vec3 col2 = vec3(0.24, 0.21, 0.27);
+
+            varying vec2 vUV;
+
+            void main(void) {
+                float t = clamp(vUV.x + vUV.y, 0.0, 1.0);
+                vec3 col = mix(col1, col2, t);
+                gl_FragColor = vec4(col, 1.0);
+            }`
+        });
+
+        // When the effect has been ready,
+        // Create the effect render and change which effects will be renderered
+        renderImage.effect.executeWhenCompiled(() => {
+            // Render the effect in the RTT.
+            const renderer = new BABYLON.EffectRenderer(engine);
+            renderer.render(renderImage, rtt);
+        });
+    }
+
     setActiveIceIndex(index) {
         if (this.iceTerrain) {
             this.iceTerrain.updateDataIndex(index);
         }
     }
+}
+
+const toNearest = (value, x) => {
+    return Math.round(value / x) * x;
 }

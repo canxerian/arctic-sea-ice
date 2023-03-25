@@ -1,0 +1,28 @@
+$purpleLight: #E1D8F7;
+$purpleMid: #bfb3df;
+$purpleDark: #6f697e;
+
+.filter-button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    .filter-button {
+        background: none;
+        border: 1px solid $purpleDark;
+        border-radius: 14px;
+        color: $purpleDark;
+        padding: 3px 10px;
+        cursor: pointer;
+
+        &:hover {
+            border-color: $purpleMid;
+            color: $purpleMid;
+        }
+
+        &.active {
+            border-color: $purpleLight;
+            color: $purpleLight;
+        }
+    }
+}

@@ -1,7 +1,83 @@
 const csvtojson = require('csvtojson');
 const fs = require('fs');
+const path = require('path');
 
-const outputPath = "../../../src/Data/ArcticIceData.json";
+const outputPath = path.join(__dirname, "../../../src/Data/ArcticIceData.json");
+
+/**
+ * @typedef {Object} IceDataItem
+ * @property {number} year data year
+ * @property {number} month data month
+ * @property {number} extent extent, in million sq km
+ * @property {number} area area, in million sq km
+ */
+
+/**
+ * Callback for filterYearlyMinMaxByProperty
+ *
+ * @callback filterByYearCallback
+ * @param {IceDataItem} min - the minimum data item
+ * @param {IceDataItem} max - the maximum data item
+ */
+
+/**
+ * Traverses input .csv files, combines the values in to a single sorted array
+ * then saves to `outputPath`
+ */
+const process = async () => {
+    let arcticIceData = {
+        data: [],
+        yearlyMinMaxArea: [],               // The min and max entries for each year, sorted by time
+        yearlyMinMaxExtent: [],
+        yearlyMaxArea: [],
+        yearlyMaxExtent: [],
+        yearlyMinArea: [],
+        yearlyMinExtent: [],
+        minExtent: Number.MAX_VALUE,
+        maxExtent: Number.MIN_VALUE,
+        minArea: Number.MAX_VALUE,
+        maxArea: Number.MIN_VALUE,
+    };
+
+    arcticIceData.data = await getCsvArray();
+
+    filterYearlyMinMaxByProperty(arcticIceData.data, "area", (min, max) => {
+        arcticIceData.yearlyMinArea.push(min);
+        arcticIceData.yearlyMaxArea.push(max);
+        arcticIceData.yearlyMinMaxArea.push(min, max);
+    });
+
+    filterYearlyMinMaxByProperty(arcticIceData.data, "extent", (min, max) => {
+        arcticIceData.yearlyMinExtent.push(min);
+        arcticIceData.yearlyMaxExtent.push(max);
+        arcticIceData.yearlyMinMaxExtent.push(min, max);
+    });
+
+    arcticIceData.yearlyMinArea.sort((a, b) => getDateHash(a.year, a.month) - getDateHash(b.year, b.month));
+    arcticIceData.yearlyMaxArea.sort((a, b) => getDateHash(a.year, a.month) - getDateHash(b.year, b.month));
+    arcticIceData.yearlyMinMaxArea.sort((a, b) => getDateHash(a.year, a.month) - getDateHash(b.year, b.month));
+    arcticIceData.yearlyMinExtent.sort((a, b) => getDateHash(a.year, a.month) - getDateHash(b.year, b.month));
+    arcticIceData.yearlyMaxExtent.sort((a, b) => getDateHash(a.year, a.month) - getDateHash(b.year, b.month));
+    arcticIceData.yearlyMinMaxExtent.sort((a, b) => getDateHash(a.year, a.month) - getDateHash(b.year, b.month));
+
+    // Find min max extent and area
+    for (let i = 0; i < arcticIceData.data.length; i++) {
+        const dataItem = arcticIceData.data[i];
+        arcticIceData.minExtent = Math.min(dataItem.extent, arcticIceData.minExtent);
+        arcticIceData.maxExtent = Math.max(dataItem.extent, arcticIceData.maxExtent);
+        arcticIceData.minArea = Math.min(dataItem.area, arcticIceData.minArea);
+        arcticIceData.maxArea = Math.max(dataItem.area, arcticIceData.maxArea);
+    }
+
+    assertOrder(arcticIceData.yearlyMinArea);
+    assertOrder(arcticIceData.yearlyMaxArea);
+    assertOrder(arcticIceData.yearlyMinMaxArea);
+    assertOrder(arcticIceData.yearlyMinExtent);
+    assertOrder(arcticIceData.yearlyMaxExtent);
+    assertOrder(arcticIceData.yearlyMinMaxExtent);
+
+    await fs.promises.writeFile(outputPath, JSON.stringify(arcticIceData));
+}
 
 /**
  * Returns a string format for a given month
@@ -19,9 +95,9 @@ const getCsvArray = async () => {
     // Read CSV and combine in to a single array
     for (let i = 1; i <= 12; i++) {
         const month = getMonth(i);
-        const path = `./N_${month}_extent_v3.0.csv`;
+        const filepath = path.join(__dirname, `./N_${month}_extent_v3.0.csv`);
 
-        const json = await csvtojson().fromFile(path);
+        const json = await csvtojson().fromFile(filepath);
 
         // Stick all data points in to a single array and then sort later
         dataArray = dataArray.concat(json);
@@ -41,75 +117,79 @@ const getCsvArray = async () => {
     return dataArray;
 }
 
+// /**
+//  * Traverses {dataArray} for min/max entries of a {property} for a given year. 
+//  * @param {*} dataArray 
+//  * @param {*} property 
+//  * 
+//  * @returns Sorted array (by time) containing min/max entries for a given year
+//  */
+// const getMinMaxForProperty = (dataArray, property) => {
+//     const minMaxarray = [];
+
+//     // Find min/max entries for each year
+//     let prevDataItem = dataArray[0];
+//     let minAreaData = prevDataItem;
+//     let maxAreaData = prevDataItem;
+
+//     for (let i = 1; i < dataArray.length; i++) {
+//         const dataItem = dataArray[i];
+
+//         if (prevDataItem.year !== dataItem.year) {
+//             minMaxarray.push(maxAreaData, minAreaData);
+//             minAreaData = dataItem;
+//             maxAreaData = dataItem;
+//         }
+
+//         if (dataItem[property] < minAreaData[property]) {
+//             minAreaData = dataItem;
+//         }
+//         if (dataItem[property] > maxAreaData[property]) {
+//             maxAreaData = dataItem;
+//         }
+
+//         prevDataItem = dataItem;
+//     }
+
+//     minMaxarray.sort((a, b) => getDateHash(a.year, a.month) - getDateHash(b.year, b.month));
+
+//     return minMaxarray;
+// }
+
 /**
- * Traverses {dataArray} for min/max entries of a {property} for a given year. 
+ * Traverses data array for min / max of a given property.
+ * Callback is called for each year traversed with ({min, max})
  * @param {*} dataArray 
  * @param {*} property 
- * 
- * @returns Sorted array (by time) containing min/max entries for a given year
+ * @param {filterByYearCallback} filterCallback 
+ * @returns 
  */
-const getMinMaxForProperty = (dataArray, property) => {
-    const minMaxarray = [];
-
+const filterYearlyMinMaxByProperty = (dataArray, property, filterCallback) => {
     // Find min/max entries for each year
     let prevDataItem = dataArray[0];
-    let minAreaData = prevDataItem;
-    let maxAreaData = prevDataItem;
+    let minData = prevDataItem;
+    let maxData = prevDataItem;
 
     for (let i = 1; i < dataArray.length; i++) {
         const dataItem = dataArray[i];
 
         if (prevDataItem.year !== dataItem.year) {
-            minMaxarray.push(maxAreaData, minAreaData);
-            minAreaData = dataItem;
-            maxAreaData = dataItem;
+            filterCallback(minData, maxData);
+            minData = dataItem;
+            maxData = dataItem;
         }
 
-        if (dataItem[property] < minAreaData[property]) {
-            minAreaData = dataItem;
+        if (dataItem[property] < minData[property]) {
+            minData = dataItem;
         }
-        if (dataItem[property] > maxAreaData[property]) {
-            maxAreaData = dataItem;
+        if (dataItem[property] > maxData[property]) {
+            maxData = dataItem;
         }
 
         prevDataItem = dataItem;
     }
 
-    minMaxarray.sort((a, b) => getDateHash(a.year, a.month) - getDateHash(b.year, b.month));
-    
-    return minMaxarray;
-}
-
-const process = async () => {
-    let arcticIceData = {
-        data: [],
-        minMaxAreaByYear: [],               // The min and max entries for each year, sorted by time
-        minMaxExtentByYear: [],
-        minExtent: Number.MAX_VALUE,
-        maxExtent: Number.MIN_VALUE,
-        minArea: Number.MAX_VALUE,
-        maxArea: Number.MIN_VALUE,
-    };
-
-    arcticIceData.data = await getCsvArray();
-
-    arcticIceData.minMaxAreaByYear = getMinMaxForProperty(arcticIceData.data, "area");
-    arcticIceData.minMaxExtentByYear = getMinMaxForProperty(arcticIceData.data, "extent");
-
-    // Find min max extent and area
-    for (let i = 0; i < arcticIceData.data.length; i++) {
-        const dataItem = arcticIceData.data[i];
-        arcticIceData.minExtent = Math.min(dataItem.extent, arcticIceData.minExtent);
-        arcticIceData.maxExtent = Math.max(dataItem.extent, arcticIceData.maxExtent);
-        arcticIceData.minArea = Math.min(dataItem.area, arcticIceData.minArea);
-        arcticIceData.maxArea = Math.max(dataItem.area, arcticIceData.maxArea);
-    }
-
-    assertOrder(arcticIceData.data);
-    assertOrder(arcticIceData.minMaxAreaByYear);
-    assertOrder(arcticIceData.minMaxExtentByYear);
-
-    await fs.promises.writeFile(outputPath, JSON.stringify(arcticIceData));
+    filterCallback(minData, maxData);
 }
 
 /**
@@ -131,7 +211,7 @@ const assertOrder = (dataArrar) => {
         const compNumA = getDateHash(a.year, a.month);
         const compNumB = getDateHash(b.year, b.month);
 
-        console.assert(compNumA < compNumB, `a: ${compNumA}, b: ${compNumB}`);
+        console.assert(compNumA <= compNumB, `a: ${compNumA}, b: ${compNumB}`);
     }
 }
 

@@ -12,6 +12,9 @@ uniform sampler2D _HeightLUT;
 uniform float _DisplaceThreshold;
 uniform float _DisplaceScale;
 uniform int _LutThreshold;
+uniform float _CamZoomNormalised;
+uniform float _FlattenedPosY;       // position.y value when cam is fully zoomed in
+uniform vec4 _IceImageCrop;
 
 varying vec3 vWorldNormal;
 varying vec2 vUV;
@@ -46,27 +49,28 @@ float displace(vec2 _uv) {
     return displacement * _DisplaceScale;
 }
 
+vec2 getCroppedUV(vec2 uv) {
+    vec2 croppedUv = uv;
+    croppedUv.x = step(_IceImageCrop.x, croppedUv.x) * croppedUv.x;      // Crop from left
+    croppedUv.x = step(croppedUv.x, _IceImageCrop.z) * croppedUv.x;      // Crop from right
+    croppedUv.y = step(_IceImageCrop.y, croppedUv.y) * croppedUv.y;      // Crop from top
+    croppedUv.y = step(croppedUv.y, _IceImageCrop.w) * croppedUv.y;      // Crop from bottom
+    return croppedUv;
+}
+
 void main(void) {
-    // vec3 newPosition = position;
-    // newPosition.y = displace(uv);
-
-    // vec3 tangent = position + vec3(0.001, 0, 0);
-    // vec3 bitangent = position + vec3(0, 0, -0.001);
-
-    // tangent.y = displace(uv + vec2(0.0, 0.001));
-    // bitangent.y = displace(uv + vec2(0.001, 0.0));
-
-    // vec3 normal = cross(tangent - newPosition, bitangent - newPosition);
-    // normal = normalize(world * vec4(normal, 0.0)).xyz;
-    // vWorldNormal = normal;
-
     vec3 newPosition = position;
+    vec2 uvCrop = getCroppedUV(uv);
 
     vec3 outColour;
     float height;
-    lookup(texture2D(_IceExtentImg, uv).rgb, outColour, height);
+    lookup(texture2D(_IceExtentImg, uvCrop).rgb, outColour, height);
 
-    newPosition.y = height * _DisplaceScale;
+    // float camZoom = smoothstep(0.0, 0.2, _CamZoomNormalised);
+    float camZoom = smoothstep(1.0, 0.99, _CamZoomNormalised);
+
+    newPosition.y = mix(_FlattenedPosY, newPosition.y + height * _DisplaceScale, camZoom);
+
     vUV = uv;
     vColour = outColour;
 

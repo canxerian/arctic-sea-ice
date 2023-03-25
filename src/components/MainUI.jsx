@@ -1,13 +1,17 @@
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ArcticIceData from "../data/ArcticIceData.json";
 import { MonthLookup } from "../data/MonthLookup";
 import { setActiveIceDataIndex } from "../redux/appSlice";
+import { FilterOptionDataLookup } from "../redux/FilterOptions";
+import FilterButtonGroup from "./FilterButtonGroup";
 import "./MainUI.scss";
 
 const MainUI = () => {
     const activeIceDataIndex = useSelector(state => state.app.activeIceDataIndex);
+    const filterOption = useSelector(state => state.app.currentFilter);
     const dispatch = useDispatch();
+
+    const dataArray = FilterOptionDataLookup[filterOption];
 
     const onScroll = (e) => {
         const { height, width, x, y } = e.target.getBoundingClientRect();
@@ -29,7 +33,7 @@ const MainUI = () => {
                 dispatch(setActiveIceDataIndex(0));
             }
             else {
-                dispatch(setActiveIceDataIndex(ArcticIceData.data.length - 1));
+                dispatch(setActiveIceDataIndex(dataArray.length - 1));
             }
         }
     }
@@ -37,32 +41,31 @@ const MainUI = () => {
     const extentRange = ArcticIceData.maxExtent - ArcticIceData.minExtent;
     const areaRange = ArcticIceData.maxArea - ArcticIceData.minArea;
 
-    const listItems = ArcticIceData.data.map((item, index) => {
-        let className;
-        if (index === activeIceDataIndex) {
-            className = "active";
-        }
-        else if (index === activeIceDataIndex - 1 || index === activeIceDataIndex + 1) {
-            className = "activeSibling";
-        }
-
-        const minColour = "red";
-        const maxColour = "green";
+    const listItems = dataArray.map((item, index) => {
+        const className = index === activeIceDataIndex && "active";
 
         const areaPercent = (item.area - ArcticIceData.minArea) / areaRange * 100;
-        const bgColour = areaPercent < 30 ? "red" : "green";
+        const bgColour = "#5B7099";
         const backgroundStyle = { background: `linear-gradient(90deg, ${bgColour} ${areaPercent}%, transparent 0%)` }
 
         return <li data-index={index} key={index} className={className} style={backgroundStyle}>
-            {item.year} {MonthLookup[item.mo]} - {areaPercent.toFixed(2)}%
+            {item.year} {MonthLookup[item.month]} - {item.area}
         </li>
     });
 
+    // Create two empty list items at beginning/end. In CSS these are set to approx 50% height, 
+    // so that actual list items appear in the center.
+    listItems.unshift(<li key="first"></li>);
+    listItems.push(<li key="last"></li>);
+
     return (
-        <aside id="data-list-aside">
+        <aside id="main-ui">
+            <h1>Filter by:</h1>
+            <FilterButtonGroup className={"button-group"} />
             <ul onScroll={onScroll}>
                 {listItems}
             </ul>
+            <p id="graph-label">In million sq km</p>
         </aside>
     );
 }
