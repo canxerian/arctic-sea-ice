@@ -150,7 +150,7 @@ export default class IceTerrain {
 
     setCameraZoom(normalizedZoom) {
         this.material.setFloat("_CamZoomNormalised", normalizedZoom);
-        const scale = smoothstep(0.999, 0.97, normalizedZoom);
+        const scale = smoothstep(0.999, 0.989, normalizedZoom);
         this.globe.scaling = new BABYLON.Vector3(scale, -scale, scale); // negative Y due to .glb coordinate
     }
 }

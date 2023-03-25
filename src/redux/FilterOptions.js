@@ -2,7 +2,7 @@ import ArcticIceData from "../data/ArcticIceData.json";
 
 export const FilterOptions = {
     allArea: "All - area",
-    allArea: "All - extent",
+    allExtent: "All - extent",
     yearlyMinArea: "Yearly min area",
     yearlyMaxArea: "Yearly max area",
     yearlyMinMaxArea: "Yearly min/max area",
@@ -12,22 +12,35 @@ export const FilterOptions = {
 
 };
 
-export const DataField = {
+export const ArcticDataProperty = {
     Area: 0,
     Extent: 1
 };
 
-const FilterOptionDataLookup = {};
-FilterOptionDataLookup[FilterOptions.allArea] = ArcticIceData.data;
-FilterOptionDataLookup[FilterOptions.yearlyMinArea] = ArcticIceData.yearlyMinArea;
-FilterOptionDataLookup[FilterOptions.yearlyMaxArea] = ArcticIceData.yearlyMaxArea;
-FilterOptionDataLookup[FilterOptions.yearlyMinMaxArea] = ArcticIceData.yearlyMinMaxArea;
-FilterOptionDataLookup[FilterOptions.yearlyMinExtent] = ArcticIceData.yearlyMinExtent;
-FilterOptionDataLookup[FilterOptions.yearlyMaxExtent] = ArcticIceData.yearlyMaxExtent;
-FilterOptionDataLookup[FilterOptions.yearlyMinMaxExtent] = ArcticIceData.yearlyMinMaxExtent;
+const filterOptionData = {};
+filterOptionData[FilterOptions.allArea] = ArcticIceData.data;
+filterOptionData[FilterOptions.allExtent] = ArcticIceData.data;
+filterOptionData[FilterOptions.yearlyMinArea] = ArcticIceData.yearlyMinArea;
+filterOptionData[FilterOptions.yearlyMaxArea] = ArcticIceData.yearlyMaxArea;
+filterOptionData[FilterOptions.yearlyMinMaxArea] = ArcticIceData.yearlyMinMaxArea;
+filterOptionData[FilterOptions.yearlyMinExtent] = ArcticIceData.yearlyMinExtent;
+filterOptionData[FilterOptions.yearlyMaxExtent] = ArcticIceData.yearlyMaxExtent;
+filterOptionData[FilterOptions.yearlyMinMaxExtent] = ArcticIceData.yearlyMinMaxExtent;
+
+const filterOptionProperty = {};
+filterOptionProperty[FilterOptions.allArea] = ArcticDataProperty.Area;
+filterOptionProperty[FilterOptions.allExtent] = ArcticDataProperty.Extent;
+filterOptionProperty[FilterOptions.yearlyMinArea] = ArcticDataProperty.Area;
+filterOptionProperty[FilterOptions.yearlyMaxArea] = ArcticDataProperty.Area;
+filterOptionProperty[FilterOptions.yearlyMinMaxArea] = ArcticDataProperty.Area;
+filterOptionProperty[FilterOptions.yearlyMinExtent] = ArcticDataProperty.Extent;
+filterOptionProperty[FilterOptions.yearlyMaxExtent] = ArcticDataProperty.Extent;
+filterOptionProperty[FilterOptions.yearlyMinMaxExtent] = ArcticDataProperty.Extent;
+
 
 export const GetDataForFilter = (filter) => {
     return {
-        dataSet: FilterOptionDataLookup[filter]
+        dataSet: filterOptionData[filter],
+        property: filterOptionProperty[filter]
     };
 }

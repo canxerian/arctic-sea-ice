@@ -2,17 +2,18 @@ import { useDispatch, useSelector } from "react-redux";
 import ArcticIceData from "../data/ArcticIceData.json";
 import { MonthLookup } from "../data/MonthLookup";
 import { setActiveIceDataIndex } from "../redux/appSlice";
-import { GetDataForFilter } from "../redux/FilterOptions";
+import { ArcticDataProperty, GetDataForFilter } from "../redux/FilterOptions";
 import FilterButtonGroup from "./FilterButtonGroup";
 import "./MainUI.scss";
+
+const MaxItemValue = 20;        // Used for plotting length of bars
 
 const MainUI = () => {
     const activeIceDataIndex = useSelector(state => state.app.activeIceDataIndex);
     const filterOption = useSelector(state => state.app.currentFilter);
     const dispatch = useDispatch();
 
-    const data = GetDataForFilter(filterOption).dataSet;
-    const dataSet = data.dataSet;
+    const data = GetDataForFilter(filterOption);
 
     const onScroll = (e) => {
         const { height, width, x, y } = e.target.getBoundingClientRect();
@@ -34,24 +35,21 @@ const MainUI = () => {
                 dispatch(setActiveIceDataIndex(0));
             }
             else {
-                dispatch(setActiveIceDataIndex(dataSet.length - 1));
+                dispatch(setActiveIceDataIndex(data.dataSet.length - 1));
             }
         }
     }
 
-    // const extentRange = ArcticIceData.maxExtent - ArcticIceData.minExtent;
-    // const areaRange = ArcticIceData.maxArea - ArcticIceData.minArea;
-
-    const listItems = dataSet.map((item, index) => {
+    const listItems = data.dataSet.map((item, index) => {
         const className = index === activeIceDataIndex ? "active" : "";
+        const dataItemValue = data.property === ArcticDataProperty.Area ? item.area : item.extent;
 
-        // const areaPercent = (item.area - ArcticIceData.minArea) / areaRange * 100;
-        const areaPercent = item.area / ArcticIceData.maxArea * 100;
+        const areaPercent = dataItemValue / MaxItemValue * 100;
         const bgColour = "#5B7099";
         const backgroundStyle = { background: `linear-gradient(90deg, ${bgColour} ${areaPercent}%, transparent 0%)` }
 
         return <li data-index={index} key={index} className={className} style={backgroundStyle}>
-            {item.year} {MonthLookup[item.month]} - {item.area}
+            {item.year} {MonthLookup[item.month]} - {dataItemValue}
         </li>
     });
 
