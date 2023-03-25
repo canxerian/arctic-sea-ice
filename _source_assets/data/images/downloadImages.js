@@ -25,30 +25,30 @@ const getUrl = (monthPrefix, year) => {
 };
 
 const getSavePath = (filename) => {
-    return path.resolve(__dirname, "test", filename);
+    return path.resolve(__dirname, "../../../src/babylonjs/iceterrain/images", filename);
 }
 
 const downloadImages = async () => {
+    const promises = [];
+
     for (let i = startYear; i <= endYear; i++) {
         for (let j = 0; j < monthPrefixes.length; j++) {
             const monthPrefix = monthPrefixes[j];
             const url = getUrl(monthPrefix, i);
 
-            try {
-                const savePath = getSavePath(path.basename(url));
-                const image = await Jimp.read(url);
-                image.crop(28, 30, 292, 426);
-                image.write(savePath);
-
-                console.log("Processed", savePath);
-
-                return;
-            }
-            catch (e) {
-                // console.error(url);
-            }
+            const savePath = getSavePath(path.basename(url));
+            const promise = Jimp.read(url)
+                .then(image => image.write(savePath))
+                .catch(e => console.error("URL error: ", url));
+            promises.push(promise);
         }
     }
+
+    Promise.allSettled(promises)
+        .then((values) => {
+            console.log("Downloaded items: ", values.length);
+        })
+        .catch(e => console.error(e));
 }
 
 downloadImages();
