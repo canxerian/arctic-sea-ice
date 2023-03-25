@@ -6,20 +6,6 @@ import { FilterOptionDataLookup } from "../redux/FilterOptions";
 import FilterButtonGroup from "./FilterButtonGroup";
 import "./MainUI.scss";
 
-// const getData = (filterOption) => {
-//     if (filterOption === FilterOptions.all) {
-//         return ArcticIceData.data;
-//     }
-//     else if (filterOption === FilterOptions.yearlyMinMaxArea) {
-//         return ArcticIceData.minMaxAreaByYear;
-//     }
-//     else if (filterOption === FilterOptions.yearlyMinMaxExtent) {
-//         return ArcticIceData.minMaxExtentByYear;
-//     }
-
-//     throw "Not implemented - filter option";
-// }
-
 const MainUI = () => {
     const activeIceDataIndex = useSelector(state => state.app.activeIceDataIndex);
     const filterOption = useSelector(state => state.app.currentFilter);
@@ -79,18 +65,20 @@ const MainUI = () => {
     listItems.push(<li key="last"></li>);
 
     return (
-        <aside id="data-list-aside">
+        <aside id="main-ui">
             <section id="filter-section">
                 <h1>Filter by:</h1>
                 <FilterButtonGroup />
-                <p>In million sq km</p>
             </section>
             <section id="data-list-section">
                 <ul onScroll={onScroll}>
                     {listItems}
                 </ul>
             </section>
-        </aside >
+            <section id="legend-section">
+                <p>In million sq km</p>
+            </section>
+        </aside>
     );
 }
 

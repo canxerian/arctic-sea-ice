@@ -1,19 +1,19 @@
-#data-list-aside {
+#main-ui {
     position: absolute;
     right: 0;
     top: 0;
-    width: 350px;
+    width: 40vw;
     height: 100vh;
     box-sizing: border-box;
     padding: 20px;
 
     #filter-section {
-        height: 20%;
+        height: 22%;
     }
 
     #data-list-section {
         background-image: url("../images/grid-background.png");
-        height: 76%;
+        height: 74%;
 
         ul {
             mask-image: linear-gradient(to bottom, transparent 0%, black 15% 85%, transparent 100%);
@@ -45,5 +45,9 @@
                 }
             }
         }
+    }
+
+    #legend-section {
+        text-align: end;
     }
 }
