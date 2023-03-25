@@ -42,7 +42,7 @@ const MainUI = () => {
     const areaRange = ArcticIceData.maxArea - ArcticIceData.minArea;
 
     const listItems = dataArray.map((item, index) => {
-        const className = index === activeIceDataIndex && "active";
+        const className = index === activeIceDataIndex ? "active" : "";
 
         const areaPercent = (item.area - ArcticIceData.minArea) / areaRange * 100;
         const bgColour = "#5B7099";
