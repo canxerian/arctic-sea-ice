@@ -4,6 +4,8 @@ const path = require('path');
 
 const outputPath = path.join(__dirname, "../../../src/Data/ArcticIceData.json");
 
+const MinAreaThreshold = 6.0;
+
 /**
  * @typedef {Object} IceDataItem
  * @property {number} year data year
@@ -42,13 +44,17 @@ const process = async () => {
     arcticIceData.data = await getCsvArray();
 
     filterYearlyMinMaxByProperty(arcticIceData.data, "area", (min, max) => {
-        arcticIceData.yearlyMinArea.push(min);
+        if (min.area < MinAreaThreshold) {
+            arcticIceData.yearlyMinArea.push(min);
+        }
         arcticIceData.yearlyMaxArea.push(max);
         arcticIceData.yearlyMinMaxArea.push(min, max);
     });
 
     filterYearlyMinMaxByProperty(arcticIceData.data, "extent", (min, max) => {
-        arcticIceData.yearlyMinExtent.push(min);
+        if (min.extent < MinAreaThreshold) {
+            arcticIceData.yearlyMinExtent.push(min);
+        }
         arcticIceData.yearlyMaxExtent.push(max);
         arcticIceData.yearlyMinMaxExtent.push(min, max);
     });

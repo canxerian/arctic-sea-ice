@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ArcticIceData from "../data/ArcticIceData.json";
 import { MonthLookup } from "../data/MonthLookup";
 import { setActiveIceDataIndex } from "../redux/appSlice";
-import { FilterOptionDataLookup } from "../redux/FilterOptions";
+import { GetDataForFilter } from "../redux/FilterOptions";
 import FilterButtonGroup from "./FilterButtonGroup";
 import "./MainUI.scss";
 
@@ -11,7 +11,8 @@ const MainUI = () => {
     const filterOption = useSelector(state => state.app.currentFilter);
     const dispatch = useDispatch();
 
-    const dataArray = FilterOptionDataLookup[filterOption];
+    const data = GetDataForFilter(filterOption).dataSet;
+    const dataSet = data.dataSet;
 
     const onScroll = (e) => {
         const { height, width, x, y } = e.target.getBoundingClientRect();
@@ -33,18 +34,19 @@ const MainUI = () => {
                 dispatch(setActiveIceDataIndex(0));
             }
             else {
-                dispatch(setActiveIceDataIndex(dataArray.length - 1));
+                dispatch(setActiveIceDataIndex(dataSet.length - 1));
             }
         }
     }
 
-    const extentRange = ArcticIceData.maxExtent - ArcticIceData.minExtent;
-    const areaRange = ArcticIceData.maxArea - ArcticIceData.minArea;
+    // const extentRange = ArcticIceData.maxExtent - ArcticIceData.minExtent;
+    // const areaRange = ArcticIceData.maxArea - ArcticIceData.minArea;
 
-    const listItems = dataArray.map((item, index) => {
+    const listItems = dataSet.map((item, index) => {
         const className = index === activeIceDataIndex ? "active" : "";
 
-        const areaPercent = (item.area - ArcticIceData.minArea) / areaRange * 100;
+        // const areaPercent = (item.area - ArcticIceData.minArea) / areaRange * 100;
+        const areaPercent = item.area / ArcticIceData.maxArea * 100;
         const bgColour = "#5B7099";
         const backgroundStyle = { background: `linear-gradient(90deg, ${bgColour} ${areaPercent}%, transparent 0%)` }
 

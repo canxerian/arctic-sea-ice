@@ -10,7 +10,7 @@ import GlobeModel from "../models/Globe/Globe3.glb";
 import seaIceConcLUT from "./SeaIceConcentrationLUT.png";
 
 import { store } from "../../redux/store";
-import { FilterOptionDataLookup } from "../../redux/FilterOptions";
+import { GetDataForFilter } from "../../redux/FilterOptions";
 
 BABYLON.Effect.ShadersStore["iceTerrainVertexShader"] = iceTerrainVertexShader;
 BABYLON.Effect.ShadersStore["iceTerrainFragmentShader"] = iceTerrainFragmentShader;
@@ -18,10 +18,10 @@ BABYLON.Effect.ShadersStore["iceTerrainFragmentShader"] = iceTerrainFragmentShad
 const getImageName = (dataIndex) => {
     try {
         const currentFilter = store.getState().app.currentFilter;
-        const dataSet = FilterOptionDataLookup[currentFilter];
-        const data = dataSet[dataIndex];
-        const month = (data.month).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
-        return `N_${data.year}${month}_conc_v3.0`;
+        const data = GetDataForFilter(currentFilter);
+        const dataItem = data.dataSet[dataIndex];
+        const month = (dataItem.month).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
+        return `N_${dataItem.year}${month}_conc_v3.0`;
     }
     catch (e) {
         console.error(dataIndex);

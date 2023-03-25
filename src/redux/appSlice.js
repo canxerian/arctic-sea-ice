@@ -5,7 +5,7 @@ export const appSlice = createSlice({
     name: 'app',
     initialState: {
         activeIceDataIndex: 0,
-        currentFilter: FilterOptions.all,
+        currentFilter: FilterOptions.allArea,
     },
     reducers: {
         setActiveIceDataIndex: (state, action) => {
