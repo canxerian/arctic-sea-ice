@@ -2,6 +2,8 @@ import * as BABYLON from "@babylonjs/core";
 import "@babylonjs/loaders";
 import envTexture from "./textures/kloppenheim_02_puresky_4k.env";
 import IceTerrain from "./iceterrain/IceTerrain";
+import { GradientMaterial } from "@babylonjs/materials";
+import StylisedSky from "./stylisedSky/StylisedSky";
 
 const Deg2Rad = Math.PI / 180;
 
@@ -35,12 +37,12 @@ export default class BabylonScene {
         // Camera
         const camera = this.createCamera(this.iceTerrain.parent.position);
 
-        this.createBackground(scene, engine);
+        // this.createBackground(scene, engine);
 
         // Skybox
-        // this.createSkybox(scene);
+        this.skybox = this.createSkybox(scene);
 
-        // const light = new BABYLON.DirectionalLight("DirectionalLight", new BABYLON.Vector3(0, -1, 0), scene);
+        // const light = new BABYLON.DirectionalLight("DirectionalLight", new BABYLON.Vector3(1, 0.2, 0), scene);
 
         const light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(1, 1, 0), scene);
         light.groundColor = new BABYLON.Color3(1, 1, 1);
@@ -48,6 +50,7 @@ export default class BabylonScene {
 
         engine.runRenderLoop(() => {
             this.iceTerrain.update();
+            this.skybox.update();
             scene.render();
         });
 
@@ -108,44 +111,22 @@ export default class BabylonScene {
      * @param {BABYLON.Scene} scene 
      */
     createSkybox(scene) {
-        scene.environmentTexture = BABYLON.CubeTexture.CreateFromPrefilteredData(envTexture, scene);
-        scene.createDefaultSkybox(scene.environmentTexture, true, 10 * scene.activeCamera.maxZ);
-        scene.imageProcessingConfiguration.toneMappingEnabled = true;
-        scene.imageProcessingConfiguration.toneMappingType = BABYLON.ImageProcessingConfiguration.TONEMAPPING_STANDARD;
+        const sky = new StylisedSky(scene);
+        return sky;
     }
 
     createBackground(scene, engine) {
-        // Create a render target.
-        const rtt = new BABYLON.RenderTargetTexture("", 512, scene)
+        const skybox = BABYLON.MeshBuilder.CreateSphere("skyboxSphere", { diameter: 400 }, scene);
+        skybox.position.y = 0;
 
-        // Create the background from it
-        const background = new BABYLON.Layer("background", null, scene);
-        background.isBackground = true;
-        background.texture = rtt;
-
-        // Create the background effect.
-        const renderImage = new BABYLON.EffectWrapper({
-            engine: engine,
-            fragmentShader: `
-            vec3 col1 = vec3(0.14, 0.18, 0.24);
-            vec3 col2 = vec3(0.24, 0.21, 0.27);
-
-            varying vec2 vUV;
-
-            void main(void) {
-                float t = clamp(vUV.x + vUV.y, 0.0, 1.0);
-                vec3 col = mix(col1, col2, t);
-                gl_FragColor = vec4(col, 1.0);
-            }`
-        });
-
-        // When the effect has been ready,
-        // Create the effect render and change which effects will be renderered
-        renderImage.effect.executeWhenCompiled(() => {
-            // Render the effect in the RTT.
-            const renderer = new BABYLON.EffectRenderer(engine);
-            renderer.render(renderImage, rtt);
-        });
+        const gradientMaterial = new GradientMaterial("grad", scene);
+        gradientMaterial.topColor = new BABYLON.Color3(0.28, 0.14, 0.35);
+        gradientMaterial.bottomColor = new BABYLON.Color3(0.28, 0.04, 0.25);
+        gradientMaterial.offset = 0.5;
+        gradientMaterial.smoothness = 0.65;
+        gradientMaterial.scale = 0.06
+        gradientMaterial.backFaceCulling = false
+        skybox.material = gradientMaterial;
     }
 
     setActiveIceIndex(index) {
