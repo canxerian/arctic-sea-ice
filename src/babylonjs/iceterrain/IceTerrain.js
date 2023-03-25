@@ -7,19 +7,19 @@ import iceTerrainVertexShader from "./IceTerrain.vertex.glsl";
 import iceTerrainFragmentShader from "./IceTerrain.fragment.glsl";
 
 import GlobeModel from "../models/Globe/Globe3.glb";
-import ArcticIceData from "../../data/ArcticIceData.json";
 import seaIceConcLUT from "./SeaIceConcentrationLUT.png";
 
-import globeAlbedo from "../models/Globe/EarthNormalMap.JPEG";
-import globeNormal from "../models/Globe/EarthNormalMap.JPEG";
+import { store } from "../../redux/store";
+import { FilterOptionDataLookup } from "../../redux/FilterOptions";
 
 BABYLON.Effect.ShadersStore["iceTerrainVertexShader"] = iceTerrainVertexShader;
 BABYLON.Effect.ShadersStore["iceTerrainFragmentShader"] = iceTerrainFragmentShader;
 
 const getImageName = (dataIndex) => {
     try {
-        // TODO - change to current filter
-        const data = ArcticIceData.data[dataIndex];
+        const currentFilter = store.getState().app.currentFilter;
+        const dataSet = FilterOptionDataLookup[currentFilter];
+        const data = dataSet[dataIndex];
         const month = (data.month).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
         return `N_${data.year}${month}_conc_v3.0`;
     }
@@ -55,7 +55,6 @@ export default class IceTerrain {
      * @param {BABYLON.Vector3} newPosition
      */
     set position(newPosition) {
-        console.log("set new pos", newPosition)
         this._position = newPosition;
 
         this.globe.position = newPosition;
@@ -93,8 +92,8 @@ export default class IceTerrain {
         }
         else {
             try {
-                // const image = await import("./images/" + imagePath + ".png");
-                const image = await import("./Test.png");
+                const image = await import("./images/" + imagePath + ".png");
+                // const image = await import("./Test.png");
 
                 this.extentTextures[imagePath] = new BABYLON.Texture(image.default, this.scene, null, null, null, () => {
                     this.material.setTexture("_IceExtentImg", this.extentTextures[imagePath]);
