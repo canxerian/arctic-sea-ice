@@ -6,48 +6,39 @@
     height: 100vh;
     box-sizing: border-box;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
 
-    #filter-section {
-        height: 22%;
+    > * {
+        margin-bottom: 20px;
     }
 
-    #data-list-section {
+    ul {
         background-image: url("../images/grid-background.png");
-        height: 74%;
+        mask-image: linear-gradient(to bottom, transparent 0%, black 15% 85%, transparent 100%);
+        overflow-x: hidden;
+        overflow-y: auto;
 
-        ul {
-            mask-image: linear-gradient(to bottom, transparent 0%, black 15% 85%, transparent 100%);
-            overflow-x: hidden;
-            overflow-y: auto;
+        width: 100%;
 
-            width: 100%;
-            height: 100%;
-            box-sizing: border-box;
+        li {
+            padding: 1px 6px;
+            transition: font-weight 0.2s font-size 0.2;
+            color: #c4c2c2;
+            &:first-child,
+            &:last-child {
+                height: 50%;
+            }
 
-            li {
-                padding: 1px 6px;
-                transition: font-weight 0.2s font-size 0.2;
-                color: #c4c2c2;
-                &:first-child,
-                &:last-child {
-                    height: 50%;
-                }
-
-                &.active {
-                    // font-size: 30px;
-                    font-weight: 800;
-                    color: #ffffff;
-                }
-
-                &.activeSibling {
-                    // font-size: 20px;
-                    // font-weight: 400;
-                }
+            &.active {
+                font-weight: 800;
+                color: #ffffff;
             }
         }
     }
 
-    #legend-section {
-        text-align: end;
+    p#graph-label {
+        text-align: right;
+        font-style: italic;
     }
 }

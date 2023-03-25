@@ -15,14 +15,14 @@ const FilterButton = ({ label, isActive, onClick }) => {
 /**
  * Render a group of buttons where only one can be selected
  */
-const FilterButtonGroup = () => {
+const FilterButtonGroup = ({ className }) => {
     const currentFilter = useSelector(state => state.app.currentFilter);
     const dispatch = useDispatch();
 
     const filters = Object.values(FilterOptions);
 
     return (
-        <div className="filter-button-group">
+        <div className={`filter-button-group ${className}`}>
             {filters.map(filter => <FilterButton key={filter}
                 label={filter}
                 isActive={filter === currentFilter}

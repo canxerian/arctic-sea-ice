@@ -66,18 +66,12 @@ const MainUI = () => {
 
     return (
         <aside id="main-ui">
-            <section id="filter-section">
-                <h1>Filter by:</h1>
-                <FilterButtonGroup />
-            </section>
-            <section id="data-list-section">
-                <ul onScroll={onScroll}>
-                    {listItems}
-                </ul>
-            </section>
-            <section id="legend-section">
-                <p>In million sq km</p>
-            </section>
+            <h1>Filter by:</h1>
+            <FilterButtonGroup className={"button-group"} />
+            <ul onScroll={onScroll}>
+                {listItems}
+            </ul>
+            <p id="graph-label">In million sq km</p>
         </aside>
     );
 }

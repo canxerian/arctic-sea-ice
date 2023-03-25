@@ -10,10 +10,6 @@ body {
   background-color: #3d3544;
 }
 
-h1 {
-  margin: 0 0 8px 0;
-}
-
 * {
   color: #fff;
 }
@@ -24,7 +20,9 @@ code {
 }
 
 ul,
-li {
+li,
+h1,
+p {
   list-style-type: none;
   margin: 0;
   padding: 0;
