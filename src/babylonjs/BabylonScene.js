@@ -51,6 +51,10 @@ export default class BabylonScene {
             this.iceTerrain.update();
             this.skybox.update();
             scene.render();
+
+            if (camera.inertialBetaOffset === 0 && camera.inertialAlphaOffset === 0) {
+                camera.alpha -= 0.000007 * scene.deltaTime;
+            }
         });
 
         scene.onBeforeRenderObservable.add(() => {
