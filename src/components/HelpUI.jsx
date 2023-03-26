@@ -19,13 +19,13 @@ const HelpUI = () => {
                 <main className="custom-scrollbar">
                     <h1>Arctic Sea Ice</h1>
                     <section>
-                        <h2>How do I use this web app?</h2>
+                        <h2>What can I do with this app?</h2>
                         <dl>
                             <dt>Filter data:</dt>
-                            <dd>Click on the buttons to filter. The list of data will update accordingly</dd>
+                            <dd>Click on the buttons to filter. The list of data updates accordingly</dd>
 
                             <dt>View historical ice data</dt>
-                            <dd>Swipe or scroll the list. The 3D visual will update accordingly.</dd>
+                            <dd>Swipe or scroll the list. The 3D visual updates accordingly.</dd>
 
                             <dt>View satellite imagery</dt>
                             <dd>Put the scene in "2D" mode</dd>
@@ -35,8 +35,7 @@ const HelpUI = () => {
                     <section>
                         <h2>Why was this project created?</h2>
                         <p><a href="https://nsidc.org/home">The National Snow and Ice Data Center</a> measure data about our world using very nice satellites and generously make them publicly available. However, specialist software is sometimes required to process and visualise it</p>
-                        <p>By making the data interactive, intuitive and visual, the data more accessible and engaging</p>
-                        <h2></h2>
+                        <p>By making the data interactive, intuitive and visual, the data becomes more accessible and engaging. The web app can run on desktop, tablet and mobile.</p>
                     </section>
 
                     <section>
@@ -57,13 +56,16 @@ const HelpUI = () => {
                     </section>
 
                     <section>
-                        <h2>Who are you?</h2>
-                        <p>Mark Nguyen, a Cancerian who like to make things with art, code and design</p>
+                        <h2>Can we discuss working with you?</h2>
+                        <p>Sure, hello@coding-canxerian.com</p>
                     </section>
 
                     <section>
-                        <h2>Can we discuss working with you?</h2>
-                        <p>Sure, hello@coding-canxerian.com</p>
+                        <h2>Who are you?</h2>
+                        <p>Mark Nguyen, a Cancerian who like to make things with art, code and design</p>
+                        <div>
+
+                        </div>
                     </section>
                 </main>
                 <button title="Close dialog modal" onClick={() => setIsOpen(false)}>Close</button>

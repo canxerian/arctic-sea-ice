@@ -1,7 +1,6 @@
 import * as BABYLON from "@babylonjs/core";
 import "@babylonjs/loaders";
 import IceTerrain from "./iceterrain/IceTerrain";
-import { GradientMaterial } from "@babylonjs/materials";
 import StylisedSky from "./stylisedSky/StylisedSky";
 
 const Deg2Rad = Math.PI / 180;
@@ -116,20 +115,6 @@ export default class BabylonScene {
     createSkybox(scene) {
         const sky = new StylisedSky(scene);
         return sky;
-    }
-
-    createBackground(scene, engine) {
-        const skybox = BABYLON.MeshBuilder.CreateSphere("skyboxSphere", { diameter: 400 }, scene);
-        skybox.position.y = 0;
-
-        const gradientMaterial = new GradientMaterial("grad", scene);
-        gradientMaterial.topColor = new BABYLON.Color3(0.28, 0.14, 0.35);
-        gradientMaterial.bottomColor = new BABYLON.Color3(0.28, 0.04, 0.25);
-        gradientMaterial.offset = 0.5;
-        gradientMaterial.smoothness = 0.65;
-        gradientMaterial.scale = 0.06
-        gradientMaterial.backFaceCulling = false
-        skybox.material = gradientMaterial;
     }
 
     setActiveIceIndex(index) {
