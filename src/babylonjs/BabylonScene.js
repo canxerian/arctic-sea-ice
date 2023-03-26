@@ -93,7 +93,7 @@ export default class BabylonScene {
     createCamera(targetPosition) {
         const cam = new BABYLON.ArcRotateCamera(
             "Main Camera",
-            -90 * Deg2Rad,
+            Math.random() * 360 * Deg2Rad,
             70 * Deg2Rad,
             100,
             targetPosition
@@ -101,7 +101,7 @@ export default class BabylonScene {
         cam.lowerRadiusLimit = 90;
         cam.upperRadiusLimit = 200;
         cam.lowerBetaLimit = 1 * Deg2Rad;
-        cam.upperBetaLimit = 80 * Deg2Rad;
+        cam.upperBetaLimit = 135 * Deg2Rad;
         cam.minZ = 0.01;
         cam.maxZ = 1000;
         cam.viewport = new BABYLON.Viewport(-0.3, 0, 1.3, 1);
