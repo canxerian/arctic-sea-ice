@@ -14,6 +14,7 @@ const HelpUI = () => {
     }
 
     const renderContent = () => {
+        const summaryIcon = <span>❄️</span>;
         return (
             <dialog open={isOpen} id="help-ui-dialog">
                 <main className="custom-scrollbar">
@@ -21,7 +22,7 @@ const HelpUI = () => {
 
                     <details>
                         <summary>
-                            <h2>What can I do with this app?</h2>
+                            <h2>{summaryIcon}What can I do with this app?</h2>
                         </summary>
                         <dl>
                             <dt>Filter data:</dt>
@@ -37,7 +38,7 @@ const HelpUI = () => {
 
                     <details>
                         <summary>
-                            <h2>Why was this project created?</h2>
+                            <h2>{summaryIcon}Why was this project created?</h2>
                         </summary>
                         <p><a href="https://nsidc.org/home">The National Snow and Ice Data Center</a> measure data about our world using very nice satellites and generously make them publicly available. However, specialist software is sometimes required to process and visualise it</p>
                         <p>By making the data interactive, intuitive and visual, the data becomes more accessible and engaging. The web app can run on desktop, tablet and mobile.</p>
@@ -45,7 +46,7 @@ const HelpUI = () => {
 
                     <details>
                         <summary>
-                            <h2>What technologies were used to create this?</h2>
+                            <h2>{summaryIcon}What technologies were used to create this?</h2>
                         </summary>
                         <dl>
                             <dt>3D rendering:</dt>
@@ -64,14 +65,14 @@ const HelpUI = () => {
 
                     <details>
                         <summary>
-                            <h2>Can we discuss working with you?</h2>
+                            <h2>{summaryIcon}Can we discuss working with you?</h2>
                         </summary>
                         <p>Sure, hello@coding-canxerian.com</p>
                     </details>
 
                     <details>
                         <summary>
-                            <h2>Who are you?</h2>
+                            <h2>{summaryIcon}Who created this?</h2>
                         </summary>
                         <p>Mark Nguyen, a Cancerian who like to make things with art, code and design</p>
                         <ul>

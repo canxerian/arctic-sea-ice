@@ -1,4 +1,5 @@
 $buttonSize: 50px;
+$summaryHover: #37314d;
 
 @mixin pos-absolute-center {
     position: absolute;
@@ -26,11 +27,10 @@ $buttonSize: 50px;
     }
 }
 
-:root {
-    --my-color-rgb: 255, 0, 0;
-}
-
 dialog#help-ui-dialog {
+    &::backdrop {
+        background-color: darkorange;
+    }
     @include pos-absolute-center;
     width: 80%;
     max-width: 960px;
@@ -41,11 +41,11 @@ dialog#help-ui-dialog {
     padding: 30px;
 
     main {
-        max-height: 80vh;
+        max-height: 70vh;
         overflow: auto;
         margin-bottom: 30px;
     }
-     
+
     h1 {
         margin-bottom: 16px;
         font-size: 22px;
@@ -54,22 +54,40 @@ dialog#help-ui-dialog {
     details {
         &[open] {
             margin-bottom: 26px;
+
+            summary {
+                background-color: $summaryHover;
+            }
         }
+
         summary {
-            display: inline-block;
+            line-height: 2.2em;
+            margin-bottom: 10px;
+
+            span {
+                display: inline-block;
+                width: 40px;
+            }
+
+            &:hover {
+                background-color: $summaryHover;
+            }
             cursor: pointer;
             list-style: none;
         }
-    
+
+        > :not(summary) {
+            margin-left: 40px;
+        }
+
         h2 {
-            margin-bottom: 8px;
             font-size: 18px;
         }
-    
+
         p {
             margin-bottom: 10px;
         }
-    
+
         dl {
             display: flex;
             flex-wrap: wrap;
@@ -86,6 +104,7 @@ dialog#help-ui-dialog {
         float: right;
         background: var(--purple-dark);
         border: none;
+        border-radius: 2px;
         padding: 10px;
 
         &:hover {
