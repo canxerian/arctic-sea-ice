@@ -62,8 +62,6 @@ export default class IceTerrain {
     }
 
     async init(scene, sun) {
-        const subDivisions = 512;
-        const scale = 0.5;
         this.scene = scene;
         this.sun = sun;
 
