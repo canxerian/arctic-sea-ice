@@ -18,8 +18,12 @@
         mask-image: linear-gradient(to bottom, transparent 0%, black 15% 85%, transparent 100%);
         overflow-x: hidden;
         overflow-y: auto;
-
         width: 100%;
+        scrollbar-width: 0;
+
+        &::-webkit-scrollbar {
+                display: none;
+        }
 
         li {
             padding: 1px 6px;
