@@ -5,8 +5,9 @@ const HelpUI = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     const renderButton = () => {
+        const title = isOpen ? "Close info" : "Open info";
         return (
-            <button id="help-ui-button" title="Open info" onClick={() => setIsOpen(!isOpen)}>
+            <button id="help-ui-button" title={title} onClick={() => setIsOpen(!isOpen)}>
                 {isOpen ? "x" : "?"}
             </button>
         );
@@ -65,7 +66,7 @@ const HelpUI = () => {
                         <p>Sure, hello@coding-canxerian.com</p>
                     </section>
                 </main>
-                <button onClick={() => setIsOpen(false)}>Close</button>
+                <button title="Close dialog modal" onClick={() => setIsOpen(false)}>Close</button>
             </dialog>
         );
     }
