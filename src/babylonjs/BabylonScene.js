@@ -1,5 +1,7 @@
 import * as BABYLON from "@babylonjs/core";
 import "@babylonjs/loaders";
+import { setCameraZoomNormalised } from "../redux/appSlice";
+import { store } from "../redux/store";
 import IceTerrain from "./iceterrain/IceTerrain";
 import StylisedSky from "./stylisedSky/StylisedSky";
 
@@ -75,6 +77,8 @@ export default class BabylonScene {
                 const betaDelta = BABYLON.Scalar.Lerp(camera.beta, MaxZoomBetaTarget, camZoomNormalized);
                 camera.alpha = BABYLON.Scalar.Lerp(camera.alpha, alphaDelta, 0.1);
                 camera.beta = BABYLON.Scalar.Lerp(camera.beta, betaDelta, 0.1);
+
+                store.dispatch(setCameraZoomNormalised(camZoomNormalized));
             }
             if (camZoomNormalized === 1) {
                 camera.alpha = MaxZoomAlphaTarget;
