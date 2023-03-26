@@ -1,3 +1,5 @@
+$scrollBarWidth: 2px;
+
 #main-ui {
     position: absolute;
     right: 0;
@@ -19,10 +21,14 @@
         overflow-x: hidden;
         overflow-y: auto;
         width: 100%;
-        scrollbar-width: 0;
+        scrollbar-width: $scrollBarWidth;
 
         &::-webkit-scrollbar {
-                display: none;
+            width: $scrollBarWidth;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: #aaa;
         }
 
         li {
