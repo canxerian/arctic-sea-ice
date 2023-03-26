@@ -1,0 +1,20 @@
+$buttonSize: 50px;
+
+#help-ui-button {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    width: $buttonSize;
+    height: $buttonSize;
+    border-radius: $buttonSize / 2;
+    background: none;
+    font-size: 30px;
+
+    border: 1px solid var(--purple-mid);
+    color: var(--purple-mid);
+
+    &:hover {
+        border-color: var(--purple-light);
+        color: var(--purple-light);
+    }
+}

@@ -27,3 +27,14 @@ p {
   margin: 0;
   padding: 0;
 }
+
+button {
+  background: none;
+  cursor: pointer;
+}
+
+:root {
+  --purple-light: #E1D8F7;
+  --purple-mid: #bfb3df;
+  --purple-dark: #6f697e;
+}
