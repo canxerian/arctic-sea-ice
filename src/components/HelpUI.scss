@@ -4,8 +4,7 @@ $buttonSize: 50px;
     position: absolute;
     left: 0;
     right: 0;
-    top: 0;
-    bottom: 0;
+    top: 70px;
 }
 
 #help-ui-button {
@@ -46,34 +45,41 @@ dialog#help-ui-dialog {
         overflow: auto;
         margin-bottom: 30px;
     }
-
-    section {
-        margin-bottom: 26px;
-    }
-
+     
     h1 {
         margin-bottom: 16px;
         font-size: 22px;
     }
 
-    h2 {
-        margin-bottom: 8px;
-        font-size: 18px;
-    }
-
-    p {
-        margin-bottom: 10px;
-    }
-
-    dl {
-        display: flex;
-        flex-wrap: wrap;
-    }
-    dt {
-        width: 16%;
-    }
-    dd {
-        width: 74%;
+    details {
+        &[open] {
+            margin-bottom: 26px;
+        }
+        summary {
+            display: inline-block;
+            cursor: pointer;
+            list-style: none;
+        }
+    
+        h2 {
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+    
+        p {
+            margin-bottom: 10px;
+        }
+    
+        dl {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        dt {
+            width: 22%;
+        }
+        dd {
+            width: 70%;
+        }
     }
 
     button {
