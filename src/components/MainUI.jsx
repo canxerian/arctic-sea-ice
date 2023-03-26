@@ -60,8 +60,10 @@ const MainUI = () => {
 
     return (
         <aside id="main-ui">
-            <h1>Filter by:</h1>
-            <FilterButtonGroup className={"button-group"} />
+            <section>
+                <h1>Filter by:</h1>
+                <FilterButtonGroup className={"button-group"} />
+            </section>
             <ul onScroll={onScroll}>
                 {listItems}
             </ul>

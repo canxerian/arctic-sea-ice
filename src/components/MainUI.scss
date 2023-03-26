@@ -11,8 +11,12 @@ $scrollBarWidth: 2px;
     display: flex;
     flex-direction: column;
 
-    > * {
+    > :not(:last-child) {
         margin-bottom: 20px;
+    }
+
+    h1 {
+        margin-bottom: 10px;
     }
 
     ul {
