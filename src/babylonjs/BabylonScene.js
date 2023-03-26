@@ -26,7 +26,7 @@ export default class BabylonScene {
 
         // Gizmo 
         const gizmoManager = new BABYLON.GizmoManager(scene);
-        gizmoManager.positionGizmoEnabled = true;
+        gizmoManager.positionGizmoEnabled = false;
 
         // const meshes = scene.getNodes().filter((node) => node instanceof BABYLON.AbstractMesh);
 
