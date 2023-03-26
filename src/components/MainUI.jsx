@@ -64,7 +64,7 @@ const MainUI = () => {
                 <h1>Filter by:</h1>
                 <FilterButtonGroup className={"button-group"} />
             </section>
-            <ul onScroll={onScroll}>
+            <ul className="custom-scrollbar" onScroll={onScroll}>
                 {listItems}
             </ul>
             <p id="graph-label">In million sq km</p>

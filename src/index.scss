@@ -1,0 +1,54 @@
+@import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@200&display=swap");
+
+$scrollBarWidth: 2px;
+
+body {
+  margin: 0;
+  font-family: "Tajawal", "Roboto", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  overflow: hidden;
+  background-color: #3d3544;
+}
+
+* {
+  color: #fff;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+ul,
+dl,
+li,
+h1,
+h2,
+p {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+button {
+  background: none;
+  cursor: pointer;
+}
+
+.custom-scrollbar {
+  scrollbar-width: $scrollBarWidth;
+  &::-webkit-scrollbar {
+    width: $scrollBarWidth;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #aaa;
+  }
+}
+
+:root {
+  --purple-light: #e1d8f7;
+  --purple-mid: #bfb3df;
+  --purple-dark: #6f697e;
+}
