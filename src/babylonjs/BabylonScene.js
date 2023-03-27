@@ -71,15 +71,25 @@ export default class BabylonScene {
                 cameraStatus = CameraState.Zooming;
             }
 
-            const camZoomNormalized = 1 - BABYLON.Scalar.InverseLerp(camera.lowerRadiusLimit, camera.upperRadiusLimit, camera.radius);
-            if (cameraStatus === CameraState.Zooming) {
-                const alphaDelta = BABYLON.Scalar.Lerp(camera.alpha, MaxZoomAlphaTarget, camZoomNormalized);
-                const betaDelta = BABYLON.Scalar.Lerp(camera.beta, MaxZoomBetaTarget, camZoomNormalized);
-                camera.alpha = BABYLON.Scalar.Lerp(camera.alpha, alphaDelta, 0.1);
-                camera.beta = BABYLON.Scalar.Lerp(camera.beta, betaDelta, 0.1);
-
-                store.dispatch(setCameraZoomNormalised(camZoomNormalized));
+            const isOverridingZoom = store.getState().app.isOverridingZoom;
+            let camZoomNormalized;
+            if (isOverridingZoom) {
+                camZoomNormalized = store.getState().app.cameraZoomNormalised;
+                camera.radius = BABYLON.Scalar.Lerp(camera.lowerRadiusLimit, camera.upperRadiusLimit, 1 - camZoomNormalized);
             }
+            else {
+                camZoomNormalized = 1 - BABYLON.Scalar.InverseLerp(camera.lowerRadiusLimit, camera.upperRadiusLimit, camera.radius);
+
+                if (cameraStatus === CameraState.Zooming) {
+                    const alphaDelta = BABYLON.Scalar.Lerp(camera.alpha, MaxZoomAlphaTarget, camZoomNormalized);
+                    const betaDelta = BABYLON.Scalar.Lerp(camera.beta, MaxZoomBetaTarget, camZoomNormalized);
+                    camera.alpha = BABYLON.Scalar.Lerp(camera.alpha, alphaDelta, 0.1);
+                    camera.beta = BABYLON.Scalar.Lerp(camera.beta, betaDelta, 0.1);
+
+                    store.dispatch(setCameraZoomNormalised(camZoomNormalized));
+                }
+            }
+
             if (camZoomNormalized === 1) {
                 camera.alpha = MaxZoomAlphaTarget;
                 camera.beta = MaxZoomBetaTarget;
