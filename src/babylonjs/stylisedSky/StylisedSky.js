@@ -8,6 +8,10 @@ BABYLON.Effect.ShadersStore["stylisedSkyVertexShader"] = vertexShader;
 BABYLON.Effect.ShadersStore["stylisedSkyFragmentShader"] = fragmentShader;
 
 export default class StylisedSky {
+    /**
+     * 
+     * @param {BABYLON.Scene} scene 
+     */
     constructor(scene) {
         this.sphere = BABYLON.MeshBuilder.CreateSphere("StylisedSky", {
             diameter: 420,
@@ -16,6 +20,7 @@ export default class StylisedSky {
 
         this.material = this.createMaterial();
         this.sphere.material = this.material;
+        this.scene = scene;
     }
 
     /**
@@ -23,7 +28,7 @@ export default class StylisedSky {
      * @returns {BABYLON.ShaderMaterial}
      */
     createMaterial(scene) {
-        const mat =  new BABYLON.ShaderMaterial("StylisedSky",
+        const mat = new BABYLON.ShaderMaterial("StylisedSky",
             scene,
             {
                 vertex: "stylisedSky",
@@ -54,5 +59,6 @@ export default class StylisedSky {
     update() {
         this.material.setColor3("_Colour1", sceneDataInstance.Skybox.Colour1);
         this.material.setColor3("_Colour2", sceneDataInstance.Skybox.Colour2);
+        this.material.setVector3("_CamPos", this.scene.activeCamera.position);
     }
 }
