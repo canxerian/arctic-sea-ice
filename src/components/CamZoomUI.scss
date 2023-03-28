@@ -1,15 +1,39 @@
-$thumbSize: 30px;
+$sliderHeight: 20px;
+$borderRadius: 10px;
+
+@mixin slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: $sliderHeight;
+    height: $sliderHeight;
+    background: var(--purple-light);
+    cursor: pointer;
+    border-radius: $borderRadius;
+    border: none;
+}
 
 #cam-zoom-ui {
     position: absolute;
-    bottom: 100px;
+    bottom: 80px;
     width: 67vw;
     height: 10px;
 }
 
-input.slider {
+input#slider {
+    appearance: none;
     display: block;
     width: 300px;
-    height: 100%;
+    height: $sliderHeight;
     margin: auto;
+    background: var(--purple-dark);
+    border-radius: $borderRadius;
+    box-shadow: inset 0px 4px 5px 0px #544a7d;
+
+    &::-moz-range-thumb {
+        @include slider-thumb();
+    }
+
+    &::-webkit-slider-thumb {
+        @include slider-thumb();
+    }
 }

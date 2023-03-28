@@ -24,7 +24,7 @@ const CamZoomUI = () => {
         <div id="cam-zoom-ui">
             <input
                 type="range"
-                className="slider"
+                id="slider"
                 min="1"
                 max="100"
                 value={camZoom * 100}

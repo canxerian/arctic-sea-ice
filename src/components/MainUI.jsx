@@ -45,7 +45,7 @@ const MainUI = () => {
         const dataItemValue = data.property === ArcticDataProperty.Area ? item.area : item.extent;
 
         const areaPercent = dataItemValue / MaxItemValue * 100;
-        const bgColour = "#5B7099";
+        const bgColour = "var(--purple-dark)";
         const backgroundStyle = { background: `linear-gradient(90deg, ${bgColour} ${areaPercent}%, transparent 0%)` }
 
         return <li data-index={index} key={index} className={className} style={backgroundStyle}>
