@@ -23,8 +23,8 @@ $summaryHover: #2f2943;
     display: flex;
     flex-direction: column;
     gap: $buttonSize / 3;
-    bottom: 10px;
-    left: 10px;
+    bottom: 16px;
+    left: 12px;
 
     .help-ui-button {
         width: $buttonSize;
