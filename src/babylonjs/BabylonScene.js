@@ -13,8 +13,16 @@ const CameraState = {
     Zooming: 2
 };
 
-const MaxZoomAlphaTarget = 90 * Deg2Rad;
-const MaxZoomBetaTarget = 1 * Deg2Rad;
+const CameraInitZoom = {
+    Alpha: Math.random() * 360 * Deg2Rad,
+    Beta: 70 * Deg2Rad,
+    Radius: 100,
+};
+
+const CamMaxZoom = {
+    Alpha: 90 * Deg2Rad,
+    Beta: 1 * Deg2Rad,
+};
 
 export default class BabylonScene {
     constructor(canvas) {
@@ -53,6 +61,7 @@ export default class BabylonScene {
             this.skybox.update();
             scene.render();
 
+            // Rotate the camera.. slowly
             if (camera.inertialBetaOffset === 0 && camera.inertialAlphaOffset === 0) {
                 camera.alpha -= 0.000007 * scene.deltaTime;
             }
@@ -75,14 +84,17 @@ export default class BabylonScene {
             let camZoomNormalized;
             if (isOverridingZoom) {
                 camZoomNormalized = store.getState().app.cameraZoomNormalised;
-                camera.radius = BABYLON.Scalar.Lerp(camera.lowerRadiusLimit, camera.upperRadiusLimit, 1 - camZoomNormalized);
+                // camera.radius = BABYLON.Scalar.Lerp(camera.lowerRadiusLimit, camera.upperRadiusLimit, 1 - camZoomNormalized);
             }
             else {
                 camZoomNormalized = 1 - BABYLON.Scalar.InverseLerp(camera.lowerRadiusLimit, camera.upperRadiusLimit, camera.radius);
 
                 if (cameraStatus === CameraState.Zooming) {
-                    const alphaDelta = BABYLON.Scalar.Lerp(camera.alpha, MaxZoomAlphaTarget, camZoomNormalized);
-                    const betaDelta = BABYLON.Scalar.Lerp(camera.beta, MaxZoomBetaTarget, camZoomNormalized);
+                    const targetAlpha = BABYLON.Scalar.Lerp(camera.alpha, CamMaxZoom.Alpha, camZoomNormalized);
+                    const targetBeta = BABYLON.Scalar.Lerp(CameraInitZoom.Beta, CamMaxZoom.Beta, camZoomNormalized);
+                    
+                    const alphaDelta = BABYLON.Scalar.Lerp(camera.alpha, targetAlpha, camZoomNormalized);
+                    const betaDelta = BABYLON.Scalar.Lerp(camera.beta, targetBeta, camZoomNormalized);
                     camera.alpha = BABYLON.Scalar.Lerp(camera.alpha, alphaDelta, 0.1);
                     camera.beta = BABYLON.Scalar.Lerp(camera.beta, betaDelta, 0.1);
 
@@ -91,8 +103,11 @@ export default class BabylonScene {
             }
 
             if (camZoomNormalized === 1) {
-                camera.alpha = MaxZoomAlphaTarget;
-                camera.beta = MaxZoomBetaTarget;
+                camera.alpha = CamMaxZoom.Alpha;
+                camera.beta = CamMaxZoom.Beta;
+            }
+            else if (camZoomNormalized === 0) {
+                // camera.beta = CameraInitZoom.Beta;
             }
 
             this.iceTerrain.setCameraZoom(camZoomNormalized);
@@ -106,9 +121,9 @@ export default class BabylonScene {
     createCamera(targetPosition) {
         const cam = new BABYLON.ArcRotateCamera(
             "Main Camera",
-            Math.random() * 360 * Deg2Rad,
-            70 * Deg2Rad,
-            100,
+            CameraInitZoom.Alpha,
+            CameraInitZoom.Beta,
+            CameraInitZoom.Radius,
             targetPosition
         );
         cam.lowerRadiusLimit = 90;
