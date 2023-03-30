@@ -89,6 +89,7 @@ export default class BabylonScene {
             else {
                 camZoomNormalized = 1 - BABYLON.Scalar.InverseLerp(camera.lowerRadiusLimit, camera.upperRadiusLimit, camera.radius);
             }
+            
             if (cameraStatus === CameraState.Zooming || isOverridingZoom) {
                 const targetAlpha = BABYLON.Scalar.Lerp(camera.alpha, CamMaxZoom.Alpha, camZoomNormalized);
                 const targetBeta = BABYLON.Scalar.Lerp(CameraInitZoom.Beta, CamMaxZoom.Beta, camZoomNormalized);
@@ -101,13 +102,9 @@ export default class BabylonScene {
                 store.dispatch(setCameraZoomNormalised(camZoomNormalized));
             }
 
-
             if (camZoomNormalized === 1) {
                 camera.alpha = CamMaxZoom.Alpha;
                 camera.beta = CamMaxZoom.Beta;
-            }
-            else if (camZoomNormalized === 0) {
-                // camera.beta = CameraInitZoom.Beta;
             }
 
             this.iceTerrain.setCameraZoom(camZoomNormalized);
