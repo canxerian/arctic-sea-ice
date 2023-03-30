@@ -34,8 +34,6 @@ const HelpUI = () => {
         );
     }
 
-
-
     const renderContent = () => {
         const summaryIcon = <span>❄️</span>;
         return (
@@ -55,7 +53,7 @@ const HelpUI = () => {
                             <dd>Swipe or scroll the list. The 3D visual updates accordingly.</dd>
 
                             <dt>View satellite imagery:</dt>
-                            <dd>Put the scene in "2D" mode</dd>
+                            <dd>Put the scene in "2D" mode (maximum zoom)</dd>
                         </dl>
                     </details>
 
@@ -75,10 +73,10 @@ const HelpUI = () => {
                             <dt>3D rendering:</dt>
                             <dd><a href="https://www.babylonjs.com/">babylon.js</a> and custom shaders</dd>
 
-                            <dt>Project bootstrap:</dt>
+                            <dt>Initial project creation:</dt>
                             <dd><a href="https://create-react-app.dev/">create-react-app</a></dd>
 
-                            <dt>UI, Styling:</dt>
+                            <dt>UI and styling:</dt>
                             <dd><a href="https://react.dev/">React</a>, <a href="https://sass-lang.com/">Sass</a></dd>
 
                             <dt>3D modelling:</dt>
