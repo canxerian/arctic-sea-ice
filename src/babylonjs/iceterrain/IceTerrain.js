@@ -80,9 +80,7 @@ export default class IceTerrain {
         this.parent.addChild(this.globe);
         this.parent.addChild(this.globeImagePlane);
 
-        console.time("Preload images");
         await this.preloadImages();
-        console.timeEnd("Preload images");
     }
 
     async updateDataIndex(index) {

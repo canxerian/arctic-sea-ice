@@ -1,7 +1,7 @@
-import MainUI from './components/MainUI';
-import BabylonCanvas from './components/BabylonCanvas';
-import HelpUI from './components/HelpUI';
-import CamZoomUI from './components/CamZoomUI';
+import MainUI from './MainUI';
+import BabylonCanvas from './BabylonCanvas';
+import HelpUI from './HelpUI';
+import CamZoomUI from './CamZoomUI';
 import './App.scss';
 
 function App() {
