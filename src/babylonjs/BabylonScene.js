@@ -129,7 +129,7 @@ export default class BabylonScene {
         cam.upperBetaLimit = 135 * Deg2Rad;
         cam.minZ = 0.01;
         cam.maxZ = 1000;
-        cam.viewport = new BABYLON.Viewport(-0.3, 0, 1.3, 1);
+        cam.viewport = new BABYLON.Viewport(-0.31, 0, 1.3, 1);
         cam.attachControl(null, true, true);
         return cam;
     }
