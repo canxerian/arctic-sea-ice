@@ -7,7 +7,7 @@ import './App.scss';
 function App() {
   return (
     <>
-      <BabylonCanvas />
+      <BabylonCanvas onReady={() => console.log("Babylonjs is ready")} />
       <MainUI />
       <HelpUI />
       <CamZoomUI />

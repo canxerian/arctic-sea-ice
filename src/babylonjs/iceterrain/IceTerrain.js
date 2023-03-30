@@ -10,15 +10,14 @@ import GlobeModel from "./Globe4.glb";
 import seaIceConcLUT from "./SeaIceConcentrationLUT.png";
 
 import { store } from "../../redux/store";
-import { GetDataForFilter } from "../../redux/FilterOptions";
+import { GetDataForFilter, FilterOptions } from "../../redux/FilterOptions";
 
 BABYLON.Effect.ShadersStore["iceTerrainVertexShader"] = iceTerrainVertexShader;
 BABYLON.Effect.ShadersStore["iceTerrainFragmentShader"] = iceTerrainFragmentShader;
 
-const getImageName = (dataIndex) => {
+const getImageName = (dataIndex, filter) => {
     try {
-        const currentFilter = store.getState().app.currentFilter;
-        const data = GetDataForFilter(currentFilter);
+        const data = GetDataForFilter(filter);
         const dataItem = data.dataSet[dataIndex];
         const month = (dataItem.month).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
         return `N_${dataItem.year}${month}_conc_v3.0`;
@@ -44,7 +43,7 @@ export default class IceTerrain {
      */
     static async Create(scene, sun) {
         const iceTerrain = new IceTerrain(scene, sun);
-        await iceTerrain.init(scene, sun);
+        await iceTerrain.init(scene, sun, true);
 
         return new Promise((resolve) => {
             resolve(iceTerrain);
@@ -80,10 +79,12 @@ export default class IceTerrain {
         this.parent = new BABYLON.AbstractMesh("IceTerrainParent", scene);
         this.parent.addChild(this.globe);
         this.parent.addChild(this.globeImagePlane);
+
+        await this.preloadImages();
     }
 
     async updateDataIndex(index) {
-        const imagePath = getImageName(index);
+        const imagePath = getImageName(index, store.getState().app.currentFilter);
 
         if (this.extentTextures[imagePath]) {
             this.material.setTexture("_IceExtentImg", this.extentTextures[imagePath]);
@@ -153,6 +154,31 @@ export default class IceTerrain {
 
         // TODO - scale plane to avoid edge artifact
         // this.globeImagePlane.scaling = new BABYLON.Vector3(scale, -scale, scale); // negative Y due to .glb coordinate
+    }
+
+    async preloadImages() {
+        const dataSet = GetDataForFilter(FilterOptions.allArea).dataSet
+        const loadingPromises = [];
+
+        const cacheTexture = (url, cacheKey) => {
+            return new Promise((resolve, reject) => {
+                const texture = new BABYLON.Texture(url, this.scene, null, null, null, () => {
+                    this.extentTextures[cacheKey] = texture;
+                    resolve(texture);
+                }, (message) => {
+                    reject(message);
+                });
+            })
+        }
+
+        for (let i = 0; i < dataSet.length; i++) {
+            const imageName = getImageName(i, FilterOptions.allArea);
+            const imageUrl = await import("./images/" + imageName + ".png");
+            const promise = cacheTexture(imageUrl.default, imageName);
+
+            loadingPromises.push(promise);
+        }
+        return Promise.allSettled(loadingPromises);
     }
 }
 

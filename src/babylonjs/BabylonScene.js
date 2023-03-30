@@ -25,11 +25,11 @@ const CamMaxZoom = {
 };
 
 export default class BabylonScene {
-    constructor(canvas) {
-        this.initialise(canvas);
+    constructor(canvas, onReady) {
+        this.initialise(canvas, onReady);
     }
 
-    async initialise(canvas) {
+    async initialise(canvas, onReady) {
         const engine = new BABYLON.Engine(canvas);
         const scene = new BABYLON.Scene(engine);
 
@@ -113,6 +113,8 @@ export default class BabylonScene {
         window.addEventListener("resize", () => {
             engine.resize();
         });
+
+        onReady();
     }
 
     createCamera(targetPosition) {
