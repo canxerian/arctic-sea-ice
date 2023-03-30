@@ -80,7 +80,9 @@ export default class IceTerrain {
         this.parent.addChild(this.globe);
         this.parent.addChild(this.globeImagePlane);
 
+        console.time("Preload images");
         await this.preloadImages();
+        console.timeEnd("Preload images");
     }
 
     async updateDataIndex(index) {
@@ -92,7 +94,6 @@ export default class IceTerrain {
         else {
             try {
                 const image = await import("./images/" + imagePath + ".png");
-                // const image = await import("./Test.png");
 
                 this.extentTextures[imagePath] = new BABYLON.Texture(image.default, this.scene, null, null, null, () => {
                     this.material.setTexture("_IceExtentImg", this.extentTextures[imagePath]);
@@ -158,27 +159,28 @@ export default class IceTerrain {
 
     async preloadImages() {
         const dataSet = GetDataForFilter(FilterOptions.allArea).dataSet
-        const loadingPromises = [];
 
-        const cacheTexture = (url, cacheKey) => {
+        const importAndCacheTexture = (imageName) => {
             return new Promise((resolve, reject) => {
-                const texture = new BABYLON.Texture(url, this.scene, null, null, null, () => {
-                    this.extentTextures[cacheKey] = texture;
-                    resolve(texture);
-                }, (message) => {
-                    reject(message);
-                });
-            })
+                import("./images/" + imageName + ".png").then((value) => {
+                    const imageUrl = value.default;
+                    const texture = new BABYLON.Texture(imageUrl, this.scene, null, null, null, () => {
+                        this.extentTextures[imageName] = texture;
+                        resolve();
+                    });
+                })
+            });
         }
+
+        const cacheTexturePromises = [];
 
         for (let i = 0; i < dataSet.length; i++) {
             const imageName = getImageName(i, FilterOptions.allArea);
-            const imageUrl = await import("./images/" + imageName + ".png");
-            const promise = cacheTexture(imageUrl.default, imageName);
-
-            loadingPromises.push(promise);
+            const promise = importAndCacheTexture(imageName);
+            cacheTexturePromises.push(promise);
         }
-        return Promise.allSettled(loadingPromises);
+
+        await Promise.allSettled(cacheTexturePromises);
     }
 }
 

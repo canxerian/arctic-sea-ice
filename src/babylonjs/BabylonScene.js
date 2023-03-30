@@ -15,7 +15,7 @@ const CameraState = {
 
 const CameraInitZoom = {
     Alpha: Math.random() * 360 * Deg2Rad,
-    Beta: 70 * Deg2Rad,
+    Beta: 65 * Deg2Rad,
     Radius: 100,
 };
 
