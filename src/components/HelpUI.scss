@@ -27,10 +27,26 @@ $summaryHover: #37314d;
     }
 }
 
-dialog#help-ui-dialog {
-    &::backdrop {
-        background-color: darkorange;
+#dialog-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #37314dbf;
+    pointer-events: none;
+}
+
+@keyframes show {
+    from {
+        opacity: 0.1;
     }
+    to {
+        opacity: 1;
+    }
+}
+
+dialog#help-ui-dialog {
     @include pos-absolute-center;
     width: 80%;
     max-width: 960px;
@@ -39,6 +55,15 @@ dialog#help-ui-dialog {
     border-radius: 8px;
     background-color: rgba(#15131c, 0.95);
     padding: 30px;
+
+    &[open],
+    &[open]::backdrop {
+        animation: show 0.25s ease normal;
+    }
+
+    &::backdrop {
+        background-color: #cebfd135;
+    }
 
     main {
         max-height: 70vh;

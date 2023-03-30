@@ -1,22 +1,40 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 import "./HelpUI.scss";
 
 const HelpUI = () => {
     const [isOpen, setIsOpen] = useState(false);
 
+    const setDialogOpen = (v) => {
+        if (v) {
+            dialogRef.current.showModal();
+        }
+        else {
+            dialogRef.current.close();
+        }
+        setIsOpen(v);
+    }
+
     const renderButton = () => {
         const title = isOpen ? "Close info" : "Open info";
+
         return (
-            <button id="help-ui-button" title={title} onClick={() => setIsOpen(!isOpen)}>
+            <button id="help-ui-button" title={title} onClick={() => setDialogOpen(!isOpen)}>
                 {isOpen ? "x" : "?"}
             </button>
         );
     }
 
+    /**
+     * @type React.MutableRefObject<HTMLDialogElement>
+     */
+    const dialogRef = useRef();
+
+
     const renderContent = () => {
         const summaryIcon = <span>❄️</span>;
         return (
-            <dialog open={isOpen} id="help-ui-dialog">
+            // <div onClick={() => setIsOpen(false)} id="dialog-backdrop">
+            <dialog ref={dialogRef} id="help-ui-dialog">
                 <main className="custom-scrollbar">
                     <h1>Arctic Sea Ice</h1>
 
@@ -81,8 +99,9 @@ const HelpUI = () => {
                         </ul>
                     </details>
                 </main>
-                <button title="Close dialog modal" onClick={() => setIsOpen(false)}>Close</button>
+                <button title="Close dialog modal" onClick={() => setDialogOpen(false)}>Close</button>
             </dialog>
+            // </div>
         );
     }
 
