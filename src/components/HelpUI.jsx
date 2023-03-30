@@ -1,7 +1,11 @@
 import { useRef, useState } from "react"
+import githubLogo from "../images/github-mark-white.svg";
 import "./HelpUI.scss";
 
 const HelpUI = () => {
+    /** @type React.MutableRefObject<HTMLDialogElement> */
+    const dialogRef = useRef();
+
     const [isOpen, setIsOpen] = useState(false);
 
     const setDialogOpen = (v) => {
@@ -18,22 +22,23 @@ const HelpUI = () => {
         const title = isOpen ? "Close info" : "Open info";
 
         return (
-            <button id="help-ui-button" title={title} onClick={() => setDialogOpen(!isOpen)}>
-                {isOpen ? "x" : "?"}
-            </button>
+            <div id="help-ui-buttons">
+                <a href="https://github.com/canxerian/Arctic-Sea-Ice.JS" id="github-button" className="help-ui-button">
+                    <img src={githubLogo} />
+                </a>
+
+                <button className="help-ui-button" id="info-button" title={title} onClick={() => setDialogOpen(!isOpen)}>
+                    i
+                </button>
+            </div>
         );
     }
 
-    /**
-     * @type React.MutableRefObject<HTMLDialogElement>
-     */
-    const dialogRef = useRef();
 
 
     const renderContent = () => {
         const summaryIcon = <span>❄️</span>;
         return (
-            // <div onClick={() => setIsOpen(false)} id="dialog-backdrop">
             <dialog ref={dialogRef} id="help-ui-dialog">
                 <main className="custom-scrollbar">
                     <h1>Arctic Sea Ice</h1>
@@ -83,13 +88,6 @@ const HelpUI = () => {
 
                     <details>
                         <summary>
-                            <h2>{summaryIcon}Can we discuss working with you?</h2>
-                        </summary>
-                        <p>Sure, hello@coding-canxerian.com</p>
-                    </details>
-
-                    <details>
-                        <summary>
                             <h2>{summaryIcon}Who created this?</h2>
                         </summary>
                         <p>Mark Nguyen, a Cancerian who like to make things with art, code and design</p>
@@ -101,7 +99,6 @@ const HelpUI = () => {
                 </main>
                 <button title="Close dialog modal" onClick={() => setDialogOpen(false)}>Close</button>
             </dialog>
-            // </div>
         );
     }
 
