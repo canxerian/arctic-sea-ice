@@ -45,10 +45,8 @@ $summaryHover: #2f2943;
         &#info-button {
             border-radius: $buttonSize / 2;
             background: none;
-            font-size: 16px;
             border: 2px solid var(--purple-mid);
             color: var(--purple-mid);
-
         }
     }
 }
@@ -61,7 +59,12 @@ $summaryHover: #2f2943;
 
     border: 1px solid var(--purple-light);
     border-radius: 8px;
-    background-color: rgba(#15131c, 0.95);
+    background: rgb(21, 19, 28);
+    background: linear-gradient(
+        29deg,
+        rgba(21, 19, 28, 1) 0%,
+        rgba(38, 23, 45, 1) 100%
+    );
     padding: 30px;
 
     &[open],
@@ -74,14 +77,13 @@ $summaryHover: #2f2943;
     }
 
     main {
-        max-height: 70vh;
+        height: 70vh;
         overflow: auto;
         margin-bottom: 30px;
     }
 
-    h1 {
+    h2 {
         margin-bottom: 16px;
-        font-size: 22px;
     }
 
     details {
@@ -96,7 +98,7 @@ $summaryHover: #2f2943;
         summary {
             line-height: 2.2em;
             margin-bottom: 10px;
-            
+
             span {
                 display: inline-block;
                 width: 40px;
@@ -111,10 +113,6 @@ $summaryHover: #2f2943;
 
         > :not(summary) {
             margin-left: 40px;
-        }
-
-        h2 {
-            font-size: 18px;
         }
 
         p {
