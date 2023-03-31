@@ -45,7 +45,7 @@ const MainUI = () => {
         const dataItemValue = data.property === ArcticDataProperty.Area ? item.area : item.extent;
 
         const areaPercent = dataItemValue / MaxItemValue * 100;
-        const bgColour = "#5B7099";
+        const bgColour = "var(--purple-dark)";
         const backgroundStyle = { background: `linear-gradient(90deg, ${bgColour} ${areaPercent}%, transparent 0%)` }
 
         return <li data-index={index} key={index} className={className} style={backgroundStyle}>
@@ -60,9 +60,11 @@ const MainUI = () => {
 
     return (
         <aside id="main-ui">
-            <h1>Filter by:</h1>
-            <FilterButtonGroup className={"button-group"} />
-            <ul onScroll={onScroll}>
+            <section>
+                <h4>Filter by:</h4>
+                <FilterButtonGroup className={"button-group"} />
+            </section>
+            <ul className="custom-scrollbar" onScroll={onScroll}>
                 {listItems}
             </ul>
             <p id="graph-label">In million sq km</p>

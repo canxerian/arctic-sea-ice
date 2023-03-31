@@ -1,7 +1,8 @@
 import * as BABYLON from "@babylonjs/core";
 import "@babylonjs/loaders";
+import { setCameraZoomNormalised } from "../redux/appSlice";
+import { store } from "../redux/store";
 import IceTerrain from "./iceterrain/IceTerrain";
-import { GradientMaterial } from "@babylonjs/materials";
 import StylisedSky from "./stylisedSky/StylisedSky";
 
 const Deg2Rad = Math.PI / 180;
@@ -12,26 +13,34 @@ const CameraState = {
     Zooming: 2
 };
 
-const MaxZoomAlphaTarget = 90 * Deg2Rad;
-const MaxZoomBetaTarget = 1 * Deg2Rad;
+const CameraInitZoom = {
+    Alpha: Math.random() * 360 * Deg2Rad,
+    Beta: 55 * Deg2Rad,
+    Radius: 120,
+};
+
+const CamMaxZoom = {
+    Alpha: 90 * Deg2Rad,
+    Beta: 1 * Deg2Rad,
+};
 
 export default class BabylonScene {
-    constructor(canvas) {
-        this.initialise(canvas);
+    constructor(canvas, onReady) {
+        this.initialise(canvas, onReady);
     }
 
-    async initialise(canvas) {
+    async initialise(canvas, onReady) {
         const engine = new BABYLON.Engine(canvas);
         const scene = new BABYLON.Scene(engine);
 
         // Gizmo 
         const gizmoManager = new BABYLON.GizmoManager(scene);
-        gizmoManager.positionGizmoEnabled = true;
+        gizmoManager.positionGizmoEnabled = false;
 
         // const meshes = scene.getNodes().filter((node) => node instanceof BABYLON.AbstractMesh);
 
         // Ice Terrain
-        this.iceTerrain = await IceTerrain.Create(scene);
+        this.iceTerrain = await IceTerrain.Create(scene, false);
 
         // Camera
         const camera = this.createCamera(this.iceTerrain.parent.position);
@@ -52,6 +61,7 @@ export default class BabylonScene {
             this.skybox.update();
             scene.render();
 
+            // Rotate the camera.. slowly
             if (camera.inertialBetaOffset === 0 && camera.inertialAlphaOffset === 0) {
                 camera.alpha -= 0.000007 * scene.deltaTime;
             }
@@ -70,16 +80,31 @@ export default class BabylonScene {
                 cameraStatus = CameraState.Zooming;
             }
 
-            const camZoomNormalized = 1 - BABYLON.Scalar.InverseLerp(camera.lowerRadiusLimit, camera.upperRadiusLimit, camera.radius);
-            if (cameraStatus === CameraState.Zooming) {
-                const alphaDelta = BABYLON.Scalar.Lerp(camera.alpha, MaxZoomAlphaTarget, camZoomNormalized);
-                const betaDelta = BABYLON.Scalar.Lerp(camera.beta, MaxZoomBetaTarget, camZoomNormalized);
+            const isOverridingZoom = store.getState().app.isOverridingZoom;
+            let camZoomNormalized;
+            if (isOverridingZoom) {
+                camZoomNormalized = store.getState().app.cameraZoomNormalised;
+                camera.radius = BABYLON.Scalar.Lerp(camera.lowerRadiusLimit, camera.upperRadiusLimit, 1 - camZoomNormalized);
+            }
+            else {
+                camZoomNormalized = 1 - BABYLON.Scalar.InverseLerp(camera.lowerRadiusLimit, camera.upperRadiusLimit, camera.radius);
+            }
+            
+            if (cameraStatus === CameraState.Zooming || isOverridingZoom) {
+                const targetAlpha = BABYLON.Scalar.Lerp(camera.alpha, CamMaxZoom.Alpha, camZoomNormalized);
+                const targetBeta = BABYLON.Scalar.Lerp(CameraInitZoom.Beta, CamMaxZoom.Beta, camZoomNormalized);
+
+                const alphaDelta = BABYLON.Scalar.Lerp(camera.alpha, targetAlpha, camZoomNormalized);
+                const betaDelta = BABYLON.Scalar.Lerp(camera.beta, targetBeta, camZoomNormalized);
                 camera.alpha = BABYLON.Scalar.Lerp(camera.alpha, alphaDelta, 0.1);
                 camera.beta = BABYLON.Scalar.Lerp(camera.beta, betaDelta, 0.1);
+
+                store.dispatch(setCameraZoomNormalised(camZoomNormalized));
             }
+
             if (camZoomNormalized === 1) {
-                camera.alpha = MaxZoomAlphaTarget;
-                camera.beta = MaxZoomBetaTarget;
+                camera.alpha = CamMaxZoom.Alpha;
+                camera.beta = CamMaxZoom.Beta;
             }
 
             this.iceTerrain.setCameraZoom(camZoomNormalized);
@@ -88,23 +113,25 @@ export default class BabylonScene {
         window.addEventListener("resize", () => {
             engine.resize();
         });
+
+        onReady();
     }
 
     createCamera(targetPosition) {
         const cam = new BABYLON.ArcRotateCamera(
             "Main Camera",
-            -90 * Deg2Rad,
-            70 * Deg2Rad,
-            100,
+            CameraInitZoom.Alpha,
+            CameraInitZoom.Beta,
+            CameraInitZoom.Radius,
             targetPosition
         );
-        cam.lowerRadiusLimit = 90;
+        cam.lowerRadiusLimit = 100;
         cam.upperRadiusLimit = 200;
         cam.lowerBetaLimit = 1 * Deg2Rad;
-        cam.upperBetaLimit = 80 * Deg2Rad;
+        cam.upperBetaLimit = 135 * Deg2Rad;
         cam.minZ = 0.01;
         cam.maxZ = 1000;
-        cam.viewport = new BABYLON.Viewport(-0.3, 0, 1.3, 1);
+        cam.viewport = new BABYLON.Viewport(-0.33, -0.05, 1.35, 1.05);
         cam.attachControl(null, true, true);
         return cam;
     }
@@ -116,20 +143,6 @@ export default class BabylonScene {
     createSkybox(scene) {
         const sky = new StylisedSky(scene);
         return sky;
-    }
-
-    createBackground(scene, engine) {
-        const skybox = BABYLON.MeshBuilder.CreateSphere("skyboxSphere", { diameter: 400 }, scene);
-        skybox.position.y = 0;
-
-        const gradientMaterial = new GradientMaterial("grad", scene);
-        gradientMaterial.topColor = new BABYLON.Color3(0.28, 0.14, 0.35);
-        gradientMaterial.bottomColor = new BABYLON.Color3(0.28, 0.04, 0.25);
-        gradientMaterial.offset = 0.5;
-        gradientMaterial.smoothness = 0.65;
-        gradientMaterial.scale = 0.06
-        gradientMaterial.backFaceCulling = false
-        skybox.material = gradientMaterial;
     }
 
     setActiveIceIndex(index) {

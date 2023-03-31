@@ -10,15 +10,14 @@ import GlobeModel from "./Globe4.glb";
 import seaIceConcLUT from "./SeaIceConcentrationLUT.png";
 
 import { store } from "../../redux/store";
-import { GetDataForFilter } from "../../redux/FilterOptions";
+import { GetDataForFilter, FilterOptions } from "../../redux/FilterOptions";
 
 BABYLON.Effect.ShadersStore["iceTerrainVertexShader"] = iceTerrainVertexShader;
 BABYLON.Effect.ShadersStore["iceTerrainFragmentShader"] = iceTerrainFragmentShader;
 
-const getImageName = (dataIndex) => {
+const getImageName = (dataIndex, filter) => {
     try {
-        const currentFilter = store.getState().app.currentFilter;
-        const data = GetDataForFilter(currentFilter);
+        const data = GetDataForFilter(filter);
         const dataItem = data.dataSet[dataIndex];
         const month = (dataItem.month).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
         return `N_${dataItem.year}${month}_conc_v3.0`;
@@ -39,12 +38,11 @@ export default class IceTerrain {
      * Creates an instance of IceTerrain
      * 
      * @param {*} scene 
-     * @param {*} sun 
      * @returns {Promise<IceTerrain>}
      */
-    static async Create(scene, sun) {
-        const iceTerrain = new IceTerrain(scene, sun);
-        await iceTerrain.init(scene, sun);
+    static async Create(scene, preloadImage) {
+        const iceTerrain = new IceTerrain(scene);
+        await iceTerrain.init(scene, preloadImage);
 
         return new Promise((resolve) => {
             resolve(iceTerrain);
@@ -61,9 +59,8 @@ export default class IceTerrain {
         this.globeImagePlane.position = newPosition;
     }
 
-    async init(scene, sun) {
+    async init(scene, preloadImages) {
         this.scene = scene;
-        this.sun = sun;
 
         // Create the material that will reference the shaders we created
         this.material = this.createShaderMaterial();
@@ -80,10 +77,14 @@ export default class IceTerrain {
         this.parent = new BABYLON.AbstractMesh("IceTerrainParent", scene);
         this.parent.addChild(this.globe);
         this.parent.addChild(this.globeImagePlane);
+
+        if (preloadImages) {
+            await this.preloadImages();
+        }
     }
 
     async updateDataIndex(index) {
-        const imagePath = getImageName(index);
+        const imagePath = getImageName(index, store.getState().app.currentFilter);
 
         if (this.extentTextures[imagePath]) {
             this.material.setTexture("_IceExtentImg", this.extentTextures[imagePath]);
@@ -91,7 +92,6 @@ export default class IceTerrain {
         else {
             try {
                 const image = await import("./images/" + imagePath + ".png");
-                // const image = await import("./Test.png");
 
                 this.extentTextures[imagePath] = new BABYLON.Texture(image.default, this.scene, null, null, null, () => {
                     this.material.setTexture("_IceExtentImg", this.extentTextures[imagePath]);
@@ -153,6 +153,32 @@ export default class IceTerrain {
 
         // TODO - scale plane to avoid edge artifact
         // this.globeImagePlane.scaling = new BABYLON.Vector3(scale, -scale, scale); // negative Y due to .glb coordinate
+    }
+
+    async preloadImages() {
+        const dataSet = GetDataForFilter(FilterOptions.allArea).dataSet
+
+        const importAndCacheTexture = (imageName) => {
+            return new Promise((resolve, reject) => {
+                import("./images/" + imageName + ".png").then((value) => {
+                    const imageUrl = value.default;
+                    const texture = new BABYLON.Texture(imageUrl, this.scene, null, null, null, () => {
+                        this.extentTextures[imageName] = texture;
+                        resolve();
+                    });
+                })
+            });
+        }
+
+        const cacheTexturePromises = [];
+
+        for (let i = 0; i < dataSet.length; i++) {
+            const imageName = getImageName(i, FilterOptions.allArea);
+            const promise = importAndCacheTexture(imageName);
+            cacheTexturePromises.push(promise);
+        }
+
+        await Promise.allSettled(cacheTexturePromises);
     }
 }
 

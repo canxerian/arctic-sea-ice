@@ -1,0 +1,17 @@
+#title-ui {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: var(--padding-20);
+    pointer-events: none;
+}
+
+#title-ui-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    // background: linear-gradient(241.1deg, #3d3544 15.58%, #242d3c 98.72%);
+    background-color: black;
+    width: 100vw;
+    height: 100vh;
+}

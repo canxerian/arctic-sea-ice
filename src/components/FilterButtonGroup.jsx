@@ -4,12 +4,14 @@ import { setCurrentFilter } from "../redux/appSlice";
 import { FilterOptions } from "../redux/FilterOptions";
 import "./FilterButtonGroup.scss";
 
+const getTitle = (label) => `Filter by ${label.toLowerCase()}`;
+
 const FilterButton = ({ label, isActive, onClick }) => {
     const classes = ["filter-button"];
     if (isActive) {
         classes.push("active");
     }
-    return <button className={classes.join(" ")} onClick={() => onClick(label)}>{label}</button>
+    return <button title={getTitle(label)} className={classes.join(" ")} onClick={() => onClick(label)}>{label}</button>
 }
 
 /**

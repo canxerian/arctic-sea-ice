@@ -5,14 +5,14 @@ import "./BabylonCanvas.scss";
 
 const { useRef, useEffect } = require("react")
 
-const BabylonCanvas = () => {
+const BabylonCanvas = ({ onReady }) => {
     const canvasRef = useRef();
     const babylonSceneRef = useRef();
     const appState = useSelector(state => state.app);
 
     useEffect(() => {
         if (!babylonSceneRef.current) {
-            babylonSceneRef.current = new BabylonScene(canvasRef.current);
+            babylonSceneRef.current = new BabylonScene(canvasRef.current, onReady);
         }
         babylonSceneRef.current.setActiveIceIndex(appState.activeIceDataIndex);
     }, [appState.activeIceDataIndex, appState.currentFilter]);

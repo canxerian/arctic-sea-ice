@@ -5,12 +5,16 @@
     width: 33vw;
     height: 100vh;
     box-sizing: border-box;
-    padding: 20px;
+    padding: var(--padding-20);
     display: flex;
     flex-direction: column;
 
-    > * {
+    > :not(:last-child) {
         margin-bottom: 20px;
+    }
+
+    h4 {
+        margin-bottom: 10px;
     }
 
     ul {
@@ -18,12 +22,11 @@
         mask-image: linear-gradient(to bottom, transparent 0%, black 15% 85%, transparent 100%);
         overflow-x: hidden;
         overflow-y: auto;
-
         width: 100%;
 
         li {
+            transition: font-weight 0.2s;
             padding: 1px 6px;
-            transition: font-weight 0.2s font-size 0.2;
             color: #c4c2c2;
             &:first-child,
             &:last-child {

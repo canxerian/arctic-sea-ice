@@ -1,0 +1,146 @@
+$buttonSize: 32px;
+$summaryHover: #2f2943;
+
+@mixin pos-absolute-center {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+@keyframes show {
+    from {
+        opacity: 0.1;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+#help-ui-buttons {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: $buttonSize / 3;
+    bottom: 16px;
+    left: 12px;
+
+    .help-ui-button {
+        width: $buttonSize;
+        height: $buttonSize;
+
+        &:hover {
+            filter: brightness(4);
+        }
+
+        &#github-button {
+            img {
+                filter: invert(42%) sepia(19%) saturate(826%) hue-rotate(212deg) brightness(92%) contrast(91%);
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+        &#info-button {
+            border-radius: $buttonSize / 2;
+            background: none;
+            border: 2px solid var(--purple-mid);
+            color: var(--purple-mid);
+        }
+    }
+}
+
+#help-ui-dialog {
+    @include pos-absolute-center;
+    width: 80%;
+    max-width: 960px;
+    height: 80%;
+
+    border: 1px solid var(--purple-light);
+    border-radius: 8px;
+    background: rgb(21, 19, 28);
+    background: linear-gradient(
+        29deg,
+        rgba(21, 19, 28, 1) 0%,
+        rgba(38, 23, 45, 1) 100%
+    );
+    padding: 30px;
+
+    &[open],
+    &[open]::backdrop {
+        animation: show 0.25s ease normal;
+    }
+
+    &::backdrop {
+        background-color: #cebfd135;
+    }
+
+    main {
+        height: 70vh;
+        overflow: auto;
+        margin-bottom: 30px;
+    }
+
+    h2 {
+        margin-bottom: 16px;
+    }
+
+    details {
+        &[open] {
+            margin-bottom: 26px;
+
+            summary {
+                background-color: $summaryHover;
+            }
+        }
+
+        summary {
+            line-height: 2.2em;
+            margin-bottom: 10px;
+
+            span {
+                display: inline-block;
+                width: 40px;
+            }
+
+            &:hover {
+                background-color: $summaryHover;
+            }
+            cursor: pointer;
+            list-style: none;
+        }
+
+        > :not(summary) {
+            margin-left: 40px;
+        }
+
+        p {
+            margin-bottom: 10px;
+        }
+
+        dl {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        dt {
+            width: 22%;
+        }
+        dd {
+            width: 70%;
+        }
+    }
+
+    button {
+        float: right;
+        background: var(--purple-dark);
+        border: none;
+        border-radius: 2px;
+        padding: 10px;
+
+        &:hover {
+            background: var(--purple-light);
+            color: var(--purple-dark);
+        }
+    }
+}

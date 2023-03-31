@@ -6,6 +6,8 @@ export const appSlice = createSlice({
     initialState: {
         activeIceDataIndex: 0,
         currentFilter: FilterOptions.allArea,
+        cameraZoomNormalised: 0,
+        isOverridingZoom: false,
     },
     reducers: {
         setActiveIceDataIndex: (state, action) => {
@@ -13,6 +15,12 @@ export const appSlice = createSlice({
         },
         setCurrentFilter: (state, action) => {
             state.currentFilter = action.payload;
+        },
+        setCameraZoomNormalised: (state, action) => {
+            state.cameraZoomNormalised = action.payload;
+        },
+        setIsOverridingZoom: (state, action) => {
+            state.isOverridingZoom = action.payload;
         }
     },
 });
@@ -20,7 +28,9 @@ export const appSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const {
     setActiveIceDataIndex,
-    setCurrentFilter
+    setCurrentFilter,
+    setCameraZoomNormalised,
+    setIsOverridingZoom,
 } = appSlice.actions;
 
 export default appSlice.reducer;
