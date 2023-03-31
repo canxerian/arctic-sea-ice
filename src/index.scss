@@ -26,6 +26,7 @@ li,
 h1,
 h2,
 h3,
+h4,
 p {
   list-style-type: none;
   margin: 0;
@@ -58,4 +59,6 @@ button {
   --purple-mid: #bfb3df;
   --purple-dark: #6e6495;
   --purple-darker: #2c2741a2;
+
+  --padding-20: 20px;
 }

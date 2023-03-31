@@ -38,12 +38,11 @@ export default class IceTerrain {
      * Creates an instance of IceTerrain
      * 
      * @param {*} scene 
-     * @param {*} sun 
      * @returns {Promise<IceTerrain>}
      */
-    static async Create(scene, sun) {
-        const iceTerrain = new IceTerrain(scene, sun);
-        await iceTerrain.init(scene, sun, true);
+    static async Create(scene, preloadImage) {
+        const iceTerrain = new IceTerrain(scene);
+        await iceTerrain.init(scene, preloadImage);
 
         return new Promise((resolve) => {
             resolve(iceTerrain);
@@ -60,9 +59,8 @@ export default class IceTerrain {
         this.globeImagePlane.position = newPosition;
     }
 
-    async init(scene, sun) {
+    async init(scene, preloadImages) {
         this.scene = scene;
-        this.sun = sun;
 
         // Create the material that will reference the shaders we created
         this.material = this.createShaderMaterial();
@@ -80,7 +78,9 @@ export default class IceTerrain {
         this.parent.addChild(this.globe);
         this.parent.addChild(this.globeImagePlane);
 
-        await this.preloadImages();
+        if (preloadImages) {
+            await this.preloadImages();
+        }
     }
 
     async updateDataIndex(index) {

@@ -61,7 +61,7 @@ const MainUI = () => {
     return (
         <aside id="main-ui">
             <section>
-                <h1>Filter by:</h1>
+                <h4>Filter by:</h4>
                 <FilterButtonGroup className={"button-group"} />
             </section>
             <ul className="custom-scrollbar" onScroll={onScroll}>

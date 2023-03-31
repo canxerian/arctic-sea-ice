@@ -15,8 +15,8 @@ const CameraState = {
 
 const CameraInitZoom = {
     Alpha: Math.random() * 360 * Deg2Rad,
-    Beta: 65 * Deg2Rad,
-    Radius: 100,
+    Beta: 55 * Deg2Rad,
+    Radius: 120,
 };
 
 const CamMaxZoom = {
@@ -40,7 +40,7 @@ export default class BabylonScene {
         // const meshes = scene.getNodes().filter((node) => node instanceof BABYLON.AbstractMesh);
 
         // Ice Terrain
-        this.iceTerrain = await IceTerrain.Create(scene);
+        this.iceTerrain = await IceTerrain.Create(scene, false);
 
         // Camera
         const camera = this.createCamera(this.iceTerrain.parent.position);
@@ -125,13 +125,13 @@ export default class BabylonScene {
             CameraInitZoom.Radius,
             targetPosition
         );
-        cam.lowerRadiusLimit = 90;
+        cam.lowerRadiusLimit = 100;
         cam.upperRadiusLimit = 200;
         cam.lowerBetaLimit = 1 * Deg2Rad;
         cam.upperBetaLimit = 135 * Deg2Rad;
         cam.minZ = 0.01;
         cam.maxZ = 1000;
-        cam.viewport = new BABYLON.Viewport(-0.31, 0, 1.3, 1);
+        cam.viewport = new BABYLON.Viewport(-0.33, -0.05, 1.35, 1.05);
         cam.attachControl(null, true, true);
         return cam;
     }
