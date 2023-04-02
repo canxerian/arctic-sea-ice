@@ -30,6 +30,7 @@ class SceneData {
         skybox.addInput(this.Skybox, "Colour2", { color: { type: "float" } });
 
         this.pane.expanded = false;
+        this.pane.hidden = true;
 
         this.pane.importPreset(SavedData);
 
