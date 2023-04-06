@@ -25,11 +25,11 @@ const CamMaxZoom = {
 };
 
 export default class BabylonScene {
-    constructor(canvas, onReady) {
-        this.initialise(canvas, onReady);
+    constructor(canvas, onLoadProgress) {
+        this.initialise(canvas, onLoadProgress);
     }
 
-    async initialise(canvas, onReady) {
+    async initialise(canvas, onLoadProgress) {
         const engine = new BABYLON.Engine(canvas);
         const scene = new BABYLON.Scene(engine);
 
@@ -40,7 +40,7 @@ export default class BabylonScene {
         // const meshes = scene.getNodes().filter((node) => node instanceof BABYLON.AbstractMesh);
 
         // Ice Terrain
-        this.iceTerrain = await IceTerrain.Create(scene, false);
+        this.iceTerrain = await IceTerrain.Create(scene, onLoadProgress);
 
         // Camera
         const camera = this.createCamera(this.iceTerrain.parent.position);
@@ -89,7 +89,7 @@ export default class BabylonScene {
             else {
                 camZoomNormalized = 1 - BABYLON.Scalar.InverseLerp(camera.lowerRadiusLimit, camera.upperRadiusLimit, camera.radius);
             }
-            
+
             if (cameraStatus === CameraState.Zooming || isOverridingZoom) {
                 const targetAlpha = BABYLON.Scalar.Lerp(camera.alpha, CamMaxZoom.Alpha, camZoomNormalized);
                 const targetBeta = BABYLON.Scalar.Lerp(CameraInitZoom.Beta, CamMaxZoom.Beta, camZoomNormalized);
@@ -113,8 +113,6 @@ export default class BabylonScene {
         window.addEventListener("resize", () => {
             engine.resize();
         });
-
-        onReady();
     }
 
     createCamera(targetPosition) {

@@ -8,13 +8,24 @@ import { useState } from 'react';
 
 function App() {
   const [babylonLoaded, setBabylonLoaded] = useState(false);
+
+  const onLoadProgress = (progress) => {
+    if (progress.total === progress.loaded) {
+      setBabylonLoaded(true)
+    }
+  }
+
   return (
     <>
-      <BabylonCanvas onReady={() => setBabylonLoaded(true)} />
+      <BabylonCanvas onLoadProgress={onLoadProgress} />
       <TitleUI babylonLoaded={babylonLoaded} />
-      <MainUI />
-      <HelpUI />
-      <CamZoomUI />
+      {babylonLoaded &&
+        <>
+          <MainUI />
+          <HelpUI />
+          <CamZoomUI />
+        </>
+      }
     </>
   );
 }
