@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@200&display=swap");
 
-$scrollBarWidth: 2px;
+$scrollBarWidth: 6px;
 
 body {
   margin: 0;
@@ -33,6 +33,10 @@ p {
   list-style-type: none;
   margin: 0;
   padding: 0;
+}
+
+h4 {
+  margin-bottom: 10px;
 }
 
 a {

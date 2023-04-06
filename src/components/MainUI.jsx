@@ -60,14 +60,18 @@ const MainUI = () => {
 
     return (
         <div id="main-ui">
-            <section>
+            <section className="filters">
                 <h4>Filter by:</h4>
                 <FilterButtonGroup className={"button-group"} />
             </section>
-            <ul className="custom-scrollbar" onScroll={onScroll}>
-                {listItems}
-            </ul>
-            <p id="graph-label">In million sq km</p>
+            <section className="data-list">
+                <ul className="custom-scrollbar" onScroll={onScroll}>
+                    {listItems}
+                </ul>
+            </section>
+            <section className="legend">
+                <p id="graph-label">In million sq km</p>
+            </section>
         </div>
     );
 }
