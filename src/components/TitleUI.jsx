@@ -3,7 +3,7 @@ import "./TitleUI.scss";
 const TitleUI = ({ babylonLoaded }) => {
     return (
         <>
-            {!babylonLoaded && <div id="title-ui-backdrop" />}
+            {/* {!babylonLoaded && <div id="title-ui-backdrop" />} */}
             <div id="title-ui">
                 <h3 className="no-pointer">Arctice Sea Ice Data Explorer</h3>
                 <h1>An interactive, 3D explorer of the Arctic Sea Index</h1>

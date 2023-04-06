@@ -59,7 +59,7 @@ const MainUI = () => {
     listItems.push(<li key="last"></li>);
 
     return (
-        <aside id="main-ui">
+        <div id="main-ui">
             <section>
                 <h4>Filter by:</h4>
                 <FilterButtonGroup className={"button-group"} />
@@ -68,7 +68,7 @@ const MainUI = () => {
                 {listItems}
             </ul>
             <p id="graph-label">In million sq km</p>
-        </aside>
+        </div>
     );
 }
 

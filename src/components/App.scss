@@ -7,19 +7,22 @@
     height: 100vh;
     pointer-events: none;
 
+
+
     @media only screen and (min-width: 768px) {
         flex-direction: row;
-    }
-
-    * {
-        padding: var(--padding-20);
+        > * {
+            padding: var(--padding-20);
+        }
     }
 
     main {
-        flex: 2 0 auto;
+        flex: 1 0 67%;
     }
 
     aside {
-        flex: 1 0 auto;
+        flex: 0 0 33%;
+        display: flex;
+        background-color: #ff00002b;
     }
 }
