@@ -162,7 +162,7 @@ export default class IceTerrain {
         const totalImages = dataSet.length;
         let loadedCount = 0;
 
-        const importAndCacheTexture = (imageName) => {
+        const downloadAndInstantiateTexture = (imageName) => {
             return new Promise((resolve, reject) => {
                 import("./images/" + imageName + ".png").then((value) => {
                     const imageUrl = value.default;
@@ -180,7 +180,7 @@ export default class IceTerrain {
 
         for (let i = 0; i < dataSet.length; i++) {
             const imageName = getImageName(i, FilterOptions.allArea);
-            const promise = importAndCacheTexture(imageName);
+            const promise = downloadAndInstantiateTexture(imageName);
             cacheTexturePromises.push(promise);
         }
 
