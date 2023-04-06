@@ -1,0 +1,25 @@
+.flex-container {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+
+    @media only screen and (min-width: 768px) {
+        flex-direction: row;
+    }
+
+    * {
+        padding: var(--padding-20);
+    }
+
+    main {
+        flex: 2 0 auto;
+    }
+
+    aside {
+        flex: 1 0 auto;
+    }
+}

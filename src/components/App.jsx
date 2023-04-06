@@ -14,7 +14,7 @@ function App() {
   const onLoadProgress = (progress) => {
     const percent = progress.loaded / progress.total;
 
-    loadingRef.current.log(percent)
+    // loadingRef.current.log(percent)
 
     setLoadingProgress(percent);
   }
@@ -23,17 +23,26 @@ function App() {
 
   return (
     <>
-      <BabylonCanvas onLoadProgress={onLoadProgress} />
-      <TitleUI babylonLoaded={babylonLoaded} />
-      <LoadingUI ref={loadingRef} show={!babylonLoaded} />
-      {/* <div style={{ position: "absolute", top: 0, left: 0 }} ref={progressRef}>value</div> */}
-      {babylonLoaded &&
+
+      <div className='flex-container'>
+        <main>
+          m
+        </main>
+        <aside>
+          s
+        </aside>
+      </div>
+
+      {/* <TitleUI babylonLoaded={babylonLoaded} />
+      <LoadingUI ref={loadingRef} show={babylonLoaded} /> */}
+      {/* {babylonLoaded &&
         <>
           <MainUI />
           <HelpUI />
           <CamZoomUI />
         </>
-      }
+      } */}
+      <BabylonCanvas onLoadProgress={onLoadProgress} />
     </>
   );
 }
