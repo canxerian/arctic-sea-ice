@@ -40,9 +40,9 @@ export default class IceTerrain {
      * @param {*} scene 
      * @returns {Promise<IceTerrain>}
      */
-    static async Create(scene, preloadImage) {
+    static async Create(scene, onLoadProgress) {
         const iceTerrain = new IceTerrain(scene);
-        await iceTerrain.init(scene, preloadImage);
+        await iceTerrain.init(scene, onLoadProgress);
 
         return new Promise((resolve) => {
             resolve(iceTerrain);
@@ -59,7 +59,7 @@ export default class IceTerrain {
         this.globeImagePlane.position = newPosition;
     }
 
-    async init(scene, preloadImages) {
+    async init(scene, onLoadProgress) {
         this.scene = scene;
 
         // Create the material that will reference the shaders we created
@@ -78,8 +78,9 @@ export default class IceTerrain {
         this.parent.addChild(this.globe);
         this.parent.addChild(this.globeImagePlane);
 
+        const preloadImages = onLoadProgress !== undefined || onLoadProgress !== null;
         if (preloadImages) {
-            await this.preloadImages();
+            await this.preloadImages(onLoadProgress);
         }
     }
 
@@ -155,15 +156,20 @@ export default class IceTerrain {
         // this.globeImagePlane.scaling = new BABYLON.Vector3(scale, -scale, scale); // negative Y due to .glb coordinate
     }
 
-    async preloadImages() {
+    async preloadImages(onLoadProgress) {
         const dataSet = GetDataForFilter(FilterOptions.allArea).dataSet
 
-        const importAndCacheTexture = (imageName) => {
+        const totalImages = dataSet.length;
+        let loadedCount = 0;
+
+        const downloadAndInstantiateTexture = (imageName) => {
             return new Promise((resolve, reject) => {
                 import("./images/" + imageName + ".png").then((value) => {
                     const imageUrl = value.default;
                     const texture = new BABYLON.Texture(imageUrl, this.scene, null, null, null, () => {
                         this.extentTextures[imageName] = texture;
+                        loadedCount++;
+                        onLoadProgress({ loaded: loadedCount, total: totalImages });
                         resolve();
                     });
                 })
@@ -174,7 +180,7 @@ export default class IceTerrain {
 
         for (let i = 0; i < dataSet.length; i++) {
             const imageName = getImageName(i, FilterOptions.allArea);
-            const promise = importAndCacheTexture(imageName);
+            const promise = downloadAndInstantiateTexture(imageName);
             cacheTexturePromises.push(promise);
         }
 

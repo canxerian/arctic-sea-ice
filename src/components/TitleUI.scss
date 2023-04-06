@@ -4,6 +4,9 @@
     left: 0;
     padding: var(--padding-20);
     pointer-events: none;
+    a {
+        pointer-events: all;
+    }
 }
 
 #title-ui-backdrop {
