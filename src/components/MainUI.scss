@@ -26,7 +26,11 @@
             overflow-x: hidden;
             overflow-y: auto;
             width: 100%;
-            height: 400px; // Hacky..
+            height: 33vh; // Hacky, but without it, the <ul> doesn't take full height of the flex parent and li:first-child/li:last-child 50% do not work
+
+            @include when-on-desktop {
+                height: 62vh; 
+            }
 
             li {
                 transition: font-weight 0.2s;
