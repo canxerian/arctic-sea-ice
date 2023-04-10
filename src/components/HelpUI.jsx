@@ -23,7 +23,7 @@ const HelpUI = () => {
 
         return (
             <div id="help-ui-buttons">
-                <a href="https://github.com/canxerian/Arctic-Sea-Ice.JS" id="github-button" className="help-ui-button">
+                <a href="https://github.com/canxerian/arctic-sea-ice" id="github-button" className="help-ui-button">
                     <img src={githubLogo} />
                 </a>
 
