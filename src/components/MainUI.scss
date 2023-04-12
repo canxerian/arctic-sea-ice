@@ -6,10 +6,6 @@ aside {
     flex-direction: column;
     gap: var(--padding-20);
 
-    @include when-on-desktop {
-        flex-direction: column;
-    }
-
     section.filters {
         flex: 1;
     }
