@@ -43,7 +43,7 @@ export default class BabylonScene {
         this.iceTerrain = await IceTerrain.Create(scene, onLoadProgress);
 
         // Camera
-        const camera = this.createCamera(this.iceTerrain.parent.position);
+        this.camera = this.createCamera(this.iceTerrain.parent.position);
 
         // this.createBackground(scene, engine);
 
@@ -62,15 +62,15 @@ export default class BabylonScene {
             scene.render();
 
             // Rotate the camera.. slowly
-            if (camera.inertialBetaOffset === 0 && camera.inertialAlphaOffset === 0) {
-                camera.alpha -= 0.000007 * scene.deltaTime;
+            if (this.camera.inertialBetaOffset === 0 && this.camera.inertialAlphaOffset === 0) {
+                this.camera.alpha -= 0.000007 * scene.deltaTime;
             }
         });
 
         scene.onBeforeRenderObservable.add(() => {
-            const alphaInertia = Math.abs(camera.inertialAlphaOffset);
-            const betaInertia = Math.abs(camera.inertialBetaOffset);
-            const radiusInertia = Math.abs(camera.inertialRadiusOffset) * 0.01;     // Weighted, so that alpha/beta rotating takes precedence
+            const alphaInertia = Math.abs(this.camera.inertialAlphaOffset);
+            const betaInertia = Math.abs(this.camera.inertialBetaOffset);
+            const radiusInertia = Math.abs(this.camera.inertialRadiusOffset) * 0.01;     // Weighted, so that alpha/beta rotating takes precedence
             let cameraStatus = CameraState.Idle;
 
             if (alphaInertia > radiusInertia || betaInertia > radiusInertia) {
@@ -84,34 +84,37 @@ export default class BabylonScene {
             let camZoomNormalized;
             if (isOverridingZoom) {
                 camZoomNormalized = store.getState().app.cameraZoomNormalised;
-                camera.radius = BABYLON.Scalar.Lerp(camera.lowerRadiusLimit, camera.upperRadiusLimit, 1 - camZoomNormalized);
+                this.camera.radius = BABYLON.Scalar.Lerp(this.camera.lowerRadiusLimit, this.camera.upperRadiusLimit, 1 - camZoomNormalized);
             }
             else {
-                camZoomNormalized = 1 - BABYLON.Scalar.InverseLerp(camera.lowerRadiusLimit, camera.upperRadiusLimit, camera.radius);
+                camZoomNormalized = 1 - BABYLON.Scalar.InverseLerp(this.camera.lowerRadiusLimit, this.camera.upperRadiusLimit, this.camera.radius);
             }
 
             if (cameraStatus === CameraState.Zooming || isOverridingZoom) {
-                const targetAlpha = BABYLON.Scalar.Lerp(camera.alpha, CamMaxZoom.Alpha, camZoomNormalized);
+                const targetAlpha = BABYLON.Scalar.Lerp(this.camera.alpha, CamMaxZoom.Alpha, camZoomNormalized);
                 const targetBeta = BABYLON.Scalar.Lerp(CameraInitZoom.Beta, CamMaxZoom.Beta, camZoomNormalized);
 
-                const alphaDelta = BABYLON.Scalar.Lerp(camera.alpha, targetAlpha, camZoomNormalized);
-                const betaDelta = BABYLON.Scalar.Lerp(camera.beta, targetBeta, camZoomNormalized);
-                camera.alpha = BABYLON.Scalar.Lerp(camera.alpha, alphaDelta, 0.1);
-                camera.beta = BABYLON.Scalar.Lerp(camera.beta, betaDelta, 0.1);
+                const alphaDelta = BABYLON.Scalar.Lerp(this.camera.alpha, targetAlpha, camZoomNormalized);
+                const betaDelta = BABYLON.Scalar.Lerp(this.camera.beta, targetBeta, camZoomNormalized);
+                this.camera.alpha = BABYLON.Scalar.Lerp(this.camera.alpha, alphaDelta, 0.1);
+                this.camera.beta = BABYLON.Scalar.Lerp(this.camera.beta, betaDelta, 0.1);
 
                 store.dispatch(setCameraZoomNormalised(camZoomNormalized));
             }
 
             if (camZoomNormalized === 1) {
-                camera.alpha = CamMaxZoom.Alpha;
-                camera.beta = CamMaxZoom.Beta;
+                this.camera.alpha = CamMaxZoom.Alpha;
+                this.camera.beta = CamMaxZoom.Beta;
             }
 
             this.iceTerrain.setCameraZoom(camZoomNormalized);
         });
 
-        window.addEventListener("resize", () => {
+        this.updateViewport();
+
+        window.addEventListener("resize", (e) => {
             engine.resize();
+            this.updateViewport();
         });
     }
 
@@ -129,7 +132,6 @@ export default class BabylonScene {
         cam.upperBetaLimit = 135 * Deg2Rad;
         cam.minZ = 0.01;
         cam.maxZ = 1000;
-        cam.viewport = new BABYLON.Viewport(-0.33, -0.05, 1.35, 1.05);
         cam.attachControl(null, true, true);
         return cam;
     }
@@ -146,6 +148,20 @@ export default class BabylonScene {
     setActiveIceIndex(index) {
         if (this.iceTerrain) {
             this.iceTerrain.updateDataIndex(index);
+        }
+    }
+
+    updateViewport() {
+        const mobileWidth = 768;
+        if (window.innerWidth > mobileWidth) {
+            this.camera.viewport = new BABYLON.Viewport(-0.33, -0.05, 1.35, 1.05);
+            this.camera.lowerRadiusLimit = 100;
+            this.camera.upperRadiusLimit = 200;
+        }
+        else {
+            this.camera.viewport = new BABYLON.Viewport(0, 0.07, 1, 1.07);
+            this.camera.lowerRadiusLimit = 140;
+            this.camera.upperRadiusLimit = 300;
         }
     }
 }
