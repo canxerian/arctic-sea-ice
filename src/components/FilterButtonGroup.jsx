@@ -11,26 +11,30 @@ const FilterButton = ({ label, isActive, onClick }) => {
     if (isActive) {
         classes.push("active");
     }
-    return <button title={getTitle(label)} className={classes.join(" ")} onClick={() => onClick(label)}>{label}</button>
+    return (
+        <div>
+            <button title={getTitle(label)} className={classes.join(" ")} onClick={() => onClick(label)}>{label}</button>
+        </div>
+    );
 }
 
 /**
  * Render a group of buttons where only one can be selected
  */
-const FilterButtonGroup = ({ className }) => {
+const FilterButtonGroup = () => {
     const currentFilter = useSelector(state => state.app.currentFilter);
     const dispatch = useDispatch();
 
     const filters = Object.values(FilterOptions);
 
     return (
-        <div className={`filter-button-group ${className}`}>
+        <div className={`filter-button-group custom-scrollbar`}>
             {filters.map(filter => <FilterButton key={filter}
                 label={filter}
                 isActive={filter === currentFilter}
                 onClick={label => dispatch(setCurrentFilter(label))}
             />)}
-        </div>
+        </div >
     )
 }
 

@@ -23,7 +23,6 @@ function App() {
 
   return (
     <>
-
       <div className='flex-container'>
         <main>
           <TitleUI babylonLoaded={babylonLoaded} />

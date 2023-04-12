@@ -59,20 +59,18 @@ const MainUI = () => {
     listItems.push(<li key="last"></li>);
 
     return (
-        <div id="main-ui">
+        <>
             <section className="filters">
                 <h4>Filter by:</h4>
-                <FilterButtonGroup className={"button-group"} />
+                <FilterButtonGroup />
             </section>
-            <section className="data-list">
-                <ul className="custom-scrollbar" onScroll={onScroll}>
-                    {listItems}
-                </ul>
-            </section>
+            <ul className="custom-scrollbar" onScroll={onScroll}>
+                {listItems}
+            </ul>
             <section className="legend">
                 <p id="graph-label">In million sq km</p>
             </section>
-        </div>
+        </>
     );
 }
 

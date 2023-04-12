@@ -53,6 +53,7 @@ button {
   scrollbar-width: $scrollBarWidth;
   &::-webkit-scrollbar {
     width: $scrollBarWidth;
+    height: $scrollBarWidth;
   }
 
   &::-webkit-scrollbar-thumb {

@@ -2,12 +2,20 @@
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
+    pointer-events: all;
 
+    &.scroll {
+        overflow-x: scroll;
+        max-width: 100%;
+        flex-wrap: nowrap;
+    }
+    
     .filter-button {
         border: 1px solid var(--purple-dark);
         border-radius: 14px;
         color: var(--purple-dark);
         padding: 3px 10px;
+        white-space: nowrap;
 
         &:hover {
             border-color: var(--purple-mid);

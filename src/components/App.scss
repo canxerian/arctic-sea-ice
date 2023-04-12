@@ -21,5 +21,6 @@
     aside {
         flex: 0 0 33%;
         display: flex;
+        min-width: 0; /* NEW */
     }
 }
