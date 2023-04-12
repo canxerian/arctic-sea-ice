@@ -13,7 +13,7 @@ aside {
     ul {
         flex: 12;
         background-image: url("../images/grid-background.png");
-        // mask-image: linear-gradient(to bottom, transparent 0%, black 15% 85%, transparent 100%);
+        mask-image: linear-gradient(to bottom, transparent 0%, white 13% 87%, transparent 100%);
         overflow-x: hidden;
         overflow-y: auto;
         width: 100%;
