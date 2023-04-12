@@ -17,13 +17,14 @@ const MainUI = () => {
 
     const onScroll = (e) => {
         const { height, width, x, y } = e.target.getBoundingClientRect();
-
         // The center positions of the scroll element
         const x1 = x + width / 2;
         const y1 = y + height / 2;
 
         // elementFromPoint gives the element at that particular point in the document
         const centerItem = document.elementFromPoint(x1, y1);
+        if (!centerItem) return;
+
         const dataIndex = parseInt(centerItem.getAttribute("data-index"));
 
         if (dataIndex) {

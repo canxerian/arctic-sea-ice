@@ -1,15 +1,19 @@
+@import "./_import.scss";
+
 .filter-button-group {
     display: flex;
-    flex-wrap: wrap;
     gap: 8px;
     pointer-events: all;
 
-    &.scroll {
-        overflow-x: scroll;
-        max-width: 100%;
-        flex-wrap: nowrap;
+    overflow-x: scroll;
+    max-width: 100%;
+    flex-wrap: nowrap;
+
+    @include when-on-desktop {
+        overflow-x: visible;
+        flex-wrap: wrap;
     }
-    
+
     .filter-button {
         border: 1px solid var(--purple-dark);
         border-radius: 14px;

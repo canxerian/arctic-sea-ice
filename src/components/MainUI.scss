@@ -17,11 +17,11 @@ aside {
     ul {
         flex: 12;
         background-image: url("../images/grid-background.png");
-        mask-image: linear-gradient(to bottom, transparent 0%, black 15% 85%, transparent 100%);
+        // mask-image: linear-gradient(to bottom, transparent 0%, black 15% 85%, transparent 100%);
         overflow-x: hidden;
         overflow-y: auto;
         width: 100%;
-       
+
         li {
             transition: font-weight 0.2s;
             padding: 1px 6px;
@@ -42,14 +42,9 @@ aside {
         flex: 0.2;
 
         p {
-            writing-mode: vertical-rl;
+            writing-mode: horizontal-tb;
             font-style: italic;
-        }
-
-        @include when-on-desktop {
-            p {
-                writing-mode: horizontal-tb;
-            }
+            text-align: end;
         }
     }
 

@@ -21,6 +21,10 @@
     aside {
         flex: 0 0 33%;
         display: flex;
-        min-width: 0; /* NEW */
+
+        // Default min-width/min-height are auto, meaning child items increase the size of the container
+        // https://stackoverflow.com/questions/36247140/why-dont-flex-items-shrink-past-content-size
+        min-width: 0;
+        min-height: 0;
     }
 }
