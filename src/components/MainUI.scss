@@ -4,8 +4,11 @@ aside {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    gap: var(--padding-20);
 
+    @include when-on-desktop {
+        gap: var(--padding-20);
+    }
+    
     section.filters {
         flex: 1;
     }

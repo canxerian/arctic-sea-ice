@@ -1,5 +1,4 @@
 import { useDispatch, useSelector } from "react-redux";
-import ArcticIceData from "../data/ArcticIceData.json";
 import { MonthLookup } from "../data/MonthLookup";
 import { setActiveIceDataIndex } from "../redux/appSlice";
 import { ArcticDataProperty, GetDataForFilter } from "../redux/FilterOptions";
