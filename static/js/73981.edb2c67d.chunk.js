@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkarctic_sea_ice=self.webpackChunkarctic_sea_ice||[]).push([[73981],{73981:function(c,e,a){c.exports=a.p+"static/media/N_198909_conc_v3.0.92f83a0dd4104d417ebf.png"}}]);
