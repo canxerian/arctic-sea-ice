@@ -19,6 +19,13 @@ You may also see any lint errors in the console.
 Deploys the app to https://canxerian.com/arctic-sea-ice/
 
 # Assets
+
+## Arctic Sea Index data
+The data was downloaded from https://nsidc.org/data/seaice_index/data-and-image-archive. Script used to process the data lives here: [combineIceData.js](./_source_assets/data/extentAndArea/combineIceData.js), [downloadImages.js](./_source_assets/data/images/downloadImages.js)
+
+## NASA Earth textures
+https://www.nasa.gov/multimedia/imagegallery/index.html
+
 ## Image based lighting
 .env files are created using the BabylonJS IBL tool. See https://doc.babylonjs.com/features/featuresDeepDive/materials/using/HDREnvironment  
 
