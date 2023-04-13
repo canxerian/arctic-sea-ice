@@ -31,6 +31,7 @@ section.cam-zoom-ui {
         background: var(--purple-dark);
         border-radius: $borderRadius;
         box-shadow: inset 0px 4px 5px 0px #544a7d;
+        pointer-events: all;
 
         &::-moz-range-thumb {
             @include slider-thumb();
