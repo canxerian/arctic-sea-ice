@@ -2,10 +2,11 @@
 
 .filter-button-group {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     pointer-events: all;
-
-    overflow-x: hidden;
+    padding: 2px 0;
+    margin: 0 2px;
+    overflow-x: auto;
     max-width: 100%;
     flex-wrap: nowrap;
 

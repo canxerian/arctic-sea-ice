@@ -5,7 +5,9 @@ import { ArcticDataProperty, GetDataForFilter } from "../redux/FilterOptions";
 import FilterButtonGroup from "./FilterButtonGroup";
 import "./MainUI.scss";
 
-const MaxItemValue = 20;        // Used for plotting length of bars
+const MaxItemValue = 17;        // Used for plotting length of bars
+const barColour = "var(--purple-dark2)";
+const barColourActive = "var(--purple-dark)";
 
 const MainUI = () => {
     const activeIceDataIndex = useSelector(state => state.app.activeIceDataIndex);
@@ -41,11 +43,12 @@ const MainUI = () => {
     }
 
     const listItems = data.dataSet.map((item, index) => {
-        const className = index === activeIceDataIndex ? "active" : "";
+        const isActive = index === activeIceDataIndex;
+        const className = isActive ? "active" : "";
         const dataItemValue = data.property === ArcticDataProperty.Area ? item.area : item.extent;
 
+        const bgColour = isActive ? barColourActive : barColour;
         const areaPercent = dataItemValue / MaxItemValue * 100;
-        const bgColour = "var(--purple-dark)";
         const backgroundStyle = { background: `linear-gradient(90deg, ${bgColour} ${areaPercent}%, transparent 0%)` }
 
         return <li data-index={index} key={index} className={className} style={backgroundStyle}>

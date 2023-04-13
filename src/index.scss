@@ -1,7 +1,23 @@
 @import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@200&display=swap");
 @import "components/import";
 
-$scrollBarWidth: 6px;
+:root {
+  --purple-light: #e1d8f7;
+  --purple-mid: #bfb3df;
+  --purple-dark: #6e6495;
+  --purple-dark2: #3b3457;
+  --purple-darker: #171424;
+
+  --padding-4: 10px;
+  --padding-20: 20px;
+
+  --slider-height: 10px;
+  @include when-on-desktop {
+    --slider-height: 20px;
+  }
+
+  --scroll-width: 1px;
+}
 
 body {
   margin: 0;
@@ -51,27 +67,13 @@ button {
 }
 
 .custom-scrollbar {
-  scrollbar-width: $scrollBarWidth;
+  scrollbar-width: var(--scroll-width);
   &::-webkit-scrollbar {
-    width: $scrollBarWidth;
-    height: $scrollBarWidth;
+    width: var(--scroll-width);
+    height: var(--scroll-width);
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: #aaa;
-  }
-}
-
-:root {
-  --purple-light: #e1d8f7;
-  --purple-mid: #bfb3df;
-  --purple-dark: #6e6495;
-  --purple-darker: #171424;
-
-  --padding-20: 20px;
-
-  --slider-height: 10px;
-  @include when-on-desktop {
-    --slider-height: 20px;
+    background-color: var(--purple-mid);
   }
 }

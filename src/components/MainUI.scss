@@ -5,12 +5,16 @@ aside {
     display: flex;
     flex-direction: column;
 
+    gap: var(--padding-4);
     @include when-on-desktop {
         gap: var(--padding-20);
     }
-    
+
     section.filters {
         flex: 1;
+        h4 {
+            font-size: 0.9rem;
+        }
     }
 
     ul {
@@ -22,6 +26,7 @@ aside {
         width: 100%;
 
         li {
+            font-size: 0.75rem;
             transition: font-weight 0.2s;
             padding: 1px 6px;
             color: #c4c2c2;
