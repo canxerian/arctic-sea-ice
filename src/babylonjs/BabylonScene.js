@@ -165,7 +165,7 @@ export default class BabylonScene {
             // scale down from there.
             const mobileWidthMin = 320;
             const lowerRadiusMin = 200;     // For phones with mobileWidthMin width
-            const lowerRadiusMax = 140;     // For phones with mobileWidth width
+            const lowerRadiusMax = 160;     // For phones with mobileWidth width
             const t = BABYLON.Scalar.InverseLerp(mobileWidthMin, mobileWidth, window.innerWidth);
             this.camera.lowerRadiusLimit = BABYLON.Scalar.Lerp(lowerRadiusMin, lowerRadiusMax, t);
             this.camera.upperRadiusLimit = 300;

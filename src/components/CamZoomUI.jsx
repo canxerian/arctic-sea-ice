@@ -21,7 +21,7 @@ const CamZoomUI = () => {
     }
 
     return (
-        <div id="cam-zoom-ui">
+        <section className="cam-zoom-ui">
             <input
                 type="range"
                 id="slider"
@@ -30,7 +30,7 @@ const CamZoomUI = () => {
                 value={camZoom * 100}
                 onChange={(e) => onSliderChange(e.target.value)}
             />
-        </div>
+        </section>
     );
 }
 

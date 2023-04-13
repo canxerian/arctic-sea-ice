@@ -1,10 +1,8 @@
+import CamZoomUI from "./CamZoomUI";
 import HelpUI from "./HelpUI";
-import githubLogo from "../images/github-mark-white.svg";
 import "./MainContent.scss";
 
 const MainContent = () => {
-    const title = true ? "Close info" : "Open info";
-
     return (
         <>
             <section className="title">
@@ -13,6 +11,7 @@ const MainContent = () => {
                 <p>Data sourced from <a href="https://nsidc.org/data/seaice_index/data-and-image-archive">NSIDC data and image archive</a></p>
             </section>
             <HelpUI />
+            <CamZoomUI />
         </>
     )
 }

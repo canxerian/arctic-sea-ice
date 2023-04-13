@@ -1,6 +1,7 @@
 @import "./import";
 
 main {
+    position: relative; // For CamZoomUI to position itself absolutely but relative this parent 
     display: flex;
     justify-content: space-between;
 

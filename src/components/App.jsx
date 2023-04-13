@@ -27,20 +27,11 @@ function App() {
         <main>
           <MainContent />
           {/* <LoadingUI ref={loadingRef} show={babylonLoaded} /> */}
-          <CamZoomUI />
         </main>
         <aside>
           <MainUI />
         </aside>
       </div>
-
-      {/* {babylonLoaded &&
-        <>
-          <MainUI />
-          <HelpUI />
-          <CamZoomUI />
-        </>
-      } */}
       <BabylonCanvas onLoadProgress={onLoadProgress} />
     </>
   );
