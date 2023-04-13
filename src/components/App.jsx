@@ -1,10 +1,10 @@
-import MainUI from './MainUI';
+import { useRef, useState } from 'react';
 import BabylonCanvas from './BabylonCanvas';
 import HelpUI from './HelpUI';
 import CamZoomUI from './CamZoomUI';
-import TitleUI from './TitleUI';
-import { useRef, useState } from 'react';
 import LoadingUI from './LoadingUI';
+import MainUI from './MainUI';
+import MainContent from './MainContent';
 import './App.scss';
 
 function App() {
@@ -25,9 +25,8 @@ function App() {
     <>
       <div className='flex-container'>
         <main>
+          <MainContent />
           {/* <LoadingUI ref={loadingRef} show={babylonLoaded} /> */}
-          <TitleUI babylonLoaded={babylonLoaded} />
-          <HelpUI />
           <CamZoomUI />
         </main>
         <aside>

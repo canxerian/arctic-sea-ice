@@ -1,3 +1,5 @@
+@import "./import";
+
 $buttonSize: 32px;
 $summaryHover: #2f2943;
 
@@ -18,13 +20,11 @@ $summaryHover: #2f2943;
     }
 }
 
-#help-ui-buttons {
-    position: absolute;
+section.help {
     display: flex;
     flex-direction: column;
     gap: $buttonSize / 3;
-    bottom: 16px;
-    left: 12px;
+    pointer-events: all;
 
     .help-ui-button {
         width: $buttonSize;
@@ -60,12 +60,9 @@ $summaryHover: #2f2943;
     border: 1px solid var(--purple-light);
     border-radius: 8px;
     background: rgb(21, 19, 28);
-    background: linear-gradient(
-        29deg,
-        rgba(21, 19, 28, 1) 0%,
-        rgba(38, 23, 45, 1) 100%
-    );
+    background: linear-gradient(29deg, rgba(21, 19, 28, 1) 0%, rgba(38, 23, 45, 1) 100%);
     padding: 30px;
+    pointer-events: all;
 
     &[open],
     &[open]::backdrop {
@@ -76,10 +73,16 @@ $summaryHover: #2f2943;
         background-color: #cebfd135;
     }
 
-    main {
-        height: 70vh;
-        overflow: auto;
-        margin-bottom: 30px;
+    div.dialog-content-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+
+        div.dialog-content {
+            overflow: auto;
+            margin-bottom: 30px;
+        }
     }
 
     h2 {
