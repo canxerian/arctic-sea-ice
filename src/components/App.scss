@@ -1,3 +1,5 @@
+@import "./import";
+
 .flex-container {
     position: relative;
     z-index: 1;
@@ -7,7 +9,7 @@
     height: 100vh;
     pointer-events: none;
 
-    @media only screen and (min-width: 768px) {
+    @include when-on-desktop {
         flex-direction: row;
         > * {
             padding: var(--padding-20);
