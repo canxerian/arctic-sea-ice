@@ -12,3 +12,5 @@ export const MonthLookup = {
     11: "November",
     12: "December"
 }
+
+export const Test2 = () => { }

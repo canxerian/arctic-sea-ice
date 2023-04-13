@@ -4,6 +4,7 @@ import { setCameraZoomNormalised } from "../redux/appSlice";
 import { store } from "../redux/store";
 import IceTerrain from "./iceterrain/IceTerrain";
 import StylisedSky from "./stylisedSky/StylisedSky";
+import { mobileWidth } from "../hooks/useMediaScreen";
 
 const Deg2Rad = Math.PI / 180;
 
@@ -152,7 +153,6 @@ export default class BabylonScene {
     }
 
     updateViewport() {
-        const mobileWidth = 768;
         if (window.innerWidth > mobileWidth) {
             this.camera.viewport = new BABYLON.Viewport(-0.33, -0.05, 1.35, 1.05);
             this.camera.lowerRadiusLimit = 100;

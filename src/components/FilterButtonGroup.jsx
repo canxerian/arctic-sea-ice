@@ -4,6 +4,9 @@ import { setCurrentFilter } from "../redux/appSlice";
 import { FilterOptions } from "../redux/FilterOptions";
 import "./FilterButtonGroup.scss";
 import "../images/chevron-right.svg";
+import { useMediaScreen } from "../hooks/useMediaScreen.js";
+import { testTest } from "../hooks/useMediaScreen.js";
+import { MonthLookup, Test2 } from "../data/MonthLookup";
 
 const getTitle = (label) => `Filter by ${label.toLowerCase()}`;
 
@@ -23,18 +26,25 @@ const FilterButton = ({ label, isActive, onClick }) => {
  * Render a group of buttons where only one can be selected
  */
 const FilterButtonGroup = () => {
-    const [showNext, setShowNext] = useState(true);
+    const [showNext, setShowNext] = useState();
     const [showPrev, setShowPrev] = useState();
     const divRef = useRef();
 
     const currentFilter = useSelector(state => state.app.currentFilter);
     const dispatch = useDispatch();
 
+    const mediaScreen = useMediaScreen();
+
     const filters = Object.values(FilterOptions);
+
+    useEffect(() => {
+        onScroll();
+    }, [mediaScreen])
 
     const onScroll = () => {
         const target = divRef.current;
-        if (target.scrollWidth < window.innerWidth) {
+        if (target.offsetWidth <= window.scrollWidth) {
+            setShowNext(false);
             return;
         }
 

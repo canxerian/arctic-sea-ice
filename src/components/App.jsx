@@ -25,8 +25,8 @@ function App() {
     <>
       <div className='flex-container'>
         <main>
+          {/* <LoadingUI ref={loadingRef} show={babylonLoaded} /> */}
           <TitleUI babylonLoaded={babylonLoaded} />
-          <LoadingUI ref={loadingRef} show={babylonLoaded} />
           <HelpUI />
           <CamZoomUI />
         </main>
