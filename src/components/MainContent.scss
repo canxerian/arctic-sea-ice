@@ -1,7 +1,18 @@
 @import "./import";
 
+@mixin vertical-bar {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -6px;
+    height: 100%;
+    width: 2px;
+    background-color: #fff;
+    animation: vertical-bar-blink 4s 0s both;
+}
+
 main {
-    position: relative; // For CamZoomUI to position itself absolutely but relative this parent 
+    position: relative; // For CamZoomUI to position itself absolutely but relative this parent
     display: flex;
     justify-content: space-between;
 
@@ -10,16 +21,24 @@ main {
     }
 
     section.title {
+        position: relative;
+
+        &::before {
+            @include vertical-bar();
+        }
         h1 {
             font-size: min(5vw, 1.6rem);
+            animation: text-slide-in 0.35s 1.1s both;
         }
 
         h3 {
             font-size: min(4vw, 1rem);
+            animation: text-slide-in 0.4s 0.5s both;
         }
 
         p {
             font-size: min(3vw, 1rem);
+            animation: text-slide-in 0.3s 1.6s both;
         }
 
         a {
@@ -36,4 +55,30 @@ main {
     //     width: 100vw;
     //     height: 100vh;
     // }
+}
+
+@keyframes vertical-bar-blink {
+    0%,
+    20%,
+    40%,
+    60%,
+    80% {
+        opacity: 0;
+    }
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+        opacity: 1;
+    }
+}
+
+@keyframes text-slide-in {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(0);
+    }
 }
