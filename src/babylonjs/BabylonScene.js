@@ -160,7 +160,14 @@ export default class BabylonScene {
         }
         else {
             this.camera.viewport = new BABYLON.Viewport(0, 0.07, 1, 1.07);
-            this.camera.lowerRadiusLimit = 140;
+         
+            // when width is 768, lower radius = 140
+            // scale down from there.
+            const mobileWidthMin = 320;
+            const lowerRadiusMin = 200;     // For phones with mobileWidthMin width
+            const lowerRadiusMax = 140;     // For phones with mobileWidth width
+            const t = BABYLON.Scalar.InverseLerp(mobileWidthMin, mobileWidth, window.innerWidth);
+            this.camera.lowerRadiusLimit = BABYLON.Scalar.Lerp(lowerRadiusMin, lowerRadiusMax, t);
             this.camera.upperRadiusLimit = 300;
         }
     }
