@@ -159,7 +159,7 @@ export default class BabylonScene {
             this.camera.upperRadiusLimit = 200;
         }
         else {
-            this.camera.viewport = new BABYLON.Viewport(0, 0.07, 1, 1.07);
+            this.camera.viewport = new BABYLON.Viewport(0, 0, 1, 1.2);
          
             // when width is 768, lower radius = 140
             // scale down from there.
