@@ -1,0 +1,39 @@
+@import "./import";
+
+main {
+    position: relative; // For CamZoomUI to position itself absolutely but relative this parent 
+    display: flex;
+    justify-content: space-between;
+
+    @include when-on-desktop {
+        flex-direction: column;
+    }
+
+    section.title {
+        h1 {
+            font-size: min(5vw, 1.6em);
+        }
+
+        h3 {
+            font-size: min(4vw, 1em);
+        }
+
+        p {
+            font-size: min(3vw, 1em);
+        }
+
+        a {
+            pointer-events: all;
+        }
+    }
+
+    // #title-ui-backdrop {
+    //     position: absolute;
+    //     top: 0;
+    //     left: 0;
+    //     // background: linear-gradient(241.1deg, #3d3544 15.58%, #242d3c 98.72%);
+    //     background-color: black;
+    //     width: 100vw;
+    //     height: 100vh;
+    // }
+}

@@ -1,0 +1,32 @@
+@import "./import";
+
+.flex-container {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+
+    @include when-on-desktop {
+        flex-direction: row;
+        > * {
+            padding: var(--padding-20);
+        }
+    }
+
+    main {
+        flex: 1 0 67%;
+    }
+
+    aside {
+        flex: 0 0 33%;
+        display: flex;
+
+        // Default min-width/min-height are auto, meaning child items increase the size of the container
+        // https://stackoverflow.com/questions/36247140/why-dont-flex-items-shrink-past-content-size
+        min-width: 0;
+        min-height: 0;
+    }
+}

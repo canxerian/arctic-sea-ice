@@ -1,25 +1,22 @@
-#main-ui {
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 33vw;
-    height: 100vh;
+@import "./_import.scss";
+
+aside {
     box-sizing: border-box;
-    padding: var(--padding-20);
     display: flex;
     flex-direction: column;
 
-    > :not(:last-child) {
-        margin-bottom: 20px;
+    @include when-on-desktop {
+        gap: var(--padding-20);
     }
-
-    h4 {
-        margin-bottom: 10px;
+    
+    section.filters {
+        flex: 1;
     }
 
     ul {
+        flex: 12;
         background-image: url("../images/grid-background.png");
-        mask-image: linear-gradient(to bottom, transparent 0%, black 15% 85%, transparent 100%);
+        mask-image: linear-gradient(to bottom, transparent 0%, white 13% 87%, transparent 100%);
         overflow-x: hidden;
         overflow-y: auto;
         width: 100%;
@@ -40,8 +37,18 @@
         }
     }
 
-    p#graph-label {
-        text-align: right;
-        font-style: italic;
+    section.legend {
+        flex: 0.2;
+
+        p {
+            writing-mode: horizontal-tb;
+            font-style: italic;
+            text-align: end;
+        }
+    }
+
+    button,
+    ul {
+        pointer-events: all;
     }
 }

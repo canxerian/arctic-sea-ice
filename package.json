@@ -1,8 +1,8 @@
 {
-  "name": "arctic-sea-ice.js",
+  "name": "arctic-sea-ice",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://canxerian.github.io/Arctic-Sea-Ice.JS",
+  "homepage": "https://canxerian.github.io/arctic-sea-ice",
   "dependencies": {
     "@babel/core": "^7.16.0",
     "@babylonjs/core": "^5.47.0",

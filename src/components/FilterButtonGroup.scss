@@ -1,13 +1,25 @@
+@import "./_import.scss";
+
 .filter-button-group {
     display: flex;
-    flex-wrap: wrap;
     gap: 8px;
+    pointer-events: all;
+
+    overflow-x: hidden;
+    max-width: 100%;
+    flex-wrap: nowrap;
+
+    @include when-on-desktop {
+        overflow-x: visible;
+        flex-wrap: wrap;
+    }
 
     .filter-button {
         border: 1px solid var(--purple-dark);
         border-radius: 14px;
         color: var(--purple-dark);
         padding: 3px 10px;
+        white-space: nowrap;
 
         &:hover {
             border-color: var(--purple-mid);
@@ -17,6 +29,30 @@
         &.active {
             border-color: var(--purple-light);
             color: var(--purple-light);
+        }
+    }
+
+    .scroll-button {
+        position: absolute;
+        background: var(--purple-mid);
+        padding: 3px 10px;
+        border: none;
+        border-radius: 24px;
+        height: 24px;
+        width: 24px;
+
+        background-size: 70%;
+        background-position: center;
+        background-repeat: no-repeat;
+
+        box-shadow: 0px 0px 12px 0px var(--purple-darker);
+        &.next {
+            right: 0;
+            background-image: url("../images/chevron-right.svg");
+        }
+
+        &.prev {
+            background-image: url("../images/chevron-left.svg");
         }
     }
 }

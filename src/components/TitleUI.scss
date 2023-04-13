@@ -1,9 +1,12 @@
 #title-ui {
-    position: absolute;
-    top: 0;
-    left: 0;
-    padding: var(--padding-20);
-    pointer-events: none;
+    h1 {
+        font-size: min(5vw, 1.6em);
+    }
+
+    h3 {
+        font-size: min(3vw, 1em);
+    }
+
     a {
         pointer-events: all;
     }

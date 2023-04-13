@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@200&display=swap");
+@import "components/import";
 
-$scrollBarWidth: 2px;
+$scrollBarWidth: 6px;
 
 body {
   margin: 0;
@@ -35,6 +36,10 @@ p {
   padding: 0;
 }
 
+h4 {
+  margin-bottom: 10px;
+}
+
 a {
   text-decoration: none;
   color: #de9ce3;
@@ -49,6 +54,7 @@ button {
   scrollbar-width: $scrollBarWidth;
   &::-webkit-scrollbar {
     width: $scrollBarWidth;
+    height: $scrollBarWidth;
   }
 
   &::-webkit-scrollbar-thumb {
@@ -60,7 +66,12 @@ button {
   --purple-light: #e1d8f7;
   --purple-mid: #bfb3df;
   --purple-dark: #6e6495;
-  --purple-darker: #2c2741a2;
+  --purple-darker: #171424;
 
   --padding-20: 20px;
+
+  --slider-height: 10px;
+  @include when-on-desktop {
+    --slider-height: 20px;
+  }
 }

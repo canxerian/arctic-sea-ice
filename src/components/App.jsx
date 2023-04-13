@@ -1,10 +1,10 @@
-import MainUI from './MainUI';
+import { useRef, useState } from 'react';
 import BabylonCanvas from './BabylonCanvas';
 import HelpUI from './HelpUI';
 import CamZoomUI from './CamZoomUI';
-import TitleUI from './TitleUI';
-import { useRef, useState } from 'react';
 import LoadingUI from './LoadingUI';
+import MainUI from './MainUI';
+import MainContent from './MainContent';
 import './App.scss';
 
 function App() {
@@ -14,7 +14,7 @@ function App() {
   const onLoadProgress = (progress) => {
     const percent = progress.loaded / progress.total;
 
-    loadingRef.current.log(percent)
+    // loadingRef.current.log(percent)
 
     setLoadingProgress(percent);
   }
@@ -23,17 +23,16 @@ function App() {
 
   return (
     <>
-      <BabylonCanvas onLoadProgress={onLoadProgress} />
-      <TitleUI babylonLoaded={babylonLoaded} />
-      <LoadingUI ref={loadingRef} show={!babylonLoaded} />
-      {/* <div style={{ position: "absolute", top: 0, left: 0 }} ref={progressRef}>value</div> */}
-      {babylonLoaded &&
-        <>
+      <div className='flex-container'>
+        <main>
+          <MainContent />
+          {/* <LoadingUI ref={loadingRef} show={babylonLoaded} /> */}
+        </main>
+        <aside>
           <MainUI />
-          <HelpUI />
-          <CamZoomUI />
-        </>
-      }
+        </aside>
+      </div>
+      <BabylonCanvas onLoadProgress={onLoadProgress} />
     </>
   );
 }

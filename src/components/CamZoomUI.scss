@@ -1,39 +1,43 @@
-$sliderHeight: 20px;
+@import "./import";
+
 $borderRadius: 10px;
 
 @mixin slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: $sliderHeight;
-    height: $sliderHeight;
+    width: var(--slider-height);
+    height: var(--slider-height);
     background: var(--purple-light);
     cursor: pointer;
     border-radius: $borderRadius;
     border: none;
 }
 
-#cam-zoom-ui {
+section.cam-zoom-ui {
     position: absolute;
-    bottom: 60px;
-    width: 67vw;
-    height: 10px;
-}
+    bottom: 10px;
+    width: 100%;
 
-input#slider {
-    appearance: none;
-    display: block;
-    width: 300px;
-    height: $sliderHeight;
-    margin: auto;
-    background: var(--purple-dark);
-    border-radius: $borderRadius;
-    box-shadow: inset 0px 4px 5px 0px #544a7d;
-
-    &::-moz-range-thumb {
-        @include slider-thumb();
+    @include when-on-desktop {
+        bottom: 70px;
     }
 
-    &::-webkit-slider-thumb {
-        @include slider-thumb();
+    input#slider {
+        appearance: none;
+        display: block;
+        width: 66%;
+        height: var(--slider-height);
+        margin: auto;
+        background: var(--purple-dark);
+        border-radius: $borderRadius;
+        box-shadow: inset 0px 4px 5px 0px #544a7d;
+
+        &::-moz-range-thumb {
+            @include slider-thumb();
+        }
+
+        &::-webkit-slider-thumb {
+            @include slider-thumb();
+        }
     }
 }

@@ -14,7 +14,7 @@ export default class StylisedSky {
      */
     constructor(scene) {
         this.sphere = BABYLON.MeshBuilder.CreateSphere("StylisedSky", {
-            diameter: 420,
+            diameter: 620,
             segments: 64,
         }, scene);
 

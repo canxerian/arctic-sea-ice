@@ -1,5 +1,4 @@
 import { useDispatch, useSelector } from "react-redux";
-import ArcticIceData from "../data/ArcticIceData.json";
 import { MonthLookup } from "../data/MonthLookup";
 import { setActiveIceDataIndex } from "../redux/appSlice";
 import { ArcticDataProperty, GetDataForFilter } from "../redux/FilterOptions";
@@ -17,13 +16,14 @@ const MainUI = () => {
 
     const onScroll = (e) => {
         const { height, width, x, y } = e.target.getBoundingClientRect();
-
         // The center positions of the scroll element
         const x1 = x + width / 2;
         const y1 = y + height / 2;
 
         // elementFromPoint gives the element at that particular point in the document
         const centerItem = document.elementFromPoint(x1, y1);
+        if (!centerItem) return;
+
         const dataIndex = parseInt(centerItem.getAttribute("data-index"));
 
         if (dataIndex) {
@@ -59,16 +59,18 @@ const MainUI = () => {
     listItems.push(<li key="last"></li>);
 
     return (
-        <aside id="main-ui">
-            <section>
+        <>
+            <section className="filters">
                 <h4>Filter by:</h4>
-                <FilterButtonGroup className={"button-group"} />
+                <FilterButtonGroup />
             </section>
             <ul className="custom-scrollbar" onScroll={onScroll}>
                 {listItems}
             </ul>
-            <p id="graph-label">In million sq km</p>
-        </aside>
+            <section className="legend">
+                <p id="graph-label">In million sq km</p>
+            </section>
+        </>
     );
 }
 
