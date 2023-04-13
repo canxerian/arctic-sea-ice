@@ -5,7 +5,7 @@
     gap: 8px;
     pointer-events: all;
 
-    overflow-x: scroll;
+    overflow-x: hidden;
     max-width: 100%;
     flex-wrap: nowrap;
 
@@ -29,6 +29,30 @@
         &.active {
             border-color: var(--purple-light);
             color: var(--purple-light);
+        }
+    }
+
+    .scroll-button {
+        position: absolute;
+        background: var(--purple-mid);
+        padding: 3px 10px;
+        border: none;
+        border-radius: 24px;
+        height: 24px;
+        width: 24px;
+
+        background-size: 70%;
+        background-position: center;
+        background-repeat: no-repeat;
+
+        box-shadow: 0px 0px 12px 0px var(--purple-darker);
+        &.next {
+            right: 0;
+            background-image: url("../images/chevron-right.svg");
+        }
+
+        &.prev {
+            background-image: url("../images/chevron-left.svg");
         }
     }
 }

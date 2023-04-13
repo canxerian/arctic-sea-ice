@@ -1,8 +1,9 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentFilter } from "../redux/appSlice";
 import { FilterOptions } from "../redux/FilterOptions";
 import "./FilterButtonGroup.scss";
+import "../images/chevron-right.svg";
 
 const getTitle = (label) => `Filter by ${label.toLowerCase()}`;
 
@@ -22,7 +23,7 @@ const FilterButton = ({ label, isActive, onClick }) => {
  * Render a group of buttons where only one can be selected
  */
 const FilterButtonGroup = () => {
-    const [showNext, setShowNext] = useState();
+    const [showNext, setShowNext] = useState(true);
     const [showPrev, setShowPrev] = useState();
     const divRef = useRef();
 
@@ -31,7 +32,8 @@ const FilterButtonGroup = () => {
 
     const filters = Object.values(FilterOptions);
 
-    const onScroll = ({ target }) => {
+    const onScroll = () => {
+        const target = divRef.current;
         if (target.scrollWidth < window.innerWidth) {
             return;
         }
@@ -53,14 +55,14 @@ const FilterButtonGroup = () => {
     }
 
     return (
-        <div ref={divRef} onScroll={onScroll} className={`filter-button-group custom-scrollbar`}>
+        <div ref={divRef} onScroll={onScroll} className="filter-button-group custom-scrollbar">
             {filters.map(filter => <FilterButton key={filter}
                 label={filter}
                 isActive={filter === currentFilter}
                 onClick={label => dispatch(setCurrentFilter(label))}
             />)}
-            {showPrev && <button onClick={onClickPrev} style={{ position: "absolute" }}>prev</button>}
-            {showNext && <button onClick={onClickNext} style={{ position: "absolute", right: 0 }}>next</button>}
+            {showPrev && <button onClick={onClickPrev} className="scroll-button prev" />}
+            {showNext && <button onClick={onClickNext} className="scroll-button next" />}
         </div >
     )
 }
