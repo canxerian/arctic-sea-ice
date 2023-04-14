@@ -4,7 +4,7 @@
     content: "";
     position: absolute;
     top: 0;
-    left: -6px;
+    left: 0;
     height: 100%;
     width: 2px;
     background-color: #fff;
@@ -34,7 +34,7 @@ main {
 
         &.loaded {
             animation: fade 1s 0s forwards;
-            
+
             .loading-content {
                 display: none;
             }
@@ -56,7 +56,7 @@ main {
 
     section.title {
         position: relative;
-
+        overflow: hidden;
         &::before {
             @include vertical-bar();
             animation: vertical-bar-blink 4s 0s both infinite;
@@ -67,16 +67,19 @@ main {
         }
 
         h1 {
+            margin-left: 6px;
             font-size: min(4.2vw, 1.6rem);
             animation: text-slide-in 0.7s 3s both;
         }
 
         h3 {
+            margin-left: 6px;
             font-size: min(4vw, 1rem);
             animation: text-slide-in 0.8s 1s both;
         }
 
         p {
+            margin-left: 6px;
             font-size: min(3vw, 1rem);
             animation: text-slide-in 0.6s 5s both;
         }
