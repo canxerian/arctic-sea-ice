@@ -8,7 +8,6 @@
     height: 100%;
     width: 2px;
     background-color: #fff;
-    animation: vertical-bar-blink 4s 0s both;
 }
 
 main {
@@ -23,15 +22,21 @@ main {
     section.loading {
         position: absolute;
         top: 0;
+        left: 0;
         width: 100vw;
         height: 100vh;
         background: linear-gradient(241.1deg, #2b2431 15.58%, #12171f 98.72%);
         display: flex;
         flex-direction: column;
         justify-content: center;
+        padding: var(--padding-20);
 
         &.loaded {
-            display: none;
+            animation: fade 1s 0s forwards;
+            
+            .loading-content {
+                display: none;
+            }
         }
 
         .loading-bar-track {
@@ -53,7 +58,13 @@ main {
 
         &::before {
             @include vertical-bar();
+            animation: vertical-bar-blink 4s 0s both infinite;
         }
+
+        &.loaded::before {
+            animation: none;
+        }
+
         h1 {
             font-size: min(5vw, 1.6rem);
             animation: text-slide-in 0.35s 1.1s both;
@@ -98,5 +109,18 @@ main {
     }
     100% {
         transform: translateX(0);
+    }
+}
+
+@keyframes fade {
+    0% {
+        opacity: 1;
+    }
+    99% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0;
+        display: none;
     }
 }

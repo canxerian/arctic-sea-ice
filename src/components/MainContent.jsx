@@ -15,17 +15,18 @@ const MainContent = forwardRef(({ isLoaded }, ref) => {
         }
     }));
 
+    const loadedClassName = isLoaded ? "loaded" : undefined;
     return (
         <>
-            <section className={`loading ${isLoaded ? "loaded" : ""}`}>
-                <div>
+            <section className={`loading ${loadedClassName}`}>
+                <div className="loading-content">
                     <h3>Loading..</h3>
                     <div className="loading-bar-track">
                         <div className="loading-bar-fill" ref={loadingBarFill} />
                     </div>
                 </div>
             </section>
-            <section className="title">
+            <section className={`title ${loadedClassName}`}>
                 <h3>Arctice Sea Ice Data Explorer</h3>
                 <h1>An interactive, 3D explorer of the Arctic Sea Index</h1>
                 <p>Data sourced from <a href="https://nsidc.org/data/seaice_index/data-and-image-archive">NSIDC data and image archive</a></p>
