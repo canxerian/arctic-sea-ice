@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/arctic-sea-ice/static/css/main.5053da5c.css",
-    "main.js": "/arctic-sea-ice/static/js/main.86db1ff6.js",
+    "main.css": "/arctic-sea-ice/static/css/main.152eaabf.css",
+    "main.js": "/arctic-sea-ice/static/js/main.b353172d.js",
     "static/js/61260.58fb1ab5.chunk.js": "/arctic-sea-ice/static/js/61260.58fb1ab5.chunk.js",
     "static/js/89403.6116857f.chunk.js": "/arctic-sea-ice/static/js/89403.6116857f.chunk.js",
     "static/js/71201.562b18b8.chunk.js": "/arctic-sea-ice/static/js/71201.562b18b8.chunk.js",
@@ -1072,12 +1072,12 @@
     "index.html": "/arctic-sea-ice/index.html",
     "static/media/chevron-left.svg": "/arctic-sea-ice/static/media/chevron-left.e5b9d5ffc61d2a4d78a3.svg",
     "static/media/chevron-right.svg": "/arctic-sea-ice/static/media/chevron-right.41e7e547f24d4793dca41badd873bf94.svg",
-    "main.5053da5c.css.map": "/arctic-sea-ice/static/css/main.5053da5c.css.map",
-    "main.86db1ff6.js.map": "/arctic-sea-ice/static/js/main.86db1ff6.js.map",
+    "main.152eaabf.css.map": "/arctic-sea-ice/static/css/main.152eaabf.css.map",
+    "main.b353172d.js.map": "/arctic-sea-ice/static/js/main.b353172d.js.map",
     "787.1b68d61e.chunk.js.map": "/arctic-sea-ice/static/js/787.1b68d61e.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.5053da5c.css",
-    "static/js/main.86db1ff6.js"
+    "static/css/main.152eaabf.css",
+    "static/js/main.b353172d.js"
   ]
 }
