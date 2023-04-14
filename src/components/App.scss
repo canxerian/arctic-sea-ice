@@ -8,6 +8,9 @@
     width: 100vw;
     height: 100vh;
     pointer-events: none;
+    
+    // https://stackoverflow.com/questions/37112218/css3-100vh-not-constant-in-mobile-browser
+    max-height: -webkit-fill-available;
 
     @include when-on-desktop {
         flex-direction: row;

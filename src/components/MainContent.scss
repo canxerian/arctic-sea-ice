@@ -25,7 +25,7 @@ main {
         top: 0;
         width: 100vw;
         height: 100vh;
-        background-color: black;
+        background: linear-gradient(241.1deg, #2b2431 15.58%, #12171f 98.72%);
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -73,16 +73,6 @@ main {
             pointer-events: all;
         }
     }
-
-    // #title-ui-backdrop {
-    //     position: absolute;
-    //     top: 0;
-    //     left: 0;
-    //     // background: linear-gradient(241.1deg, #3d3544 15.58%, #242d3c 98.72%);
-    //     background-color: black;
-    //     width: 100vw;
-    //     height: 100vh;
-    // }
 }
 
 @keyframes vertical-bar-blink {
