@@ -5,10 +5,7 @@ aside {
     display: flex;
     flex-direction: column;
 
-    gap: var(--padding-4);
-    @include when-on-desktop {
-        gap: var(--padding-20);
-    }
+    gap: var(--spacing);
 
     section.filters {
         flex: 1;

@@ -14,9 +14,10 @@
 
     @include when-on-desktop {
         flex-direction: row;
-        > * {
-            padding: var(--padding-20);
-        }
+    }
+    
+    > * {
+        padding: var(--spacing);
     }
 
     main {

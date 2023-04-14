@@ -8,8 +8,10 @@
   --purple-dark2: #3b3457;
   --purple-darker: #171424;
 
-  --padding-4: 10px;
-  --padding-20: 20px;
+  --spacing: 10px;
+  @include when-on-desktop {
+    --spacing: 20px;
+  }
 
   --slider-height: 10px;
   @include when-on-desktop {
