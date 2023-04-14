@@ -5,12 +5,13 @@ aside {
     display: flex;
     flex-direction: column;
 
-    gap: var(--spacing);
+    gap: var(--spacing-small);
 
     section.filters {
         flex: 1;
         h4 {
             font-size: 0.9rem;
+            margin: 0 0 var(--spacing-small) 2px;
         }
     }
 
@@ -21,7 +22,7 @@ aside {
         overflow-x: hidden;
         overflow-y: auto;
         width: 100%;
-
+        position: relative;
         li {
             font-size: 0.75rem;
             transition: font-weight 0.2s;
@@ -31,22 +32,19 @@ aside {
             &:last-child {
                 height: 50%;
             }
-
             &.active {
                 font-weight: 800;
                 color: #ffffff;
             }
         }
     }
-
-    section.legend {
-        flex: 0.2;
-
-        p {
-            writing-mode: horizontal-tb;
-            font-style: italic;
-            text-align: end;
-        }
+    p.graph-label {
+        position: absolute;
+        bottom: var(--spacing);
+        right: var(--spacing);
+        writing-mode: horizontal-tb;
+        font-style: italic;
+        text-align: end;
     }
 
     button,

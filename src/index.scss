@@ -8,6 +8,11 @@
   --purple-dark2: #3b3457;
   --purple-darker: #171424;
 
+  --spacing-small: 2px;
+  @include when-on-desktop {
+    --spacing-small: 8px;
+  }
+
   --spacing: 10px;
   @include when-on-desktop {
     --spacing: 20px;
@@ -52,10 +57,6 @@ p {
   list-style-type: none;
   margin: 0;
   padding: 0;
-}
-
-h4 {
-  margin-bottom: 10px;
 }
 
 a {

@@ -72,9 +72,7 @@ const MainUI = ({ isLoaded }) => {
             <ul className="custom-scrollbar" onScroll={onScroll}>
                 {listItems}
             </ul>
-            <section className="legend">
-                <p id="graph-label">In million sq km</p>
-            </section>
+            <p className="graph-label">In million sq km</p>
         </>
     );
 }
