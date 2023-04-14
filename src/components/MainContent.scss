@@ -20,6 +20,34 @@ main {
         flex-direction: column;
     }
 
+    section.loading {
+        position: absolute;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: black;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        &.loaded {
+            display: none;
+        }
+
+        .loading-bar-track {
+            border-radius: 1px;
+            height: 2px;
+            width: 100%;
+
+            .loading-bar-fill {
+                background-color: #fff;
+                height: 100%;
+                width: 0%;
+                transition: width 0.2s;
+            }
+        }
+    }
+
     section.title {
         position: relative;
 

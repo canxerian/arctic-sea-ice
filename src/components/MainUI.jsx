@@ -9,10 +9,12 @@ const MaxItemValue = 17;        // Used for plotting length of bars
 const barColour = "var(--purple-dark2)";
 const barColourActive = "var(--purple-dark)";
 
-const MainUI = () => {
+const MainUI = ({ isLoaded }) => {
     const activeIceDataIndex = useSelector(state => state.app.activeIceDataIndex);
     const filterOption = useSelector(state => state.app.currentFilter);
     const dispatch = useDispatch();
+
+    if (!isLoaded) return null;
 
     const data = GetDataForFilter(filterOption);
 

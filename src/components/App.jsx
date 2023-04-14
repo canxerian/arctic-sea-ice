@@ -1,30 +1,29 @@
-// import { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import BabylonCanvas from './BabylonCanvas';
-import MainUI from './MainUI';
 import MainContent from './MainContent';
+import MainUI from './MainUI';
 import './App.scss';
 
 function App() {
-  // const loadingRef = useRef();
-  // const [loadingProgress, setLoadingProgress] = useState(0);
+  const mainContent = useRef();
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const onLoadProgress = (progress) => {
-  //   const percent = progress.loaded / progress.total;
-  //   loadingRef.current.log(percent)
-  //   setLoadingProgress(percent);
-  }
+    mainContent.current.setLoadProgress(progress);
 
-  // const babylonLoaded = loadingProgress >= 1;
+    if (progress.loaded === progress.total) {
+      setIsLoaded(true);
+    }
+  }
 
   return (
     <>
       <div className='flex-container'>
         <main>
-          <MainContent />
-          {/* <LoadingUI ref={loadingRef} show={babylonLoaded} /> */}
+          <MainContent ref={mainContent} isLoaded={isLoaded} />
         </main>
         <aside>
-          <MainUI />
+          <MainUI isLoaded={isLoaded} />
         </aside>
       </div>
       <BabylonCanvas onLoadProgress={onLoadProgress} />
