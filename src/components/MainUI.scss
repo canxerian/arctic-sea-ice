@@ -5,7 +5,7 @@ aside {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-small);
-    
+
     section.filters {
         flex: 1;
         h4 {
@@ -38,14 +38,14 @@ aside {
         }
     }
 
-    section.legend {
-        flex: 0.2;
-
-        p {
-            writing-mode: horizontal-tb;
-            font-style: italic;
-            text-align: end;
-        }
+    p.graph-label {
+        position: absolute;
+        bottom: var(--spacing);
+        right: var(--spacing);
+        writing-mode: horizontal-tb;
+        font-style: italic;
+        text-align: end;
+        font-size: 0.7rem;
     }
 
     button,

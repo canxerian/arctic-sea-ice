@@ -88,7 +88,7 @@ export default class BabylonScene {
                 this.camera.radius = BABYLON.Scalar.Lerp(this.camera.lowerRadiusLimit, this.camera.upperRadiusLimit, 1 - camZoomNormalized);
             }
             else {
-                camZoomNormalized = 1 - BABYLON.Scalar.InverseLerp(this.camera.lowerRadiusLimit, this.camera.upperRadiusLimit, this.camera.radius);
+                camZoomNormalized = this.getCameraZoomNormalised();
             }
 
             if (cameraStatus === CameraState.Zooming || isOverridingZoom) {
@@ -117,6 +117,8 @@ export default class BabylonScene {
             engine.resize();
             this.updateViewport();
         });
+
+        store.dispatch(setCameraZoomNormalised(this.getCameraZoomNormalised()));
     }
 
     createCamera(targetPosition) {
@@ -160,7 +162,7 @@ export default class BabylonScene {
         }
         else {
             this.camera.viewport = new BABYLON.Viewport(0, 0, 1, 1.2);
-         
+
             // when width is 768, lower radius = 140
             // scale down from there.
             const mobileWidthMin = 320;
@@ -170,5 +172,9 @@ export default class BabylonScene {
             this.camera.lowerRadiusLimit = BABYLON.Scalar.Lerp(lowerRadiusMin, lowerRadiusMax, t);
             this.camera.upperRadiusLimit = 300;
         }
+    }
+
+    getCameraZoomNormalised() {
+        return 1 - BABYLON.Scalar.InverseLerp(this.camera.lowerRadiusLimit, this.camera.upperRadiusLimit, this.camera.radius);
     }
 }

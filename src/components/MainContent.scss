@@ -68,17 +68,17 @@ main {
 
         h1 {
             font-size: min(4.2vw, 1.6rem);
-            animation: text-slide-in 0.7s 1.5s both;
+            animation: text-slide-in 0.7s 3s both;
         }
 
         h3 {
             font-size: min(4vw, 1rem);
-            animation: text-slide-in 0.8s 0.5s both;
+            animation: text-slide-in 0.8s 1s both;
         }
 
         p {
             font-size: min(3vw, 1rem);
-            animation: text-slide-in 0.6s 4s both;
+            animation: text-slide-in 0.6s 5s both;
         }
 
         a {

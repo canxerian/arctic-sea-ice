@@ -2,9 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentFilter } from "../redux/appSlice";
 import { FilterOptions } from "../redux/FilterOptions";
-import "./FilterButtonGroup.scss";
-import "../images/chevron-right.svg";
 import { useMediaScreen } from "../hooks/useMediaScreen.js";
+import "./FilterButtonGroup.scss";
 
 const getTitle = (label) => `Filter by ${label.toLowerCase()}`;
 
