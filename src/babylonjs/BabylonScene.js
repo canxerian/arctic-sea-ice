@@ -172,7 +172,3 @@ export default class BabylonScene {
         }
     }
 }
-
-const toNearest = (value, x) => {
-    return Math.round(value / x) * x;
-}

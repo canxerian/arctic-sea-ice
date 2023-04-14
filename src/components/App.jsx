@@ -1,25 +1,20 @@
-import { useRef, useState } from 'react';
+// import { useRef, useState } from 'react';
 import BabylonCanvas from './BabylonCanvas';
-import HelpUI from './HelpUI';
-import CamZoomUI from './CamZoomUI';
-import LoadingUI from './LoadingUI';
 import MainUI from './MainUI';
 import MainContent from './MainContent';
 import './App.scss';
 
 function App() {
-  const loadingRef = useRef();
-  const [loadingProgress, setLoadingProgress] = useState(0);
+  // const loadingRef = useRef();
+  // const [loadingProgress, setLoadingProgress] = useState(0);
 
   const onLoadProgress = (progress) => {
-    const percent = progress.loaded / progress.total;
-
-    // loadingRef.current.log(percent)
-
-    setLoadingProgress(percent);
+  //   const percent = progress.loaded / progress.total;
+  //   loadingRef.current.log(percent)
+  //   setLoadingProgress(percent);
   }
 
-  const babylonLoaded = loadingProgress >= 1;
+  // const babylonLoaded = loadingProgress >= 1;
 
   return (
     <>

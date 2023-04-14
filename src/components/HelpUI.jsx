@@ -24,7 +24,7 @@ const HelpUI = () => {
         return (
             <section className="help">
                 <a className="help-ui-button" id="github-button" href="https://github.com/canxerian/arctic-sea-ice">
-                    <img src={githubLogo} />
+                    <img alt="GitHub logo" src={githubLogo} />
                 </a>
 
                 <button className="help-ui-button" id="info-button" title={title} onClick={() => setDialogOpen(!isOpen)}>

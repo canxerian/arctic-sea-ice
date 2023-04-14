@@ -15,7 +15,7 @@ const BabylonCanvas = ({ onLoadProgress }) => {
             babylonSceneRef.current = new BabylonScene(canvasRef.current, onLoadProgress);
         }
         babylonSceneRef.current.setActiveIceIndex(appState.activeIceDataIndex);
-    }, [appState.activeIceDataIndex, appState.currentFilter]);
+    }, [appState.activeIceDataIndex, appState.currentFilter, onLoadProgress]);
 
     return (
         <canvas ref={canvasRef} id="babylon-canvas" />

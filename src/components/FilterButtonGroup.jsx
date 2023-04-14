@@ -5,8 +5,6 @@ import { FilterOptions } from "../redux/FilterOptions";
 import "./FilterButtonGroup.scss";
 import "../images/chevron-right.svg";
 import { useMediaScreen } from "../hooks/useMediaScreen.js";
-import { testTest } from "../hooks/useMediaScreen.js";
-import { MonthLookup, Test2 } from "../data/MonthLookup";
 
 const getTitle = (label) => `Filter by ${label.toLowerCase()}`;
 
