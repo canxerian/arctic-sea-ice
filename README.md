@@ -1,22 +1,18 @@
 # Arctic Sea Ice Data Visualisation
 
+![image](_docs/hero.gif)
+
 A cosy, 3D data visualisation using National Snow and Ice Data Center, https://nsidc.org/data/seaice_index/data-and-image-archive.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Live site: https://canxerian.com/arctic-sea-ice
 
 # Getting Start
 
-### `npm start`
+## Install dependencies
+`npm install`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm run deploy`
-
-Deploys the app to https://canxerian.com/arctic-sea-ice/
+## Run locally
+`npm start`
 
 # Assets
 
