@@ -172,6 +172,8 @@ export default class BabylonScene {
             this.camera.lowerRadiusLimit = BABYLON.Scalar.Lerp(lowerRadiusMin, lowerRadiusMax, t);
             this.camera.upperRadiusLimit = 300;
         }
+
+        this.camera.radius = BABYLON.Scalar.Lerp(this.camera.lowerRadiusLimit, this.camera.upperRadiusLimit, 0.25);
     }
 
     getCameraZoomNormalised() {
