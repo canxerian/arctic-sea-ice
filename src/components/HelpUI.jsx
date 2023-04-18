@@ -95,7 +95,8 @@ const HelpUI = () => {
                             </summary>
                             <p>Mark Nguyen, a software engineer who like to make things with art, code, data and design</p>
                             <ul>
-                                <li>Twitter @CodingCanxerian</li>
+                                <li>Twitter <a href="https://twitter.com/CodingCanxerian">@CodingCanxerian</a></li>
+                                <li>GitHub <a href="https://github.com/canxerian">@canxerian</a></li>
                             </ul>
                         </details>
                     </div>

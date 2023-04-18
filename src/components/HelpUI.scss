@@ -61,7 +61,7 @@ section.help {
     border-radius: 8px;
     background: rgb(21, 19, 28);
     background: linear-gradient(29deg, rgba(21, 19, 28, 1) 0%, rgba(38, 23, 45, 1) 100%);
-    padding: 30px;
+    padding: var(--spacing);
     pointer-events: all;
 
     &[open],
@@ -123,14 +123,23 @@ section.help {
         }
 
         dl {
-            display: flex;
-            flex-wrap: wrap;
+            @include when-on-desktop {
+                display: flex;
+                flex-wrap: wrap;
+            }
         }
+
         dt {
-            width: 22%;
+            font-weight: bold;
+            @include when-on-desktop {
+                width: 10rem;
+            }
         }
         dd {
-            width: 70%;
+            margin: 0 0 0.5rem 0;
+            @include when-on-desktop {
+                width: calc(100% - 10rem);
+            }
         }
     }
 
